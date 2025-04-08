@@ -7,16 +7,18 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run generate-data && node main.js",
     "dev": "nodemon main.js",
-    "generate-data": "node generate-data.js"
+    "generate-data": "node generate-data.js",
+    "type": "module"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "json-server": "^0.17.0",
-    "query-string": "^7.1.1",
+    "@faker-js/faker": "^9.6.0",
     "bcrypt": "^5.0.1",
-    "jsonwebtoken": "^8.5.1"
+    "json-server": "^0.17.0",
+    "jsonwebtoken": "^8.5.1",
+    "query-string": "^7.1.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
