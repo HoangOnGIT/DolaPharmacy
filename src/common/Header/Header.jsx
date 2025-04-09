@@ -5,7 +5,7 @@ import "./Header.css";
 import { PhoneIcon } from '@heroicons/react/20/solid';
 import Search from './Search';
 import Modal from './Modal';
-import Menu from "./Menu"
+import Menu from "./Menu";
 
 const Header = React.memo(() => {
   const textList = [
@@ -14,7 +14,7 @@ const Header = React.memo(() => {
     "Rất nhiều ưu đãi và chương trình khuyến mãi đang chờ đợi bạn",
   ];
 
-  const [category, setCategory] = useState([])
+  const [category, setCategory] = useState([]);
   const [currentText, setCurrentText] = useState(textList[0]);
   const [showEffect, setShowEffect] = useState(false);
   const indexRef = useRef(0);
@@ -42,7 +42,6 @@ const Header = React.memo(() => {
     return () => clearInterval(intervalId);
   }, [textList]);
 
-
   return (
     <>
       <div className="w-full">
@@ -56,13 +55,15 @@ const Header = React.memo(() => {
         </div>
 
         {/* Header chính */}
-        <div className="header h-46 bg-gradient-to-b from-[#7fadff] to-[#0f62f9] text-white mx-auto w-full">
+        <div className="header h-46 bg-gradient-to-b from-[#7fadff] to-[#0f62f9] text-white w-full">
           {/* Contact Header */}
-          <div className='w-full mx-auto ml-50'>
+          <div className='container mx-auto w-4/5'>
             {/* Contact Information */}
-            <div className="container w-4/5">
-              <div className='flex justify-between text-base font-semibold'>
-                <p className={`my-2 ${showEffect ? "fade-in-out" : ""}`}>{memoizedText}</p>
+            <div className="w-full">
+              <div className='flex justify-between items-center text-base font-semibold'>
+                <div>
+                  <p className={`my-2 ${showEffect ? "fade-in-out" : ""}`}>{memoizedText}</p>
+                </div>
                 <div className='my-1 flex items-center'>
                   <a className='mx-1 hover:text-blue-800' href="">Đăng ký |</a>
                   <a className='mx-1 hover:text-blue-800' href="">Đăng nhập |</a>
@@ -78,9 +79,9 @@ const Header = React.memo(() => {
             </div>
 
             {/* Category Header */}
-            <div className="flex items-center my-1">
+            <div className="flex items-center my-1 justify-between">
               {/* Logo */}
-              <a href="" className='ml-5 mr-10'>
+              <a href="" className='mr-10'>
                 <img className='w-[200px] h-[50px] align-middle border-none max-w-full h-auto' src={imgLogo} alt="Logo-Dola Pharmacy" />
               </a>
               {/* Category */}
@@ -95,7 +96,7 @@ const Header = React.memo(() => {
               {/* Search */}
               <Search categories={category} />
 
-              <div className='flex items-center ml-10'>
+              <div className='flex items-center'>
                 <a className='mx-1 hover:text-blue-800' href="">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-9">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
@@ -117,19 +118,17 @@ const Header = React.memo(() => {
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-9">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                   </svg>
-
                 </button>
               </div>
             </div>
 
-            <Menu />  
-
+            <Menu />
           </div>
         </div>
       </div>
 
       {/* Modal */}
-      <Modal categories={category} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
+      <Modal categories={category} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
     </>
   );
 });
