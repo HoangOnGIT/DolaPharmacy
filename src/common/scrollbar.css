@@ -1,0 +1,28 @@
+/* scrollbar.css */
+
+/* Tùy chỉnh thanh cuộn cho Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 4px; /* Chiều rộng thanh cuộn */
+  }
+  
+  /* Phần nền của thanh cuộn (track) */
+  ::-webkit-scrollbar-track {
+    background: transparent; /* Nền trong suốt */
+  }
+  
+  /* Phần thanh kéo (thumb) */
+  ::-webkit-scrollbar-thumb {
+    background: #2563eb; /* Màu xanh dương, tương ứng blue-600 */
+    border-radius: 2px; /* Bo góc nhẹ */
+  }
+  
+  /* Khi hover vào thanh kéo */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #1d4ed8; /* Màu xanh đậm hơn khi hover, tương ứng blue-700 */
+  }
+  
+  /* Tùy chỉnh thanh cuộn cho Firefox */
+  html {
+    scrollbar-width: thin; /* Thanh cuộn mỏng */
+    scrollbar-color: #2563eb transparent; /* Màu thumb và track */
+  }

@@ -458,7 +458,9 @@
       "basePrice": 72.35429656906607,
       "salePrice": 81.49093790640416,
       "cost": 49.261915816827816,
-      "discountIds": ["0750502c-5902-48e7-b688-9ee093ea9e8e"],
+      "discountIds": [
+        "0750502c-5902-48e7-b688-9ee093ea9e8e"
+      ],
       "supplierId": "6db2622c-6242-475e-ba9b-22b83a5d3f63",
       "brand": "Brown LLC",
       "images": [
@@ -631,7 +633,9 @@
       "basePrice": 34.10585201362868,
       "salePrice": null,
       "cost": 62.55762268947976,
-      "discountIds": ["1f1b4249-3b97-4b05-b334-6c8f2d7022ba"],
+      "discountIds": [
+        "1f1b4249-3b97-4b05-b334-6c8f2d7022ba"
+      ],
       "supplierId": "c55d61ad-3dc1-466d-8502-25346cbf80be",
       "brand": "McKenzie and Sons",
       "images": [
@@ -1058,7 +1062,9 @@
       "basePrice": 92.2156781936732,
       "salePrice": 72.26305399190893,
       "cost": 30.029752297880766,
-      "discountIds": ["4d00d522-b5a0-47d0-954a-cdfcd830d37a"],
+      "discountIds": [
+        "4d00d522-b5a0-47d0-954a-cdfcd830d37a"
+      ],
       "supplierId": "fbd19a2e-1b12-4f7d-be16-9760b66b998b",
       "brand": "Senger LLC",
       "images": [
@@ -1132,7 +1138,9 @@
       "basePrice": 92.73917682565886,
       "salePrice": null,
       "cost": 29.846053842809745,
-      "discountIds": ["dcf763c8-e16a-4c5c-8404-e523029779a0"],
+      "discountIds": [
+        "dcf763c8-e16a-4c5c-8404-e523029779a0"
+      ],
       "supplierId": "c55d61ad-3dc1-466d-8502-25346cbf80be",
       "brand": "Kertzmann - Luettgen",
       "images": [
@@ -1206,7 +1214,9 @@
       "basePrice": 43.15424466428743,
       "salePrice": 8.660163129047191,
       "cost": 14.539703857496217,
-      "discountIds": ["0750502c-5902-48e7-b688-9ee093ea9e8e"],
+      "discountIds": [
+        "0750502c-5902-48e7-b688-9ee093ea9e8e"
+      ],
       "supplierId": "be92830c-ee28-4ee1-b282-3587d4e725a1",
       "brand": "D'Amore - Wyman",
       "images": [
@@ -1325,7 +1335,9 @@
       "basePrice": 62.877047346529416,
       "salePrice": null,
       "cost": 19.3392466864508,
-      "discountIds": ["07430105-9adb-4665-aa1b-e88cd8a1d973"],
+      "discountIds": [
+        "07430105-9adb-4665-aa1b-e88cd8a1d973"
+      ],
       "supplierId": "c55d61ad-3dc1-466d-8502-25346cbf80be",
       "brand": "Beer, Mertz and Legros",
       "images": [
@@ -1854,7 +1866,9 @@
       "basePrice": 63.26488916704083,
       "salePrice": null,
       "cost": 65.66182213701515,
-      "discountIds": ["dcf763c8-e16a-4c5c-8404-e523029779a0"],
+      "discountIds": [
+        "dcf763c8-e16a-4c5c-8404-e523029779a0"
+      ],
       "supplierId": "fbd19a2e-1b12-4f7d-be16-9760b66b998b",
       "brand": "Farrell - Fritsch",
       "images": [
@@ -2065,7 +2079,9 @@
       "basePrice": 84.3338592995583,
       "salePrice": null,
       "cost": 32.219679316467904,
-      "discountIds": ["07430105-9adb-4665-aa1b-e88cd8a1d973"],
+      "discountIds": [
+        "07430105-9adb-4665-aa1b-e88cd8a1d973"
+      ],
       "supplierId": "dd6b0ec5-1851-4053-af12-25eb713aba29",
       "brand": "Donnelly Inc",
       "images": [
@@ -2311,7 +2327,9 @@
       "basePrice": 15.044640034425438,
       "salePrice": 53.67276929691545,
       "cost": 47.98102434550504,
-      "discountIds": ["4d00d522-b5a0-47d0-954a-cdfcd830d37a"],
+      "discountIds": [
+        "4d00d522-b5a0-47d0-954a-cdfcd830d37a"
+      ],
       "supplierId": "69960ce3-4174-4487-aca9-79d018466699",
       "brand": "Grady, O'Kon and Willms",
       "images": [
@@ -2437,7 +2455,9 @@
       "basePrice": 5.139832325709667,
       "salePrice": 28.190007853372162,
       "cost": 73.72953848905091,
-      "discountIds": ["07430105-9adb-4665-aa1b-e88cd8a1d973"],
+      "discountIds": [
+        "07430105-9adb-4665-aa1b-e88cd8a1d973"
+      ],
       "supplierId": "6b325983-53fa-4544-b2b5-3b79f041bcba",
       "brand": "Lehner, Schoen and Bayer",
       "images": [
@@ -2518,7 +2538,9 @@
       "basePrice": 94.74983005856384,
       "salePrice": null,
       "cost": 38.70528254721707,
-      "discountIds": ["a237ad4c-ca63-40f0-864f-e4ded8adb330"],
+      "discountIds": [
+        "a237ad4c-ca63-40f0-864f-e4ded8adb330"
+      ],
       "supplierId": "c55d61ad-3dc1-466d-8502-25346cbf80be",
       "brand": "Weimann, O'Kon and Fahey",
       "images": [
@@ -3954,7 +3976,9 @@
         "12fa54a3-5d30-4e40-befd-719f175c6494",
         "05bb8c65-11fa-41f5-aa4a-4a21f402e659"
       ],
-      "excludedProductIds": ["69feb64e-8925-466c-970d-8cdd33b306c6"],
+      "excludedProductIds": [
+        "69feb64e-8925-466c-970d-8cdd33b306c6"
+      ],
       "applicableCategories": "all",
       "userGroups": [
         "seniors",
@@ -4012,8 +4036,12 @@
       "value": 13,
       "minOrderAmount": 196.99864879539928,
       "maxDiscountAmount": 166.9808272351379,
-      "applicableProducts": ["e4271736-3f06-4507-bbeb-99e678bc11d6"],
-      "excludedProductIds": ["c4970aac-210a-4475-b8c8-7796717ba56b"],
+      "applicableProducts": [
+        "e4271736-3f06-4507-bbeb-99e678bc11d6"
+      ],
+      "excludedProductIds": [
+        "c4970aac-210a-4475-b8c8-7796717ba56b"
+      ],
       "applicableCategories": "all",
       "userGroups": [
         "seniors",
@@ -4072,8 +4100,12 @@
         "1628e3b6-a983-4f81-b6ed-7295b26c39dc",
         "510546e3-fd50-4fd5-88e7-2aabd5ab1d2d"
       ],
-      "excludedProductIds": ["9882367f-10a6-4290-8477-34e151bf3eee"],
-      "applicableCategories": ["019e84b1-049e-4742-9d50-083bb5e77f82"],
+      "excludedProductIds": [
+        "9882367f-10a6-4290-8477-34e151bf3eee"
+      ],
+      "applicableCategories": [
+        "019e84b1-049e-4742-9d50-083bb5e77f82"
+      ],
       "userGroups": [
         "seniors",
         "healthcare_workers",
@@ -4099,7 +4131,9 @@
       "minOrderAmount": 27.18460750109727,
       "maxDiscountAmount": 97.81472528032023,
       "applicableProducts": [],
-      "excludedProductIds": ["462cc25f-53b9-4825-a8b5-c88c75da7be6"],
+      "excludedProductIds": [
+        "462cc25f-53b9-4825-a8b5-c88c75da7be6"
+      ],
       "applicableCategories": "all",
       "userGroups": [
         "seniors",
@@ -4165,7 +4199,9 @@
         "bffe274d-ef50-41bc-8a60-16b9a92126d9",
         "1628e3b6-a983-4f81-b6ed-7295b26c39dc"
       ],
-      "excludedProductIds": ["21eea072-1e54-4dc1-a3cc-45069186537b"],
+      "excludedProductIds": [
+        "21eea072-1e54-4dc1-a3cc-45069186537b"
+      ],
       "applicableCategories": "all",
       "userGroups": [],
       "usageLimit": 487,
@@ -4462,7 +4498,9 @@
     {
       "id": "6ed41b02-3e62-4dcd-b5a6-ef907908b706",
       "userId": "b2140544-43cf-437c-bb0f-6ad28ef6c123",
-      "items": ["6616217d-180e-46d6-8493-1540b504db37"],
+      "items": [
+        "6616217d-180e-46d6-8493-1540b504db37"
+      ],
       "total": "253.06",
       "status": "pending",
       "createdAt": "2024-06-17T19:06:11.938Z",
@@ -4540,7 +4578,9 @@
     {
       "id": "72e83b32-4300-4e92-abd9-4ba62879e9e4",
       "userId": "a887b17c-fc8b-4fa9-b291-f2f15f98b5ec",
-      "items": ["e57a2b47-dc3a-40af-9bae-526b00d24a7e"],
+      "items": [
+        "e57a2b47-dc3a-40af-9bae-526b00d24a7e"
+      ],
       "total": "284.25",
       "status": "completed",
       "createdAt": "2024-08-29T19:26:48.390Z",
@@ -4549,7 +4589,9 @@
     {
       "id": "f752a86f-6577-4e5d-8366-1a755d09ec45",
       "userId": "f9fddf76-ddab-462c-a19e-41d4a2f5d988",
-      "items": ["a825ad25-a873-4e51-aee4-8ba1815d740d"],
+      "items": [
+        "a825ad25-a873-4e51-aee4-8ba1815d740d"
+      ],
       "total": "407.45",
       "status": "cancelled",
       "createdAt": "2024-11-03T18:49:17.901Z",
@@ -4558,7 +4600,9 @@
     {
       "id": "e7c31209-20b5-4347-a754-34a0ce60f455",
       "userId": "511c74cf-c5be-4e71-8a14-b4f60c6b681f",
-      "items": ["d81e3b70-9a9b-4001-9afa-6d65fe16d5c5"],
+      "items": [
+        "d81e3b70-9a9b-4001-9afa-6d65fe16d5c5"
+      ],
       "total": "60.06",
       "status": "pending",
       "createdAt": "2024-08-23T01:43:40.387Z",
@@ -4652,7 +4696,9 @@
     {
       "id": "27732500-b931-4a54-a48b-b069e1311439",
       "userId": "6d8c2447-5135-424e-93d6-ebdd88868973",
-      "items": ["c50b2cfe-c7c4-43ff-8604-d8916be3e89d"],
+      "items": [
+        "c50b2cfe-c7c4-43ff-8604-d8916be3e89d"
+      ],
       "total": "176.52",
       "status": "cancelled",
       "createdAt": "2024-08-05T05:19:03.348Z",
@@ -5263,22 +5309,5 @@
   "prescriptions": [],
   "reviews": [],
   "wishlist": [],
-  "tokens": [
-    {
-      "id": "4fa3bdbd-1443-4257-a2b5-db7cf6f1bd93",
-      "userId": "8cfa20d5-1207-49e2-816e-0abd787ee347",
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjZmEyMGQ1LTEyMDctNDllMi04MTZlLTBhYmQ3ODdlZTM0NyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQzNzM2MTgyLCJleHAiOjE3NDM3Mzk3ODJ9.qE7oFohLb3TKfHyz32yx8_e7MXXwhCx6KXHhZEj49iI",
-      "createdAt": "2025-04-04T03:09:42.670Z",
-      "expiresAt": "2025-04-04T04:09:42.670Z",
-      "isValid": true
-    },
-    {
-      "id": "209675b3-bcdc-4260-8309-4696cb50040e",
-      "userId": "8cfa20d5-1207-49e2-816e-0abd787ee347",
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhjZmEyMGQ1LTEyMDctNDllMi04MTZlLTBhYmQ3ODdlZTM0NyIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQzNzM2MTk5LCJleHAiOjE3NDM3Mzk3OTl9.P9oRtK30zsBld6OO35fKQyZkJYNbwb5sHA4ec4wCLEc",
-      "createdAt": "2025-04-04T03:09:59.092Z",
-      "expiresAt": "2025-04-04T04:09:59.092Z",
-      "isValid": true
-    }
-  ]
+  "tokens": []
 }
