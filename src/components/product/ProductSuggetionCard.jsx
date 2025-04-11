@@ -1,8 +1,19 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function ProductSuggetionCard({ product }) {
+  const navigate = useNavigate();
+
+  function handleClick() {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    navigate(`/product-detail/${product.id}`);
+  }
+
   return (
-    <div className="flex items-center text-[12px]">
+    <div
+      className="flex items-center text-[12px]"
+      onClick={() => handleClick()}
+    >
       <img src={product.images[0].url} className="h-[80px] w-[80px] p-1"></img>
       <div className="w-full p-2 flex flex-col justify-around">
         <span>{product.name}</span>

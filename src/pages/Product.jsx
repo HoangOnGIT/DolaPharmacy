@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
-import CatergoryCard from "../components/CatergoryCard";
+import CatergoryCard from "../components/catergory/CatergoryCard";
 import { Row } from "antd";
-import FilterContent from "../components/FilterContent";
-import { SortAscendingOutlined } from "@ant-design/icons";
-import ProductCard from "../components/ProductCard";
+import FilterContent from "../components/filter/FilterContent";
+import { CloseOutlined, SortAscendingOutlined } from "@ant-design/icons";
+import ProductCard from "../components/product/ProductCard";
 import queryString from "query-string";
 import { Pagination } from "antd";
 
 function Product() {
   const [catergories, setCatergories] = useState([]);
+
+  const [branding, setBranding] = useState([]);
   const [products, setProducts] = useState([]);
   const [pagination, setPagination] = useState({
     _page: 1,
@@ -20,7 +22,61 @@ function Product() {
     _page: 1,
     _limit: 16,
     status: "active",
+    priceRange: [],
+    brand: [],
+    targeted: [],
+    weight: [],
   });
+
+  function handleChangeFilter(e, queryParam) {
+    setFilter({ ...filter, [queryParam]: e });
+  }
+
+  function handleChangeSort(name, order) {
+    setFilter({ ...filter, _sort: name, _order: order });
+  }
+
+  function handleDeleteFilter(queryParam, content) {
+    setFilter({
+      ...filter,
+      [queryParam]: filter[queryParam].filter((item) => item !== content),
+    });
+  }
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/categories")
+      .then((res) => res.json())
+      .then((data) => {
+        setCatergories(data);
+      });
+  }, []); // Fetch categories only once on component mount
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/brands")
+      .then((res) => res.json())
+      .then((data) => {
+        setBranding(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    const params = queryString.stringify(filter);
+    console.log(`${params}`);
+
+    fetch(`http://localhost:3000/api/products?${params}`)
+      .then((res) => res.json())
+      .then(({ body, pagination }) => {
+        setProducts(body);
+        setPagination(pagination);
+
+        // Set branding based on the "brand" attribute of the initial product data
+      });
+  }, [filter]); // Fetch products whenever the filter changes
+
+  function handlePageChange(n) {
+    setPagination({ ...pagination, _page: n });
+    setFilter({ ...filter, _page: n });
+  }
 
   const filterArr = [
     {
@@ -36,24 +92,17 @@ function Product() {
         "20 triệu - 50 triệu",
         "Trên 50 triệu",
       ],
+      queryParam: "priceRange",
     },
     {
       title: "Thương hiệu",
-      options: [
-        "Dưới 1 triệu",
-        "1 triệu - 2 triệu",
-        "2 triệu - 3 triệu",
-        "3 triệu - 4 triệu",
-        "4 triệu - 5 triệu",
-        "5 triệu - 10 triệu",
-        "10 triệu - 20 triệu",
-        "20 triệu - 50 triệu",
-        "Trên 50 triệu",
-      ],
+      options: branding,
+      queryParam: "brand",
     },
     {
       title: "Đối tượng",
       options: ["Nam", "Nữ", "Trẻ em", "Người cao tuổi", "Phụ nữ mang thai"],
+      queryParam: "targeted",
     },
     {
       title: "Trọng lượng",
@@ -64,41 +113,22 @@ function Product() {
         "500g - 1kg",
         "Trên 1kg",
       ],
+      queryParam: "weight",
     },
   ];
 
   const sortArr = [
-    "Tên A-Z",
-    "Tên Z-A",
-    "Hàng mới",
-    "Giá thấp đến cao",
-    "Giá cao xuống thấp",
+    { name: "Tên A-Z", order: "asc", sort_name: "name" },
+    { name: "Tên Z-A", order: "desc", sort_name: "name" },
+    { name: "Hàng mới", order: "asc", sort_name: "name" },
+    { name: "Giá thấp đến cao", order: "asc", sort_name: "salePrice" },
+    { name: "Giá cao xuống thấp", order: "desc", sort_name: "salePrice" },
   ];
-
-  useEffect(() => {
-    const params = queryString.stringify(filter);
-    fetch("http://localhost:3000/api/categories")
-      .then((res) => res.json())
-      .then((data) => {
-        setCatergories(data);
-      });
-    fetch(`http://localhost:3000/api/products?${params}`)
-      .then((res) => res.json())
-      .then(({ body, pagination }) => {
-        setProducts(body);
-        setPagination(pagination);
-      });
-  }, [filter]);
-
-  function handlePageChange(n) {
-    setPagination({ ...pagination, _page: n });
-    setFilter({ ...filter, _page: n });
-  }
 
   return (
     <div
       style={{ width: "100%" }}
-      className="flex items-center justify-center mt-10"
+      className="flex items-center justify-center my-10"
     >
       <div className="w-[70%]">
         <div className="catergory">
@@ -129,10 +159,33 @@ function Product() {
                 </span>
               </div>
               <div className="flex flex-col space-y-3 mt-3">
-                {filterArr &&
-                  filterArr.map((filterObj, index) => (
-                    <FilterContent filterObj={filterObj} key={index} />
-                  ))}
+                {filterArr && (
+                  <>
+                    {filter.priceRange.length !== 0 ||
+                    filter.targeted.length !== 0 ||
+                    filter.weight.length !== 0 ||
+                    filter.brand.length !== 0 ? (
+                      <>
+                        <h1>Bạn chọn</h1>
+                        <SelectedFilter
+                          filter={filter}
+                          onDelete={handleDeleteFilter}
+                        />
+                      </>
+                    ) : (
+                      ""
+                    )}
+                    {filterArr.map((filterObj, index) => (
+                      <FilterContent
+                        filterObj={filterObj}
+                        onChange={handleChangeFilter}
+                        selected={filter}
+                        filtering={filter[filterObj.queryParam]}
+                        key={index}
+                      />
+                    ))}
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -141,8 +194,12 @@ function Product() {
             <div className="flex space-x-3 items-center mt-1">
               <SortAscendingOutlined /> <span>Xếp theo: </span>
               {sortArr &&
-                sortArr.map((name, index) => (
-                  <SortCard name={name} key={index} />
+                sortArr.map((sortObj, index) => (
+                  <SortCard
+                    sortObj={sortObj}
+                    key={index}
+                    handleChangeSort={handleChangeSort}
+                  />
                 ))}
             </div>
             <div className="grid grid-cols-4 gap-5 mt-5">
@@ -250,13 +307,70 @@ function Product() {
   );
 }
 
-function SortCard({ name }) {
+function SortCard({ sortObj, handleChangeSort }) {
   return (
     <div
-      className="flex items-center justify-center text-blue-800 ring-2 ring-blue-800 rounded-[3px] p-0.5 hover:text-white hover:bg-blue-800
-    transition-all duration-300"
+      className="flex items-center justify-center text-blue-800 ring-2 ring-blue-800 rounded-[3px] p-0.5 px-2 hover:text-white hover:bg-blue-800 transition-all duration-300"
+      onClick={() => handleChangeSort(sortObj.sort_name, sortObj.order)}
     >
-      {name}
+      {sortObj.name}
+    </div>
+  );
+}
+
+function SelectedFilter({ filter, onDelete }) {
+  return (
+    <div className="flex flex-wrap space-x-2 space-y-2">
+      {filter.priceRange &&
+        filter.priceRange.map((content, index) => (
+          <FilterCard
+            content={content}
+            queryParam="priceRange"
+            onDelete={onDelete}
+            key={index}
+          />
+        ))}
+      {filter.brand &&
+        filter.brand.map((content, index) => (
+          <FilterCard
+            content={content}
+            queryParam="brand"
+            onDelete={onDelete}
+            key={index}
+          />
+        ))}
+      {filter.targeted &&
+        filter.targeted.map((content, index) => (
+          <FilterCard
+            content={content}
+            queryParam="targeted"
+            onDelete={onDelete}
+            key={index}
+          />
+        ))}
+      {filter.weight &&
+        filter.weight.map((content, index) => (
+          <FilterCard
+            content={content}
+            queryParam="weight"
+            onDelete={onDelete}
+            key={index}
+          />
+        ))}
+    </div>
+  );
+}
+
+function FilterCard({ content, queryParam, onDelete }) {
+  return (
+    <div className="bg-blue-600 text-white p-1 w-fit text-[10px] flex items-center space-x-2 rounded-[3px]">
+      <button
+        className=" text-whitetext-[20px] flex justify-center items-center "
+        onClick={() => onDelete(queryParam, content)}
+      >
+        <CloseOutlined style={{ fontSize: "10px" }} />
+      </button>
+      <span>{content}</span>
     </div>
   );
 }

@@ -162,106 +162,6 @@ const generatePharmacySuppliers = (count) => {
   return suppliers;
 };
 
-// Update generatePharmacyDiscounts to use Vietnamese content
-const generatePharmacyDiscounts = (count, products) => {
-  const discounts = [];
-
-  const discountNames = [
-    "Giảm giá đơn thuốc đầu tiên",
-    "Ưu đãi cho người cao tuổi",
-    "Ưu đãi nhân viên y tế",
-    "Khuyến mãi vitamin hàng tháng",
-    "Combo chăm sóc tiểu đường",
-    "Giảm giá mùa dị ứng",
-    "Gói sức khỏe gia đình",
-    "Ưu đãi khách hàng thân thiết",
-    "Quà chào mừng khách hàng mới",
-    "Combo phòng cúm mùa",
-    "Giảm giá thuốc điều trị mãn tính",
-    "Combo chăm sóc bé",
-  ];
-
-  for (let i = 0; i < count; i++) {
-    const discountType = faker.helpers.arrayElement([
-      "percentage",
-      "fixed",
-      "free_shipping",
-      "buy_x_get_y",
-    ]);
-    const startDate = faker.date.past({ years: 1 });
-
-    const discount = {
-      id: generateId(),
-      code: faker.string.alphanumeric(8).toUpperCase(),
-      name:
-        i < discountNames.length
-          ? discountNames[i]
-          : `Khuyến mãi sức khỏe ${faker.commerce.productAdjective()}`,
-      description: "Giảm giá đặc biệt cho khách hàng của chúng tôi.",
-      type: discountType,
-      value:
-        discountType === "percentage"
-          ? faker.number.int({ min: 5, max: 25 })
-          : faker.number.int({ min: 50000, max: 300000 }),
-      minOrderAmount: faker.number.int({
-        min: 100000,
-        max: 1000000,
-      }),
-      maxDiscountAmount:
-        discountType === "percentage"
-          ? faker.number.int({ min: 500000, max: 2000000 })
-          : null,
-      applicableProducts: [], // Set later
-      excludedProductIds: [], // Set later
-      applicableCategories: faker.datatype.boolean(0.7)
-        ? "all"
-        : Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, () =>
-            generateId()
-          ),
-      userGroups: faker.datatype.boolean(0.6)
-        ? []
-        : [
-            "người cao tuổi",
-            "nhân viên y tế",
-            "bệnh nhân mãn tính",
-            "khách hàng mới",
-          ],
-      usageLimit: faker.number.int({ min: 50, max: 1000 }),
-      usageCount: faker.number.int({ min: 0, max: 50 }),
-      perUserLimit: faker.number.int({ min: 1, max: 5 }),
-      startDate: startDate.toISOString(),
-      endDate: faker.datatype.boolean(0.2)
-        ? null
-        : faker.date.future({ years: 1, refDate: startDate }).toISOString(),
-      active: faker.datatype.boolean(0.8),
-      createdAt: faker.date.past({ years: 1 }).toISOString(),
-      updatedAt: faker.date.recent().toISOString(),
-    };
-
-    discounts.push(discount);
-  }
-
-  // Assign applicableProducts and excludedProductIds after products are created
-  discounts.forEach((discount) => {
-    if (faker.datatype.boolean(0.7)) {
-      discount.applicableProducts = Array.from(
-        { length: faker.number.int({ min: 1, max: 5 }) },
-        () => {
-          const product = faker.helpers.arrayElement(products);
-          product.discountIds.push(discount.id); // Add discount to the product
-          return product.id;
-        }
-      );
-    }
-    discount.excludedProductIds = Array.from(
-      { length: faker.number.int({ min: 0, max: 3 }) },
-      () => faker.helpers.arrayElement(products).id
-    );
-  });
-
-  return discounts;
-};
-
 // Generate pharmacy users with Vietnamese names and locations
 const generatePharmacyUsers = (count) => {
   const users = [];
@@ -396,58 +296,88 @@ const generatePharmacyUsers = (count) => {
 };
 
 // Update generatePharmacyProducts for Vietnamese products
-const generatePharmacyProducts = (count, categories, suppliers) => {
+const generatePharmacyProducts = (count, categories, suppliers, brands) => {
   const products = [];
-
-  const vietnameseProductPrefixes = [
-    "Thuốc",
-    "Viên",
-    "Kem",
-    "Sirô",
-    "Dung dịch",
-    "Dầu",
-    "Miếng dán",
-    "Bột",
-    "Cồn",
-    "Nước",
-    "Thực phẩm chức năng",
-    "Vitamin",
-  ];
-
-  const vietnameseProductMaterials = [
-    "thảo dược",
-    "kháng sinh",
-    "giảm đau",
-    "kháng viêm",
-    "tiêu hóa",
-    "da liễu",
-    "mắt",
-    "hô hấp",
-    "tim mạch",
-    "dinh dưỡng",
-  ];
+  const calculateDiscountedPrice = (basePrice, discount) => {
+    if (!discount) return basePrice;
+    return Math.max(
+      basePrice - (basePrice * discount.value) / 100,
+      basePrice - discount.maxDiscountAmount || 0
+    );
+  };
 
   for (let i = 0; i < count; i++) {
     const category = faker.helpers.arrayElement(categories);
     const supplier = faker.helpers.arrayElement(suppliers);
 
+    const vietnameseProductPrefixes = [
+      "Thuốc",
+      "Viên",
+      "Kem",
+      "Sirô",
+      "Dung dịch",
+      "Dầu",
+      "Miếng dán",
+      "Bột",
+      "Cồn",
+      "Nước",
+      "Thực phẩm chức năng",
+      "Vitamin",
+    ];
+
+    const vietnameseProductMaterials = [
+      "thảo dược",
+      "kháng sinh",
+      "giảm đau",
+      "kháng viêm",
+      "tiêu hóa",
+      "da liễu",
+      "mắt",
+      "hô hấp",
+      "tim mạch",
+      "dinh dưỡng",
+    ];
+
     const prefix = faker.helpers.arrayElement(vietnameseProductPrefixes);
     const material = faker.helpers.arrayElement(vietnameseProductMaterials);
     const brand = supplier.name.split(" ").slice(0, 2).join(" ");
+
+    if (!brands.includes(brand)) {
+      brands.push(brand); // Collect unique brands
+    }
 
     const productName = `${prefix} ${material} ${brand} ${faker.string.numeric(
       3
     )}`;
 
+    const discountValue = faker.number.int({ min: 5, max: 25 });
+    const maxDiscountAmount = faker.number.int({ min: 500000, max: 2000000 });
+
     const basePrice = roundToNearest10k(
-      faker.number.int({ min: 20000, max: 500000 })
+      faker.number.int({ min: 20000, max: 100000000 })
     );
     const salePrice = faker.datatype.boolean(0.3)
-      ? roundToNearest10k(faker.number.int({ min: 15000, max: 450000 }))
+      ? roundToNearest10k(faker.number.int({ min: 20000, max: basePrice }))
       : null;
     const cost = roundToNearest10k(
-      faker.number.int({ min: 10000, max: 300000 })
+      faker.number.int({ min: 20000, max: basePrice })
     );
+
+    const targeted = faker.helpers.arrayElement([
+      "Nam",
+      "Nữ",
+      "Trẻ em",
+      "Người cao tuổi",
+      "Phụ nữ mang thai",
+    ]);
+
+    const weight = faker.helpers.arrayElement([
+      "Dưới 100g",
+      "100g - 200g",
+      "200g - 500g",
+      "500g - 1kg",
+      "Trên 1kg",
+    ]);
 
     const product = {
       id: generateId(),
@@ -461,7 +391,16 @@ const generatePharmacyProducts = (count, categories, suppliers) => {
       salePrice: salePrice,
       cost: cost,
       priceRange: getPriceRange(basePrice),
-      discountIds: [], // Initialize as empty array
+      discount: {
+        type: "percentage",
+        value: discountValue,
+        maxDiscountAmount: maxDiscountAmount,
+      },
+      discountedPrice: calculateDiscountedPrice(basePrice, {
+        type: "percentage",
+        value: discountValue,
+        maxDiscountAmount: maxDiscountAmount,
+      }),
       supplierId: supplier.id,
       brand: brand,
       images: Array.from(
@@ -531,6 +470,8 @@ const generatePharmacyProducts = (count, categories, suppliers) => {
       isPopular: faker.datatype.boolean(0.3),
       averageRating: faker.number.float({ min: 3.5, max: 5, precision: 0.1 }),
       reviewCount: faker.number.int({ min: 0, max: 250 }),
+      targeted: targeted,
+      weight: weight,
       createdAt: faker.date.past({ years: 2 }).toISOString(),
       updatedAt: faker.date.recent().toISOString(),
     };
@@ -539,34 +480,6 @@ const generatePharmacyProducts = (count, categories, suppliers) => {
   }
 
   return products;
-};
-
-// Generate product-discount relationships
-const generateProductDiscounts = (products, discounts) => {
-  const productDiscounts = [];
-
-  discounts.forEach((discount) => {
-    // Add relationships for applicableProducts
-    discount.applicableProducts.forEach((productId) => {
-      productDiscounts.push({
-        id: generateId(),
-        productId,
-        discountId: discount.id,
-      });
-    });
-
-    // Add relationships for excludedProductIds
-    discount.excludedProductIds.forEach((productId) => {
-      productDiscounts.push({
-        id: generateId(),
-        productId,
-        discountId: discount.id,
-        excluded: true, // Mark as excluded
-      });
-    });
-  });
-
-  return productDiscounts;
 };
 
 // Generate orders and orderItems with Vietnamese content
@@ -626,22 +539,18 @@ const generateData = async () => {
   const categories = generatePharmacyCategories(10);
   const suppliers = generatePharmacySuppliers(10);
   const users = generatePharmacyUsers(30);
-  const products = generatePharmacyProducts(40, categories, suppliers);
-  const discounts = generatePharmacyDiscounts(10, products);
-  const productDiscounts = generateProductDiscounts(products, discounts);
+  const brands = []; // Initialize brands array
+  const products = generatePharmacyProducts(40, categories, suppliers, brands);
   const { orders, orderItems } = generateOrders(20, users, products);
-
-  console.log(productDiscounts);
 
   const data = {
     categories,
     suppliers,
     products,
     users,
-    discounts,
-    productDiscounts, // Add the join table
     orders,
     orderItems,
+    brands, // Include brands in the output
     carts: [],
     prescriptions: [],
     reviews: [],

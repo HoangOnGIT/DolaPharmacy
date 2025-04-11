@@ -1,38 +1,58 @@
 import React, { useEffect, useState } from "react";
-import ProductImageGallery from "../components/ProductImageGallery";
+import ProductImageGallery from "../components/product/ProductImageGallery";
 import {
   HeartFilled,
   HeartOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
-import VariantCard from "../components/VariantCard";
+import VariantCard from "../components/product/VariantCard";
 import queryString from "query-string";
-import ProductSuggetionCard from "../components/ProductSuggetionCard";
+import ProductSuggetionCard from "../components/product/ProductSuggetionCard";
+import { useParams } from "react-router-dom";
 
-function ProductDetail({ product }) {
-  const imageArr = product.images
-    ? product.images.map((image) => image.url)
-    : [];
+function ProductDetail() {
+  const { id } = useParams();
+  const [product, setProduct] = useState({});
+  const [suggest, setSuggestion] = useState([]);
+  const [samePricing, setSamePricing] = useState([]);
+
+  useEffect(() => {
+    // Fetch product data based on the ID
+    fetch(`http://localhost:3000/api/products?id=${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setProduct(data[0]);
+      });
+  }, [id]); // Run only when the ID changes
+
+  useEffect(() => {
+    // Fetch suggestions and same pricing only when product data is available
+    if (product.category && product.priceRange) {
+      const categoryParam = queryString.stringify({
+        category: product.category,
+      });
+      fetch(`http://localhost:3000/api/products?${categoryParam}`)
+        .then((res) => res.json())
+        .then((data) => setSuggestion(data));
+
+      const pricingParam = queryString.stringify({
+        category: product.category,
+        priceRange: product.priceRange,
+      });
+      fetch(`http://localhost:3000/api/products?${pricingParam}`)
+        .then((res) => res.json())
+        .then((data) => setSamePricing(data));
+    }
+  }, [product.category, product.priceRange]); // Run only when category or priceRange changes
 
   const [quantity, setQuantity] = useState(1);
   const [fav, setFav] = useState(false);
   const [toggle, setToggle] = useState(true);
   const [showMore, setShowMore] = useState(false);
-  const [suggest, setSuggestion] = useState([]);
-  const [samePricing, setSamePricing] = useState([]);
-  useEffect(() => {
-    let param = queryString.stringify({ category: product.category });
 
-    fetch(`http://localhost:3000/api/products?${param}`)
-      .then((res) => res.json())
-      .then((data) => setSuggestion(data));
-
-    param = { ...param, priceRange: product.priceRange };
-
-    fetch(`http://localhost:3000/api/products?${param}`)
-      .then((res) => res.json())
-      .then((data) => setSamePricing(data));
-  }, [product.category, product.priceRange]);
+  const imageArr = product.images
+    ? product.images.map((image) => image.url)
+    : [];
 
   function increase() {
     setQuantity((prev) => prev + 1);
@@ -82,7 +102,7 @@ function ProductDetail({ product }) {
   return (
     <div
       style={{ width: "100%" }}
-      className="flex items-center justify-center mt-10 flex-wrap"
+      className="flex items-center justify-center my-10 flex-wrap"
     >
       <div className="w-[70%] min-h-screen h-fit grid grid-cols-9 gap-10">
         <div className="col-span-3 img-slide">
@@ -186,19 +206,24 @@ function ProductDetail({ product }) {
             </div>
           </div>
 
-          <div className="flex gap-3 mt-4">
-            <button
-              className="flex items-center bg-blue-700 hover:bg-blue-800 text-white rounded-md px-4 py-2 w-4/5 transition-colors"
-              onClick={() => handleAddToCart(product)}
-            >
-              <ShoppingCartOutlined className="mr-2 text-lg" />
-              <div className="flex flex-col items-start">
-                <span className="font-medium">Thêm vào giỏ</span>
-                <span className="text-xs opacity-90">Miễn phí giao hàng</span>
+          <div className="flex mt-4 justify-between">
+            <div className="flex h-[48px] ring-2 ring-blue-800 rounded-[5px] hover:ring-green-800 ">
+              <div className="bg-white p-2 aspect-square h-full flex justify-center items-center rounded-l-[5px]">
+                <ShoppingCartOutlined
+                  style={{ color: "blue", fontSize: "30px" }}
+                />
               </div>
-            </button>
+              <button
+                className="text-center bg-blue-700 hover:bg-green-800 text-white rounded-r-[5px] p-2 transition-colors"
+                onClick={() => handleAddToCart(product)}
+              >
+                <span className="font-medium">Thêm vào giỏ</span>
+                <br></br>
+                <span className="text-xs opacity-90">Miễn phí giao hàng</span>
+              </button>
+            </div>
             <button
-              className="flex items-center justify-center bg-white border-2 border-blue-700 text-blue-700 rounded-md w-12 h-12 hover:bg-blue-50"
+              className="flex items-center justify-center bg-white border-2 border-blue-700 text-blue-700 rounded-md w-12 h-12 hover:bg-blue-50 ml-2"
               onClick={() => handleFav()}
             >
               {fav ? (
