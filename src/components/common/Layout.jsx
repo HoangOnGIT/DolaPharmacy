@@ -1,4 +1,3 @@
-import React from "react";
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
 import FloatingButton from "./FloatingButton/FloatingButtons";
@@ -9,6 +8,7 @@ function Layout() {
     <>
       <Header />
       <Outlet />
+
       <Footer />
       <FloatingButton />
     </>

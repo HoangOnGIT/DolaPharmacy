@@ -5,6 +5,8 @@ import {
   ShoppingCartOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { useCart } from "../../contexts/CartContext";
 
 function ProductCard({ product }) {
   const navigate = useNavigate();
@@ -77,15 +79,17 @@ function BadgeDiscount({ discount }) {
 }
 
 function AddToCart({ item }) {
-  function handleAddToCart(item) {
-    console.log(item);
-    // Add logic to add the item to the cart here
+  const { addToCart } = useCart();
+
+  async function handleAddToCart(e, item) {
+    e.stopPropagation(); // Prevent event from bubbling up to parent
+    addToCart(item);
   }
 
   return (
     <div
       className="bg-blue-800 text-white py-0.5 px-2 rounded-3xl h-[32px] w-[32px]"
-      onClick={() => handleAddToCart(item)}
+      onClick={(e) => handleAddToCart(e, item)}
     >
       <ShoppingCartOutlined />
     </div>

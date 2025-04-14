@@ -61,7 +61,6 @@ function Product() {
 
   useEffect(() => {
     const params = queryString.stringify(filter);
-    console.log(`${params}`);
 
     fetch(`http://localhost:3000/api/products?${params}`)
       .then((res) => res.json())
