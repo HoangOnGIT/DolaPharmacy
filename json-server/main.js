@@ -24,6 +24,12 @@ server.use((req, res, next) => {
   if (!db.has("tokens").value()) {
     db.set("tokens", []).write();
   }
+
+  // Initialize carts array if it doesn't exist
+  if (!db.has("carts").value()) {
+    db.set("carts", []).write();
+  }
+
   next();
 });
 
@@ -125,6 +131,18 @@ server.post("/api/register", (req, res) => {
 
   // Add the new user to the database
   router.db.get("users").push(newUser).write();
+
+  // Create an empty cart for the new user
+  const newCart = {
+    id: generateId(),
+    userId: newUser.id,
+    items: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  // Add the cart to the database
+  router.db.get("carts").push(newCart).write();
 
   // Generate a token for the new user
   const token = jwt.sign({ id: newUser.id, role: newUser.role }, SECRET_KEY, {
