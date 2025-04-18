@@ -15,19 +15,15 @@ export const CartProvider = ({ children }) => {
 
   const [cart, setCart] = useState(initialCart);
 
-  const { user } = useAuth();
-
-  console.log(user);
-
-  console.log(user && user.id);
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (user) {
+    if (isAuthenticated) {
+      const { user } = useAuth();
       const userId = { userId: user.id };
       fetch(`http://localhost:3000/api/carts?${queryString.stringify(userId)}`)
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           setCart(data);
         });
     } else {
@@ -39,7 +35,7 @@ export const CartProvider = ({ children }) => {
         setCart(initialCart);
       }
     }
-  }, [user]);
+  }, []);
 
   const addToCart = (item) => {
     // Make a copy of the current cart items
@@ -94,7 +90,11 @@ export const CartProvider = ({ children }) => {
   };
 
   const updateItemQuantity = (itemId, newQuantity) => {
-    if (newQuantity < 1) return;
+    if (newQuantity < 1) {
+      // Remove the item if the quantity is less than 1
+      removeItemFromCart(itemId);
+      return;
+    }
 
     const updatedItems = cart.items.map((item) =>
       item.id === itemId ? { ...item, quantity: newQuantity } : item
@@ -106,8 +106,30 @@ export const CartProvider = ({ children }) => {
 
   const removeItemFromCart = (itemId) => {
     const updatedItems = cart.items.filter((item) => item.id !== itemId);
-    setCart({ ...cart, items: updatedItems });
-    // Here you would also update the cart on the server
+    const updatedCart = { ...cart, items: updatedItems };
+
+    if (user) {
+      // If user is logged in, remove the item from the server
+      fetch(`http://localhost:3000/api/carts/${user.id}/items/${itemId}`, {
+        method: "DELETE",
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to remove item from server");
+          }
+          return response.json();
+        })
+        .then(() => {
+          setCart(updatedCart);
+        })
+        .catch((error) => {
+          console.error("Error removing item from cart:", error);
+        });
+    } else {
+      // If no user, update localStorage
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      setCart(updatedCart);
+    }
   };
 
   const value = {

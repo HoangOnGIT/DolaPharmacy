@@ -6,6 +6,7 @@ import { PhoneIcon } from "@heroicons/react/20/solid";
 import Search from "./Search";
 import Modal from "./Modal";
 import Menu from "./Menu";
+import { useNavigate } from "react-router-dom";
 
 const Header = React.memo(() => {
   const textList = [
@@ -42,6 +43,20 @@ const Header = React.memo(() => {
     return () => clearInterval(intervalId);
   }, [textList]);
 
+  const nav = useNavigate();
+
+  function handleClickCart() {
+    nav("/cart");
+  }
+
+  function handleClickFav() {
+    nav("/fav");
+  }
+
+  function handleClickMap() {
+    nav("/map");
+  }
+
   return (
     <>
       <div className="w-full">
@@ -67,10 +82,10 @@ const Header = React.memo(() => {
                   </p>
                 </div>
                 <div className="my-1 flex items-center">
-                  <a className="mx-1 hover:text-blue-800" href="">
+                  <a className="mx-1 hover:text-blue-800" href="/register">
                     Đăng ký |
                   </a>
-                  <a className="mx-1 hover:text-blue-800" href="">
+                  <a className="mx-1 hover:text-blue-800" href="/login  ">
                     Đăng nhập |
                   </a>
                   <p className="mx-1 flex items-center" href="">
@@ -119,7 +134,11 @@ const Header = React.memo(() => {
               <Search categories={category} />
 
               <div className="flex items-center">
-                <a className="mx-1 hover:text-blue-800" href="">
+                <a
+                  className="mx-1 hover:text-blue-800"
+                  href=""
+                  onClick={() => handleClickMap()}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -140,7 +159,11 @@ const Header = React.memo(() => {
                     />
                   </svg>
                 </a>
-                <a className="mx-1 hover:text-blue-800" href="">
+                <a
+                  className="mx-1 hover:text-blue-800"
+                  href=""
+                  onClick={() => handleClickFav()}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -172,7 +195,10 @@ const Header = React.memo(() => {
                     />
                   </svg>
                 </a>
-                <button className="mx-2 flex items-center bg-blue-800 text-white px-2.5 py-1 rounded-lg text-base hover:bg-white hover:text-blue-800 cursor-pointer">
+                <button
+                  className="mx-2 flex items-center bg-blue-800 text-white px-2.5 py-1 rounded-lg text-base hover:bg-white hover:text-blue-800 cursor-pointer"
+                  onClick={() => handleClickCart()}
+                >
                   Giỏ hàng
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

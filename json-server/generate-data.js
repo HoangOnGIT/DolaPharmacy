@@ -166,6 +166,39 @@ const generatePharmacySuppliers = (count) => {
 const generatePharmacyUsers = (count) => {
   const users = [];
 
+  // Always add admin user first
+  const adminUser = {
+    id: generateId(),
+    email: "admin",
+    passwordHash: "admin", // In a real app, this would be hashed
+    firstName: "Admin",
+    lastName: "User",
+    phone: "0987654321",
+    dateOfBirth: "1990-01-01",
+    role: "admin",
+    verificationStatus: "verified",
+    lastLogin: faker.date.recent().toISOString(),
+    addresses: [
+      {
+        id: generateId(),
+        type: "billing",
+        isPrimary: true,
+        firstName: "Admin",
+        lastName: "User",
+        street: "123 Đường Admin, Quận 1",
+        city: "TP. Hồ Chí Minh",
+        state: "",
+        postalCode: "70000",
+        country: "Việt Nam",
+        phone: "0987654321",
+      },
+    ],
+    createdAt: faker.date.past({ years: 2 }).toISOString(),
+    updatedAt: faker.date.recent().toISOString(),
+  };
+
+  users.push(adminUser);
+
   const vietnameseCities = [
     "Hà Nội",
     "TP. Hồ Chí Minh",
@@ -224,24 +257,22 @@ const generatePharmacyUsers = (count) => {
     "Vy",
   ];
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < count - 1; i++) {
+    // Reduced count by 1 since we already added admin
     const lastName = faker.helpers.arrayElement(vietnameseLastNames);
     const firstName = faker.helpers.arrayElement(vietnameseFirstNames);
     const fullName = `${lastName} ${firstName}`;
 
     const city = faker.helpers.arrayElement(vietnameseCities);
 
-    // Admin should be a small percentage
-    const role =
-      i === 0
-        ? "admin"
-        : faker.helpers.arrayElement([
-            "customer",
-            "customer",
-            "customer",
-            "staff",
-            "guest",
-          ]);
+    // Admin should be a small percentage, but we already have one admin
+    const role = faker.helpers.arrayElement([
+      "customer",
+      "customer",
+      "customer",
+      "staff",
+      "guest",
+    ]);
 
     const user = {
       id: generateId(),
@@ -350,15 +381,20 @@ const generatePharmacyProducts = (count, categories, suppliers, brands) => {
       3
     )}`;
 
-    const discountValue = faker.number.int({ min: 5, max: 25 });
-    const maxDiscountAmount = faker.number.int({ min: 500000, max: 2000000 });
+    const discountValue = faker.datatype.boolean(0.7) // 70% chance to have a discount
+      ? faker.number.int({ min: 5, max: 25 })
+      : null;
+    const maxDiscountAmount = discountValue
+      ? faker.number.int({ min: 500000, max: 2000000 })
+      : null;
 
     const basePrice = roundToNearest10k(
       faker.number.int({ min: 20000, max: 100000000 })
     );
-    const salePrice = faker.datatype.boolean(0.3)
-      ? roundToNearest10k(faker.number.int({ min: 20000, max: basePrice }))
-      : null;
+    const salePrice = discountValue
+      ? roundToNearest10k(basePrice * (1 - discountValue / 100))
+      : basePrice; // Set salePrice to basePrice if no discount
+
     const cost = roundToNearest10k(
       faker.number.int({ min: 20000, max: basePrice })
     );
@@ -388,14 +424,16 @@ const generatePharmacyProducts = (count, categories, suppliers, brands) => {
       sku: `DOLA-${faker.string.alphanumeric(6).toUpperCase()}`,
       requiresPrescription: faker.datatype.boolean(0.5),
       basePrice: basePrice,
-      salePrice: salePrice,
+      salePrice: salePrice, // Ensure salePrice is set
       cost: cost,
       priceRange: getPriceRange(basePrice),
-      discount: {
-        type: "percentage",
-        value: discountValue,
-        maxDiscountAmount: maxDiscountAmount,
-      },
+      discount: discountValue
+        ? {
+            type: "percentage",
+            value: discountValue,
+            maxDiscountAmount: maxDiscountAmount,
+          }
+        : null,
       discountedPrice: calculateDiscountedPrice(basePrice, {
         type: "percentage",
         value: discountValue,
@@ -542,6 +580,13 @@ const generateData = async () => {
   const brands = []; // Initialize brands array
   const products = generatePharmacyProducts(40, categories, suppliers, brands);
   const { orders, orderItems } = generateOrders(20, users, products);
+
+  // Calculate total products for each category
+  categories.forEach((category) => {
+    category.totalProducts = products.filter(
+      (product) => product.category === category.id
+    ).length;
+  });
 
   const data = {
     categories,

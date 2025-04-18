@@ -9,7 +9,6 @@ import { Pagination } from "antd";
 
 function Product() {
   const [catergories, setCatergories] = useState([]);
-
   const [branding, setBranding] = useState([]);
   const [products, setProducts] = useState([]);
   const [pagination, setPagination] = useState({
@@ -17,7 +16,6 @@ function Product() {
     _limit: 16,
     _totalRows: 1,
   });
-
   const [filter, setFilter] = useState({
     _page: 1,
     _limit: 16,
@@ -27,6 +25,7 @@ function Product() {
     targeted: [],
     weight: [],
   });
+  const [activeSort, setActiveSort] = useState(null);
 
   function handleChangeFilter(e, queryParam) {
     setFilter({ ...filter, [queryParam]: e });
@@ -34,6 +33,7 @@ function Product() {
 
   function handleChangeSort(name, order) {
     setFilter({ ...filter, _sort: name, _order: order });
+    setActiveSort({ sort_name: name, order: order });
   }
 
   function handleDeleteFilter(queryParam, content) {
@@ -62,13 +62,13 @@ function Product() {
   useEffect(() => {
     const params = queryString.stringify(filter);
 
+    console.log(`http://localhost:3000/api/products?${params}`);
+
     fetch(`http://localhost:3000/api/products?${params}`)
       .then((res) => res.json())
       .then(({ body, pagination }) => {
         setProducts(body);
         setPagination(pagination);
-
-        // Set branding based on the "brand" attribute of the initial product data
       });
   }, [filter]); // Fetch products whenever the filter changes
 
@@ -119,20 +119,20 @@ function Product() {
   const sortArr = [
     { name: "Tên A-Z", order: "asc", sort_name: "name" },
     { name: "Tên Z-A", order: "desc", sort_name: "name" },
-    { name: "Hàng mới", order: "asc", sort_name: "name" },
+    { name: "Hàng mới", order: "desc", sort_name: "createdAt" },
     { name: "Giá thấp đến cao", order: "asc", sort_name: "salePrice" },
     { name: "Giá cao xuống thấp", order: "desc", sort_name: "salePrice" },
   ];
 
   return (
-    <div
-      style={{ width: "100%" }}
-      className="flex items-center justify-center my-10"
-    >
-      <div className="w-[70%]">
-        <div className="catergory">
-          <div className="mx-auto flex justify-center items-center space-x-3">
-            <Row gutter={16}>
+    <div className="bg-gray-50 py-10">
+      <div className="container mx-auto max-w-7xl px-4">
+        <div className="category-section mb-8">
+          <h2 className="text-xl font-semibold mb-4 text-gray-800 pb-2">
+            Danh mục sản phẩm
+          </h2>
+          <div className="mx-auto flex justify-center items-center">
+            <Row gutter={[16, 16]} className="w-full">
               {catergories &&
                 catergories.map((catergory) => {
                   if (catergory.displayOrder <= 6) {
@@ -148,99 +148,166 @@ function Product() {
             </Row>
           </div>
         </div>
-        <div className="grid grid-cols-[1fr_4fr] min-h-screen mt-10 gap-5">
-          <div className="filter">
-            <div>
-              <div className="bg-blue-600 text-white px-3 py-2 rounded-[5px]">
-                <span>Bộ lọc sản phẩm</span> <br></br>
-                <span className="text-[12px]">
+
+        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
+          {/* Filter sidebar */}
+          <div className="filter-sidebar">
+            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+              <div className="bg-blue-600 text-white px-4 py-3">
+                <span className="font-medium text-lg">Bộ lọc sản phẩm</span>
+                <p className="text-sm opacity-90 mt-0.5">
                   Giúp bạn tìm sản phẩm nhanh hơn
-                </span>
+                </p>
               </div>
-              <div className="flex flex-col space-y-3 mt-3">
+
+              <div className="p-4">
                 {filterArr && (
                   <>
                     {filter.priceRange.length !== 0 ||
                     filter.targeted.length !== 0 ||
                     filter.weight.length !== 0 ||
                     filter.brand.length !== 0 ? (
-                      <>
-                        <h1>Bạn chọn</h1>
+                      <div className="mb-4">
+                        <h3 className="font-medium text-gray-700 mb-2">
+                          Bạn đã chọn
+                        </h3>
                         <SelectedFilter
                           filter={filter}
                           onDelete={handleDeleteFilter}
                         />
-                      </>
-                    ) : (
-                      ""
-                    )}
-                    {filterArr.map((filterObj, index) => (
-                      <FilterContent
-                        filterObj={filterObj}
-                        onChange={handleChangeFilter}
-                        selected={filter}
-                        filtering={filter[filterObj.queryParam]}
-                        key={index}
-                      />
-                    ))}
+                      </div>
+                    ) : null}
+
+                    <div className="space-y-6">
+                      {filterArr.map((filterObj, index) => (
+                        <FilterContent
+                          filterObj={filterObj}
+                          onChange={handleChangeFilter}
+                          selected={filter}
+                          filtering={filter[filterObj.queryParam]}
+                          key={index}
+                        />
+                      ))}
+                    </div>
                   </>
                 )}
               </div>
             </div>
           </div>
-          <div className="product">
-            <h1 className="text-[24px] font-semibold">Tất cả sản phẩm</h1>
-            <div className="flex space-x-3 items-center mt-1">
-              <SortAscendingOutlined /> <span>Xếp theo: </span>
-              {sortArr &&
-                sortArr.map((sortObj, index) => (
-                  <SortCard
-                    sortObj={sortObj}
-                    key={index}
-                    handleChangeSort={handleChangeSort}
+
+          {/* Product grid */}
+          <div className="product-section">
+            <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
+              <h1 className="text-2xl font-semibold text-gray-800 mb-3">
+                Tất cả sản phẩm
+              </h1>
+              <div className="flex flex-wrap items-center gap-2 pb-2">
+                <div className="flex items-center text-gray-600 mr-2">
+                  <SortAscendingOutlined className="mr-1" />
+                  <span>Xếp theo: </span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {sortArr &&
+                    sortArr.map((sortObj, index) => (
+                      <SortCard
+                        sortObj={sortObj}
+                        key={index}
+                        handleChangeSort={handleChangeSort}
+                        isActive={
+                          activeSort &&
+                          activeSort.sort_name === sortObj.sort_name &&
+                          activeSort.order === sortObj.order
+                        }
+                      />
+                    ))}
+                </div>
+              </div>
+            </div>
+
+            {products && products.length > 0 ? (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  {products.map((product) => (
+                    <ProductCard product={product} key={product.id} />
+                  ))}
+                </div>
+
+                <div className="flex justify-center mt-8">
+                  <Pagination
+                    current={pagination._page}
+                    pageSize={pagination._limit}
+                    total={pagination._totalRows}
+                    onChange={handlePageChange}
+                    showSizeChanger={false}
+                    hideOnSinglePage={true}
+                    className="custom-pagination"
+                    itemRender={(page, type, originalElement) => {
+                      if (type === "page") {
+                        return (
+                          <div
+                            className={`pagination-item ${
+                              pagination._page === page
+                                ? "pagination-item-active"
+                                : ""
+                            }`}
+                          >
+                            {page}
+                          </div>
+                        );
+                      }
+                      if (type === "prev" || type === "next") {
+                        return (
+                          <div className="pagination-nav-button">
+                            {originalElement}
+                          </div>
+                        );
+                      }
+                      return originalElement;
+                    }}
                   />
-                ))}
-            </div>
-            <div className="grid grid-cols-4 gap-5 mt-5">
-              {products &&
-                products.map((product) => (
-                  <ProductCard product={product} key={product.id} />
-                ))}
-            </div>
-            <div className="flex justify-center mt-8">
-              <Pagination
-                current={pagination._page}
-                pageSize={pagination._limit}
-                total={pagination._totalRows}
-                onChange={handlePageChange}
-                showSizeChanger={false}
-                hideOnSinglePage={true}
-                className="custom-pagination"
-                itemRender={(page, type, originalElement) => {
-                  if (type === "page") {
-                    return (
-                      <div
-                        className={`pagination-item ${
-                          pagination._page === page
-                            ? "pagination-item-active"
-                            : ""
-                        }`}
-                      >
-                        {page}
-                      </div>
-                    );
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-16 px-4 bg-white rounded-lg shadow-sm">
+                <svg
+                  className="w-16 h-16 text-gray-300 mb-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+                <h3 className="text-xl font-medium text-gray-700 mb-2">
+                  Không tìm thấy sản phẩm nào
+                </h3>
+                <p className="text-gray-500 text-center mb-4">
+                  Không có sản phẩm nào phù hợp với tiêu chí tìm kiếm của bạn.
+                </p>
+                <button
+                  onClick={() =>
+                    setFilter({
+                      _page: 1,
+                      _limit: 16,
+                      status: "active",
+                      priceRange: [],
+                      brand: [],
+                      targeted: [],
+                      weight: [],
+                    })
                   }
-                  if (type === "prev" || type === "next") {
-                    return (
-                      <div className="pagination-nav-button">
-                        {originalElement}
-                      </div>
-                    );
-                  }
-                  return originalElement;
-                }}
-              />
-            </div>
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  Xóa bộ lọc
+                </button>
+              </div>
+            )}
+
             <style jsx>{`
               .custom-pagination .ant-pagination-item,
               .custom-pagination .ant-pagination-prev,
@@ -306,10 +373,14 @@ function Product() {
   );
 }
 
-function SortCard({ sortObj, handleChangeSort }) {
+function SortCard({ sortObj, handleChangeSort, isActive }) {
   return (
     <div
-      className="flex items-center justify-center text-blue-800 ring-2 ring-blue-800 rounded-[3px] p-0.5 px-2 hover:text-white hover:bg-blue-800 transition-all duration-300"
+      className={`cursor-pointer flex items-center justify-center border rounded-md py-1 px-3 text-sm font-medium transition-all duration-200 ${
+        isActive
+          ? "bg-blue-700 text-white border-blue-700"
+          : "text-blue-700 border-blue-600 hover:text-white hover:bg-blue-700"
+      }`}
       onClick={() => handleChangeSort(sortObj.sort_name, sortObj.order)}
     >
       {sortObj.name}
@@ -319,7 +390,7 @@ function SortCard({ sortObj, handleChangeSort }) {
 
 function SelectedFilter({ filter, onDelete }) {
   return (
-    <div className="flex flex-wrap space-x-2 space-y-2">
+    <div className="flex flex-wrap gap-2">
       {filter.priceRange &&
         filter.priceRange.map((content, index) => (
           <FilterCard
@@ -362,14 +433,14 @@ function SelectedFilter({ filter, onDelete }) {
 
 function FilterCard({ content, queryParam, onDelete }) {
   return (
-    <div className="bg-blue-600 text-white p-1 w-fit text-[10px] flex items-center space-x-2 rounded-[3px]">
+    <div className="bg-blue-100 text-blue-800 border border-blue-200 rounded-md py-1 px-2 text-xs flex items-center gap-1.5 hover:bg-blue-200 transition-all">
       <button
-        className=" text-whitetext-[20px] flex justify-center items-center "
+        className="text-blue-700 hover:text-blue-900 flex items-center"
         onClick={() => onDelete(queryParam, content)}
       >
-        <CloseOutlined style={{ fontSize: "10px" }} />
+        <CloseOutlined style={{ fontSize: "11px" }} />
       </button>
-      <span>{content}</span>
+      <span className="font-medium">{content}</span>
     </div>
   );
 }

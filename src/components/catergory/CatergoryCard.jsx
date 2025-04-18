@@ -1,11 +1,11 @@
 import React from "react";
-import { Card } from "antd";
-import { Col, Row } from "antd";
+import { Col } from "antd";
+
 function CatergoryCard({ catergory, onFilter }) {
   return (
     <Col span={4}>
       <div
-        className="ring-1 shadow-xl rounded-[5px] ring-gray-200 hover:ring-blue-700 flex h-25 px-2 space-x-3 hover:text-blue-700 hover:shadow-blue-300"
+        className="ring-1 shadow-md rounded-lg ring-gray-200 hover:ring-blue-500 flex flex-col items-center justify-center h-32 p-3 space-y-2 hover:text-blue-600 hover:shadow-lg hover:scale-105 transition-transform duration-300 cursor-pointer bg-white"
         onClick={() =>
           onFilter((prev) => {
             return { ...prev, category: catergory.id };
@@ -13,11 +13,19 @@ function CatergoryCard({ catergory, onFilter }) {
         }
       >
         <div className="flex justify-center items-center">
-          <img src={catergory.image} className="w-20 h-20" />
+          <img
+            src={catergory.image}
+            alt={catergory.name}
+            className="w-16 h-16 object-contain"
+          />
         </div>
-        <div className="flex flex-col justify-around">
-          <span className="font-semibold">{catergory.name}</span>
-          <span className="text-blue-600">({5} sản phẩm)</span>
+        <div className="text-center">
+          <span className="font-semibold text-gray-800 block truncate">
+            {catergory.name}
+          </span>
+          <span className="text-blue-500 text-sm">
+            ({catergory.totalProducts} sản phẩm)
+          </span>
         </div>
       </div>
     </Col>
