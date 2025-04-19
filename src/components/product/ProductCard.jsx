@@ -1,15 +1,11 @@
-import React, { useState } from "react";
-import {
-  HeartFilled,
-  HeartOutlined,
-  ShoppingCartOutlined,
-} from "@ant-design/icons";
+import React, { memo, useState } from "react";
+import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import { useCart } from "../../contexts/CartContext";
+import AddToCart from "./AddToCart";
 
-function ProductCard({ product }) {
+const ProductCard = memo(({ product }) => {
   const navigate = useNavigate();
+
   const [isFavourited, setIsFavourited] = useState(false);
 
   function handleToggleFavourite() {
@@ -17,7 +13,7 @@ function ProductCard({ product }) {
   }
 
   function handleClick() {
-    navigate(`/product-detail/${product.id}`);
+    // navigate(`/product-detail/${product.id}`);
   }
 
   return (
@@ -78,29 +74,10 @@ function ProductCard({ product }) {
       </div>
     </div>
   );
-}
+});
 
 function BadgeDiscount({ discount }) {
   return <div className="bg-red-600 text-white py-0.5 px-2">-{discount}</div>;
-}
-
-function AddToCart({ item }) {
-  const { addToCart } = useCart();
-
-  async function handleAddToCart(e, item) {
-    e.stopPropagation(); // Prevent event from bubbling up to parent
-    addToCart(item);
-  }
-
-  return (
-    <div
-      className="bg-blue-600 text-white py-1 px-3 rounded-full flex items-center justify-center shadow-md hover:bg-blue-700 hover:shadow-xl hover:scale-105 transition-transform duration-500 ease-in-out cursor-pointer"
-      onClick={(e) => handleAddToCart(e, item)}
-    >
-      <ShoppingCartOutlined className="mr-1" />
-      <span className="text-sm font-medium">Thêm</span>
-    </div>
-  );
 }
 
 export default ProductCard;

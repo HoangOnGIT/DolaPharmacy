@@ -6,92 +6,98 @@ const CartContext = createContext();
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-  const initialCart = {
-    userId: null,
-    items: [],
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
+  const initialCart = {};
 
   const [cart, setCart] = useState(initialCart);
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      const { user } = useAuth();
+    if (isAuthenticated && user) {
       const userId = { userId: user.id };
-      fetch(`http://localhost:3000/api/carts?${queryString.stringify(userId)}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setCart(data);
-        });
+      const fetchCart = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:3000/api/carts?${queryString.stringify(userId)}`
+          );
+          if (!response.ok) {
+            throw new Error("Failed to fetch cart data");
+          }
+          const data = await response.json();
+          setCart(data[0] || initialCart);
+        } catch (error) {
+          console.error("Error fetching cart:", error);
+          setCart(initialCart);
+        }
+      };
+      fetchCart();
     } else {
-      // Load cart from localStorage when no user is logged in
-      const localCart = localStorage.getItem("cart");
-      if (localCart) {
-        setCart(JSON.parse(localCart));
-      } else {
-        setCart(initialCart);
+      setCart(initialCart);
+    }
+  }, [isAuthenticated, user]);
+
+  const addToCart = async (item) => {
+    try {
+      if (!isAuthenticated || !user) {
+        console.error("User must be logged in to add items to the cart.");
+        return;
       }
-    }
-  }, []);
 
-  const addToCart = (item) => {
-    // Make a copy of the current cart items
-    const currentItems = cart.items ? [...cart.items] : [];
+      const currentItems = cart.items ? [...cart.items] : [];
+      const existingItemIndex = currentItems.findIndex(
+        (cartItem) => cartItem.productId === item.id || cartItem.id === item.id
+      );
 
-    // Check if the item already exists in the cart
-    const existingItemIndex = currentItems.findIndex(
-      (cartItem) => cartItem.productId === item.id || cartItem.id === item.id
-    );
-
-    if (existingItemIndex >= 0) {
-      // If item exists, increment its quantity
-      currentItems[existingItemIndex].quantity += 1;
-    } else {
-      // If item doesn't exist, add it with quantity 1
-      currentItems.push({
-        ...item,
-        productId: item.id, // Ensure we have productId for consistency
-        quantity: 1,
-      });
-    }
-
-    const updatedCart = {
-      ...cart,
-      items: currentItems,
-      updatedAt: new Date(),
-    };
-
-    if (user) {
-      // If user is logged in, update cart on server
-      fetch(`http://localhost:3000/api/carts/${user.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedCart),
-      })
-        .then((response) => response.json())
-        .then((serverCart) => {
-          setCart(serverCart);
-        })
-        .catch((error) => {
-          console.error("Error updating cart:", error);
-          // Update local state anyway to keep UI consistent
-          setCart(updatedCart);
+      if (existingItemIndex >= 0) {
+        currentItems[existingItemIndex].quantity += 1;
+      } else {
+        currentItems.push({
+          ...item,
+          productId: item.id,
+          quantity: 1,
         });
-    } else {
-      // If no user, store in localStorage
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
-      setCart(updatedCart);
+      }
+
+      const updatedCart = {
+        ...cart,
+        items: currentItems,
+        updatedAt: new Date(),
+      };
+
+      const token = localStorage.getItem("token");
+
+      const response = await fetch(
+        `http://localhost:3000/api/carts/${cart.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updatedCart),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to update cart on server");
+      }
+      const serverCart = await response.json();
+      console.log(serverCart);
+
+      setCart(serverCart);
+      console.log("Cart updated:", serverCart);
+    } catch (error) {
+      console.error("Error updating cart:", error);
+      console.log("Error");
     }
   };
 
   const updateItemQuantity = (itemId, newQuantity) => {
+    if (!isAuthenticated || !user) {
+      console.error("User must be logged in to update item quantity.");
+      return;
+    }
+
     if (newQuantity < 1) {
-      // Remove the item if the quantity is less than 1
       removeItemFromCart(itemId);
       return;
     }
@@ -100,36 +106,66 @@ export const CartProvider = ({ children }) => {
       item.id === itemId ? { ...item, quantity: newQuantity } : item
     );
 
+    const updatedCart = {
+      ...cart,
+      items: updatedItems,
+      updatedAt: new Date(),
+    };
+
     setCart({ ...cart, items: updatedItems });
-    // Here you would also update the cart on the server
+
+    const token = localStorage.getItem("token");
+
+    fetch(`http://localhost:3000/api/carts/${cart.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedCart),
+    })
+      .then((response) => response.json())
+      .then((serverCart) => {
+        setCart(serverCart);
+      })
+      .catch((error) => {
+        console.error("Error updating cart:", error);
+        setCart(updatedCart);
+      });
   };
 
   const removeItemFromCart = (itemId) => {
+    if (!isAuthenticated || !user) {
+      console.error("User must be logged in to remove items from the cart.");
+      return;
+    }
+
     const updatedItems = cart.items.filter((item) => item.id !== itemId);
     const updatedCart = { ...cart, items: updatedItems };
+    const token = localStorage.getItem("token");
 
-    if (user) {
-      // If user is logged in, remove the item from the server
-      fetch(`http://localhost:3000/api/carts/${user.id}/items/${itemId}`, {
-        method: "DELETE",
+    console.log(`http://localhost:3000/api/carts/${cart.id}`);
+
+    fetch(`http://localhost:3000/api/carts/${cart.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedCart),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to remove item from server");
+        }
+        return response.json();
       })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to remove item from server");
-          }
-          return response.json();
-        })
-        .then(() => {
-          setCart(updatedCart);
-        })
-        .catch((error) => {
-          console.error("Error removing item from cart:", error);
-        });
-    } else {
-      // If no user, update localStorage
-      localStorage.setItem("cart", JSON.stringify(updatedCart));
-      setCart(updatedCart);
-    }
+      .then(() => {
+        setCart(updatedCart);
+      })
+      .catch((error) => {
+        console.error("Error removing item from cart:", error);
+      });
   };
 
   const value = {

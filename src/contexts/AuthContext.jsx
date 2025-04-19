@@ -44,6 +44,47 @@ export const AuthProvider = ({ children }) => {
 
       return { success: true };
     } catch (error) {
+      console.log(error);
+
+      setError(error.message || "Authentication failed");
+      return { success: false, error: error.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //Register function
+  const register = async (userData) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch("http://localhost:3000/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setError(errorData.error);
+        throw new Error(errorData.error ? errorData.error : "Register failed");
+      }
+
+      const data = await response.json();
+
+      // Store token in localStorage
+      localStorage.setItem("token", data.token);
+      // Store user data in localStorage
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      setUser(data.user);
+      setIsAuthenticated(true);
+
+      return { success: true };
+    } catch (error) {
       setError(error.message || "Authentication failed");
       return { success: false, error: error.message };
     } finally {
@@ -83,6 +124,7 @@ export const AuthProvider = ({ children }) => {
     error,
     login,
     logout,
+    register,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

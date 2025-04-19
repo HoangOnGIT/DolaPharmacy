@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function UserCrediential({ loginPage }) {
   const [email, setEmail] = useState("");
@@ -9,7 +9,8 @@ function UserCrediential({ loginPage }) {
   const [lastName, setLastName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [activeTab, setActiveTab] = useState(loginPage ? "login" : "register");
-  const { login, error, loading } = useAuth();
+  const { login, register, error, loading } = useAuth();
+  const navigate = useNavigate();
 
   // Add a state to handle animation
   const [isAnimating, setIsAnimating] = useState(false);
@@ -31,6 +32,7 @@ function UserCrediential({ loginPage }) {
       alert(result.error || "Login failed");
     } else {
       alert("Login successful!");
+      navigate("/");
     }
   };
 
@@ -40,9 +42,20 @@ function UserCrediential({ loginPage }) {
       alert("Mật khẩu không khớp!");
       return;
     }
-    // Here you would call your register function from AuthContext
-    alert("Đăng ký thành công! Vui lòng đăng nhập.");
-    handleTabChange("login"); // Use handleTabChange instead of directly setting activeTab
+
+    const userData = {
+      firstName,
+      lastName,
+      email,
+      password,
+    };
+
+    const result = await register(userData);
+    if (!result.success) {
+    } else {
+      alert("Register successful!");
+      navigate("/");
+    }
   };
 
   // Handlers for social login
@@ -386,9 +399,15 @@ function UserCrediential({ loginPage }) {
                     />
                   </div>
                 </div>
+                {error && (
+                  <p className="text-sm text-red-500 text-center mt-2">
+                    {error}
+                  </p>
+                )}
                 <button
                   type="submit"
                   className="w-full py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
+                  onClick={() => handleRegister()}
                 >
                   Đăng ký
                 </button>

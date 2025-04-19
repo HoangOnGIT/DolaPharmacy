@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, use } from "react";
 import imgBanner from "../../../img/Header/Banner.png";
 import imgLogo from "../../../img/Header/Logo.png";
 import "./Header.css";
@@ -7,6 +7,8 @@ import Search from "./Search";
 import Modal from "./Modal";
 import Menu from "./Menu";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext";
+import UserInfo from "./UserInfo";
 
 const Header = React.memo(() => {
   const textList = [
@@ -57,6 +59,8 @@ const Header = React.memo(() => {
     nav("/map");
   }
 
+  const { user, isAuthenticated, loading, error, login, logout } = useAuth();
+
   return (
     <>
       <div className="w-full">
@@ -81,21 +85,26 @@ const Header = React.memo(() => {
                     {memoizedText}
                   </p>
                 </div>
-                <div className="my-1 flex items-center">
-                  <a className="mx-1 hover:text-blue-800" href="/register">
-                    Đăng ký |
-                  </a>
-                  <a className="mx-1 hover:text-blue-800" href="/login  ">
-                    Đăng nhập |
-                  </a>
-                  <p className="mx-1 flex items-center" href="">
-                    Hotline đặt hàng:
-                    <button className="flex items-center bg-blue-800 text-white px-2.5 py-1 rounded-full text-base hover:bg-white hover:text-blue-800 ml-2 cursor-pointer">
-                      <PhoneIcon className="mr-2 h-3 w-3" />
-                      1900 6750
-                    </button>
-                  </p>
-                </div>
+
+                {isAuthenticated ? (
+                  <UserInfo user={user} />
+                ) : (
+                  <div className="my-1 flex items-center">
+                    <a className="mx-1 hover:text-blue-800" href="/register">
+                      Đăng ký |
+                    </a>
+                    <a className="mx-1 hover:text-blue-800" href="/login  ">
+                      Đăng nhập |
+                    </a>
+                    <p className="mx-1 flex items-center">
+                      Hotline đặt hàng:
+                      <button className="flex items-center bg-blue-800 text-white px-2.5 py-1 rounded-full text-base hover:bg-white hover:text-blue-800 ml-2 cursor-pointer">
+                        <PhoneIcon className="mr-2 h-3 w-3" />
+                        1900 6750
+                      </button>
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -104,7 +113,7 @@ const Header = React.memo(() => {
               {/* Logo */}
               <a href="" className="mr-10">
                 <img
-                  className="w-[200px] h-[50px] align-middle border-none max-w-full h-auto"
+                  className="w-[200px] align-middle border-none max-w-full h-auto"
                   src={imgLogo}
                   alt="Logo-Dola Pharmacy"
                 />

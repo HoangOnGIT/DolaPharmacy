@@ -1,13 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import CatergoryCard from "../components/catergory/CatergoryCard";
 import { Row } from "antd";
 import FilterContent from "../components/filter/FilterContent";
-import { CloseOutlined, SortAscendingOutlined } from "@ant-design/icons";
+import { SortAscendingOutlined } from "@ant-design/icons";
 import ProductCard from "../components/product/ProductCard";
 import queryString from "query-string";
 import { Pagination } from "antd";
+import LoadingComponent from "../components/common/Loading/LoadingCompoent";
+import SelectedFilter from "../components/filter/SelectedFilter";
+import SortCard from "../components/filter/SortCard";
+import { useParams, useSearchParams } from "react-router-dom";
 
-function Product() {
+const Product = (props) => {
+  const { category } = useParams();
+
   const [catergories, setCatergories] = useState([]);
   const [branding, setBranding] = useState([]);
   const [products, setProducts] = useState([]);
@@ -26,21 +32,32 @@ function Product() {
     weight: [],
   });
   const [activeSort, setActiveSort] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   function handleChangeFilter(e, queryParam) {
     setFilter({ ...filter, [queryParam]: e });
   }
 
   function handleChangeSort(name, order) {
-    setFilter({ ...filter, _sort: name, _order: order });
+    setFilter({ ...filter, _sort: name, _order: order, _page: 1 });
     setActiveSort({ sort_name: name, order: order });
   }
 
   function handleDeleteFilter(queryParam, content) {
-    setFilter({
-      ...filter,
-      [queryParam]: filter[queryParam].filter((item) => item !== content),
+    setFilter((prevFilter) => {
+      const updatedQueryParam = prevFilter[queryParam].filter(
+        (item) => item !== content
+      );
+      return {
+        ...prevFilter,
+        [queryParam]: updatedQueryParam,
+      };
     });
+  }
+
+  function handlePageChange(n) {
+    setPagination({ ...pagination, _page: n });
+    setFilter({ ...filter, _page: n });
   }
 
   useEffect(() => {
@@ -60,6 +77,7 @@ function Product() {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     const params = queryString.stringify(filter);
 
     console.log(`http://localhost:3000/api/products?${params}`);
@@ -69,13 +87,10 @@ function Product() {
       .then(({ body, pagination }) => {
         setProducts(body);
         setPagination(pagination);
-      });
+      })
+      .catch((e) => console.log(e))
+      .finally(() => setLoading(false));
   }, [filter]); // Fetch products whenever the filter changes
-
-  function handlePageChange(n) {
-    setPagination({ ...pagination, _page: n });
-    setFilter({ ...filter, _page: n });
-  }
 
   const filterArr = [
     {
@@ -124,11 +139,19 @@ function Product() {
     { name: "Giá cao xuống thấp", order: "desc", sort_name: "salePrice" },
   ];
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    const params = queryString.stringify(filter);
+
+    setSearchParams(params); // This updates the URL query parameters
+  }, [filter]);
+
   return (
     <div className="bg-gray-50 py-10">
-      <div className="container mx-auto max-w-7xl px-4">
+      <div className="container mx-auto max-w-8xl px-4">
         <div className="category-section mb-8">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800 pb-2">
+          <h2 className="text-3xl font-semibold text-center mb-4 text-gray-800 pb-2">
             Danh mục sản phẩm
           </h2>
           <div className="mx-auto flex justify-center items-center">
@@ -225,48 +248,54 @@ function Product() {
             </div>
 
             {products && products.length > 0 ? (
-              <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                  {products.map((product) => (
-                    <ProductCard product={product} key={product.id} />
-                  ))}
+              loading ? (
+                <div className="fade-in">
+                  <LoadingComponent />
                 </div>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {products.map((product) => (
+                      <ProductCard product={product} key={product.id} />
+                    ))}
+                  </div>
 
-                <div className="flex justify-center mt-8">
-                  <Pagination
-                    current={pagination._page}
-                    pageSize={pagination._limit}
-                    total={pagination._totalRows}
-                    onChange={handlePageChange}
-                    showSizeChanger={false}
-                    hideOnSinglePage={true}
-                    className="custom-pagination"
-                    itemRender={(page, type, originalElement) => {
-                      if (type === "page") {
-                        return (
-                          <div
-                            className={`pagination-item ${
-                              pagination._page === page
-                                ? "pagination-item-active"
-                                : ""
-                            }`}
-                          >
-                            {page}
-                          </div>
-                        );
-                      }
-                      if (type === "prev" || type === "next") {
-                        return (
-                          <div className="pagination-nav-button">
-                            {originalElement}
-                          </div>
-                        );
-                      }
-                      return originalElement;
-                    }}
-                  />
-                </div>
-              </>
+                  <div className="flex justify-center mt-8">
+                    <Pagination
+                      current={pagination._page}
+                      pageSize={pagination._limit}
+                      total={pagination._totalRows}
+                      onChange={handlePageChange}
+                      showSizeChanger={false}
+                      hideOnSinglePage={true}
+                      className="custom-pagination"
+                      itemRender={(page, type, originalElement) => {
+                        if (type === "page") {
+                          return (
+                            <div
+                              className={`pagination-item ${
+                                pagination._page === page
+                                  ? "pagination-item-active"
+                                  : ""
+                              }`}
+                            >
+                              {page}
+                            </div>
+                          );
+                        }
+                        if (type === "prev" || type === "next") {
+                          return (
+                            <div className="pagination-nav-button">
+                              {originalElement}
+                            </div>
+                          );
+                        }
+                        return originalElement;
+                      }}
+                    />
+                  </div>
+                </>
+              )
             ) : (
               <div className="flex flex-col items-center justify-center py-16 px-4 bg-white rounded-lg shadow-sm">
                 <svg
@@ -307,142 +336,14 @@ function Product() {
                 </button>
               </div>
             )}
-
-            <style jsx>{`
-              .custom-pagination .ant-pagination-item,
-              .custom-pagination .ant-pagination-prev,
-              .custom-pagination .ant-pagination-next {
-                border-color: #2563eb;
-                border-radius: 3px;
-                transition: all 0.3s;
-              }
-              .custom-pagination .ant-pagination-item a {
-                color: #2563eb;
-              }
-              .custom-pagination .ant-pagination-item:hover,
-              .custom-pagination
-                .ant-pagination-prev:hover
-                .ant-pagination-item-link,
-              .custom-pagination
-                .ant-pagination-next:hover
-                .ant-pagination-item-link {
-                border-color: #2563eb;
-                color: white;
-                background-color: #2563eb;
-              }
-              .custom-pagination .ant-pagination-item:hover {
-                background-color: #2563eb;
-                border-color: #2563eb;
-              }
-              .custom-pagination .ant-pagination-item:hover a {
-                color: white;
-              }
-              .custom-pagination .ant-pagination-item-active {
-                background-color: #2563eb;
-                border-color: #2563eb;
-              }
-              .custom-pagination .ant-pagination-item-active a {
-                color: white;
-              }
-              .pagination-item {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 100%;
-                height: 100%;
-              }
-              .pagination-item:hover {
-                background-color: #2563eb;
-                color: white;
-              }
-              .pagination-item-active {
-                background-color: #2563eb;
-                color: white;
-              }
-              .pagination-nav-button {
-                color: #2563eb;
-              }
-              .pagination-nav-button:hover {
-                color: white;
-              }
-            `}</style>
           </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
-function SortCard({ sortObj, handleChangeSort, isActive }) {
-  return (
-    <div
-      className={`cursor-pointer flex items-center justify-center border rounded-md py-1 px-3 text-sm font-medium transition-all duration-200 ${
-        isActive
-          ? "bg-blue-700 text-white border-blue-700"
-          : "text-blue-700 border-blue-600 hover:text-white hover:bg-blue-700"
-      }`}
-      onClick={() => handleChangeSort(sortObj.sort_name, sortObj.order)}
-    >
-      {sortObj.name}
-    </div>
-  );
-}
-
-function SelectedFilter({ filter, onDelete }) {
-  return (
-    <div className="flex flex-wrap gap-2">
-      {filter.priceRange &&
-        filter.priceRange.map((content, index) => (
-          <FilterCard
-            content={content}
-            queryParam="priceRange"
-            onDelete={onDelete}
-            key={index}
-          />
-        ))}
-      {filter.brand &&
-        filter.brand.map((content, index) => (
-          <FilterCard
-            content={content}
-            queryParam="brand"
-            onDelete={onDelete}
-            key={index}
-          />
-        ))}
-      {filter.targeted &&
-        filter.targeted.map((content, index) => (
-          <FilterCard
-            content={content}
-            queryParam="targeted"
-            onDelete={onDelete}
-            key={index}
-          />
-        ))}
-      {filter.weight &&
-        filter.weight.map((content, index) => (
-          <FilterCard
-            content={content}
-            queryParam="weight"
-            onDelete={onDelete}
-            key={index}
-          />
-        ))}
-    </div>
-  );
-}
-
-function FilterCard({ content, queryParam, onDelete }) {
-  return (
-    <div className="bg-blue-100 text-blue-800 border border-blue-200 rounded-md py-1 px-2 text-xs flex items-center gap-1.5 hover:bg-blue-200 transition-all">
-      <button
-        className="text-blue-700 hover:text-blue-900 flex items-center"
-        onClick={() => onDelete(queryParam, content)}
-      >
-        <CloseOutlined style={{ fontSize: "11px" }} />
-      </button>
-      <span className="font-medium">{content}</span>
-    </div>
-  );
-}
-
-export default Product;
+export default memo(Product, (prevProps, nextProps) => {
+  // Custom comparison logic
+  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
+});

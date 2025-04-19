@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import fs from "fs/promises";
+import bcrypt from "bcrypt";
 
 // Helper function to generate unique IDs
 const generateId = () => faker.string.uuid();
@@ -163,14 +164,15 @@ const generatePharmacySuppliers = (count) => {
 };
 
 // Generate pharmacy users with Vietnamese names and locations
-const generatePharmacyUsers = (count) => {
+const generatePharmacyUsers = async (count) => {
   const users = [];
+  const carts = []; // Initialize carts array
 
   // Always add admin user first
   const adminUser = {
     id: generateId(),
-    email: "admin",
-    passwordHash: "admin", // In a real app, this would be hashed
+    email: "admin@gmail.com",
+    passwordHash: await bcrypt.hash("admin", 10), // Hash the admin password
     firstName: "Admin",
     lastName: "User",
     phone: "0987654321",
@@ -198,6 +200,15 @@ const generatePharmacyUsers = (count) => {
   };
 
   users.push(adminUser);
+
+  // Generate a cart for the admin user
+  carts.push({
+    id: generateId(),
+    userId: adminUser.id,
+    items: [],
+    createdAt: faker.date.past({ years: 1 }).toISOString(),
+    updatedAt: faker.date.recent().toISOString(),
+  });
 
   const vietnameseCities = [
     "Hà Nội",
@@ -265,7 +276,6 @@ const generatePharmacyUsers = (count) => {
 
     const city = faker.helpers.arrayElement(vietnameseCities);
 
-    // Admin should be a small percentage, but we already have one admin
     const role = faker.helpers.arrayElement([
       "customer",
       "customer",
@@ -279,7 +289,10 @@ const generatePharmacyUsers = (count) => {
       email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}${faker.number.int(
         999
       )}@gmail.com`,
-      passwordHash: faker.internet.password({ length: 64 }),
+      passwordHash: await bcrypt.hash(
+        faker.internet.password({ length: 12 }),
+        10
+      ),
       firstName: firstName,
       lastName: lastName,
       phone: `0${faker.string.numeric(9)}`,
@@ -321,9 +334,18 @@ const generatePharmacyUsers = (count) => {
     };
 
     users.push(user);
+
+    // Generate a cart for the user
+    carts.push({
+      id: generateId(),
+      userId: user.id,
+      items: [],
+      createdAt: faker.date.past({ years: 1 }).toISOString(),
+      updatedAt: faker.date.recent().toISOString(),
+    });
   }
 
-  return users;
+  return { users, carts };
 };
 
 // Update generatePharmacyProducts for Vietnamese products
@@ -576,7 +598,7 @@ const generateData = async () => {
 
   const categories = generatePharmacyCategories(10);
   const suppliers = generatePharmacySuppliers(10);
-  const users = generatePharmacyUsers(30);
+  const { users, carts } = await generatePharmacyUsers(30); // Destructure carts
   const brands = []; // Initialize brands array
   const products = generatePharmacyProducts(40, categories, suppliers, brands);
   const { orders, orderItems } = generateOrders(20, users, products);
@@ -593,10 +615,10 @@ const generateData = async () => {
     suppliers,
     products,
     users,
+    carts, // Include carts in the output
     orders,
     orderItems,
     brands, // Include brands in the output
-    carts: [],
     prescriptions: [],
     reviews: [],
     wishlist: [],
