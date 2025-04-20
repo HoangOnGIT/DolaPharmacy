@@ -167,6 +167,7 @@ const generatePharmacySuppliers = (count) => {
 const generatePharmacyUsers = async (count) => {
   const users = [];
   const carts = []; // Initialize carts array
+  const favourites = []; // Initialize favourites array
 
   // Always add admin user first
   const adminUser = {
@@ -203,6 +204,15 @@ const generatePharmacyUsers = async (count) => {
 
   // Generate a cart for the admin user
   carts.push({
+    id: generateId(),
+    userId: adminUser.id,
+    items: [],
+    createdAt: faker.date.past({ years: 1 }).toISOString(),
+    updatedAt: faker.date.recent().toISOString(),
+  });
+
+  // Generate a favourites list for the admin user
+  favourites.push({
     id: generateId(),
     userId: adminUser.id,
     items: [],
@@ -343,9 +353,24 @@ const generatePharmacyUsers = async (count) => {
       createdAt: faker.date.past({ years: 1 }).toISOString(),
       updatedAt: faker.date.recent().toISOString(),
     });
+
+    // Generate a favourites list for the user
+    favourites.push({
+      id: generateId(),
+      userId: user.id,
+      items: Array.from(
+        { length: faker.number.int({ min: 1, max: 5 }) },
+        () => ({
+          productId: generateId(),
+          addedAt: faker.date.recent().toISOString(),
+        })
+      ),
+      createdAt: faker.date.past({ years: 1 }).toISOString(),
+      updatedAt: faker.date.recent().toISOString(),
+    });
   }
 
-  return { users, carts };
+  return { users, carts, favourites }; // Include favourites in the return
 };
 
 // Update generatePharmacyProducts for Vietnamese products
@@ -598,7 +623,7 @@ const generateData = async () => {
 
   const categories = generatePharmacyCategories(10);
   const suppliers = generatePharmacySuppliers(10);
-  const { users, carts } = await generatePharmacyUsers(30); // Destructure carts
+  const { users, carts, favourites } = await generatePharmacyUsers(30); // Destructure favourites
   const brands = []; // Initialize brands array
   const products = generatePharmacyProducts(40, categories, suppliers, brands);
   const { orders, orderItems } = generateOrders(20, users, products);
@@ -616,6 +641,7 @@ const generateData = async () => {
     products,
     users,
     carts, // Include carts in the output
+    favourites, // Include favourites in the output
     orders,
     orderItems,
     brands, // Include brands in the output

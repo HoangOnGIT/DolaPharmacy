@@ -10,10 +10,11 @@ import LoadingComponent from "../components/common/Loading/LoadingCompoent";
 import SelectedFilter from "../components/filter/SelectedFilter";
 import SortCard from "../components/filter/SortCard";
 import { useParams, useSearchParams } from "react-router-dom";
+import { useFav } from "../contexts/FavouriteContext";
 
 const Product = (props) => {
   const { category } = useParams();
-
+  const { favList } = useFav();
   const [catergories, setCatergories] = useState([]);
   const [branding, setBranding] = useState([]);
   const [products, setProducts] = useState([]);
@@ -255,9 +256,24 @@ const Product = (props) => {
               ) : (
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {products.map((product) => (
-                      <ProductCard product={product} key={product.id} />
-                    ))}
+                    {products.map((product) => {
+                      let isFavourited = false;
+                      if (
+                        favList.items.find(
+                          (favItem) => favItem.id === product.id
+                        )
+                      ) {
+                        isFavourited = true;
+                      }
+
+                      return (
+                        <ProductCard
+                          product={product}
+                          key={product.id}
+                          isFavourited={isFavourited}
+                        />
+                      );
+                    })}
                   </div>
 
                   <div className="flex justify-center mt-8">

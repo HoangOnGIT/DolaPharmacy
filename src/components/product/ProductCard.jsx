@@ -2,18 +2,19 @@ import React, { memo, useState } from "react";
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import AddToCart from "./AddToCart";
+import { useFav } from "../../contexts/FavouriteContext";
 
-const ProductCard = memo(({ product }) => {
+const ProductCard = memo(({ product, isFavourited }) => {
   const navigate = useNavigate();
+  const { toggleFavourite } = useFav();
 
-  const [isFavourited, setIsFavourited] = useState(false);
-
-  function handleToggleFavourite() {
-    setIsFavourited(!isFavourited);
+  function handleToggleFavourite(e) {
+    e.stopPropagation();
+    toggleFavourite(product);
   }
 
   function handleClick() {
-    // navigate(`/product-detail/${product.id}`);
+    navigate(`/product-detail/${product.id}`);
   }
 
   return (
@@ -21,12 +22,11 @@ const ProductCard = memo(({ product }) => {
       className="col-span-1 rounded-lg ring-1 ring-gray-300 hover:ring-blue-500 h-[340px] relative shadow-md overflow-hidden transition-transform duration-500 ease-in-out hover:scale-105 hover:shadow-lg bg-white"
       onClick={() => handleClick()}
     >
-      <div className="absolute top-2 right-2 text-red-500 cursor-pointer z-10">
-        {isFavourited ? (
-          <HeartFilled onClick={() => handleToggleFavourite()} />
-        ) : (
-          <HeartOutlined onClick={() => handleToggleFavourite()} />
-        )}
+      <div
+        className="absolute top-2 right-2 text-red-500 cursor-pointer z-10"
+        onClick={handleToggleFavourite}
+      >
+        {isFavourited ? <HeartFilled /> : <HeartOutlined />}
       </div>
 
       <div className="absolute top-2 left-2 z-10">

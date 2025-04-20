@@ -10,7 +10,6 @@ function UserInfo({ user }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("User object:", user);
     if (!user || !user.id) {
       console.error("User or user.id is undefined");
       return;
@@ -19,7 +18,6 @@ function UserInfo({ user }) {
       .then((res) => res.json())
       .then((data) => {
         setUserCurr(data);
-        console.log(data);
       })
       .catch((err) => {
         console.error(err);
