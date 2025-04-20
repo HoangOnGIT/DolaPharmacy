@@ -1,4 +1,52 @@
-/* animation.css */
+.floating-buttons-wrapper {
+  position: fixed;
+  bottom: 150px;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  width: 100%; /* Đảm bảo wrapper trải dài toàn màn hình */
+  padding: 0 16px; /* Khoảng cách hai bên */
+  box-sizing: border-box;
+}
+
+.left-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: absolute;
+  left: 16px; /* Đặt các nút bên trái sát lề trái */
+}
+
+.right-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: absolute;
+  right: 16px; /* Đặt các nút bên phải sát lề phải */
+}
+
+.floating-button {
+  background-color: #3b82f6; /* Tailwind blue-600 */
+  color: white;
+  padding: 12px;
+  border-radius: 9999px; /* Fully rounded */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Tailwind shadow-md */
+  transition: background-color 0.15s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floating-button:hover {
+  background-color: #2563eb; /* Tailwind blue-700 */
+}
+
+.floating-button svg {
+  width: 20px; /* Icon size */
+  height: 20px;
+}
+
+/* Animation for shake effect */
 @keyframes shake {
   0%, 100% {
     transform: translateX(0);
