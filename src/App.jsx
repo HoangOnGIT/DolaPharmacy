@@ -10,6 +10,10 @@ import Cart from "./pages/Cart";
 import UserCrediential from "./pages/UserCrediential";
 import ErrorBoundary from "./components/common/ErrorBoundary";
 import ErrorPage from "./pages/ErrorPage";
+import PersonalInfomation from "./pages/PersonalInfomation";
+import Favourite from "./pages/Favourite";
+import FavContext from "./contexts/FavouriteContext";
+import FavProvider from "./contexts/FavouriteContext";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +53,16 @@ const router = createBrowserRouter([
         element: <Video />,
         errorElement: <ErrorPage />,
       },
+      {
+        path: "profile",
+        element: <PersonalInfomation />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "fav",
+        element: <Favourite />,
+        errorElement: <ErrorPage />,
+      },
       // { path: "qna", element: <QnA /> },
       // { path: "contact", element: <Contact /> },
       // { path: "cart", element: <Contact /> },
@@ -63,7 +77,9 @@ function App() {
     <ErrorBoundary>
       <AuthProvider>
         <CartProvider>
-          <RouterProvider router={router} />
+          <FavProvider>
+            <RouterProvider router={router} />
+          </FavProvider>
         </CartProvider>
       </AuthProvider>
     </ErrorBoundary>

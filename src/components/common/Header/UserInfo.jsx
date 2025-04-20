@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import { PhoneIcon } from "@heroicons/react/20/solid";
+import { useNavigate } from "react-router-dom";
 
 function UserInfo({ user }) {
   const [userCurr, setUserCurr] = useState({});
   const { logout } = useAuth();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log("User object:", user);
@@ -23,7 +26,9 @@ function UserInfo({ user }) {
       });
   }, [user]);
 
-  function handleUserInfo() {}
+  function handleUserInfo() {
+    navigate("/profile");
+  }
 
   return (
     <div className="flex space-x-1 justify-center items-center">
