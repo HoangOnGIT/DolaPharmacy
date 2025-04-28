@@ -3,6 +3,7 @@ import Layout from "./components/common/Layout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Product from "./pages/Product";
 import ProductDetail from "./pages/ProductDetail";
+import Home from "./pages/Home";
 import FakeLogin from "./components/FakeLogin";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/CartContext";
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
       { path: "product-detail/:id", element: <ProductDetail /> },
       { path: "login", element: <FakeLogin /> },
       { path: "cart", element: <Cart /> },
-      // { path: "homepage", element: <Homepage /> },
+      { path: "homepage", element: <Home /> },
       // { path: "news", element: <News /> },
       // { path: "video", element: <Video /> },
       // { path: "qna", element: <QnA /> },

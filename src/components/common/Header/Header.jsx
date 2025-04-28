@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, use } from "react";
 import imgBanner from "../../../img/Header/Banner.png";
 import imgLogo from "../../../img/Header/Logo.png";
 import "./Header.css";
@@ -6,6 +6,9 @@ import { PhoneIcon } from "@heroicons/react/20/solid";
 import Search from "./Search";
 import Modal from "./Modal";
 import Menu from "./Menu";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext";
+import UserInfo from "./UserInfo";
 
 const Header = React.memo(() => {
   const textList = [
@@ -42,13 +45,29 @@ const Header = React.memo(() => {
     return () => clearInterval(intervalId);
   }, [textList]);
 
+  const nav = useNavigate();
+
+  function handleClickCart() {
+    nav("/cart");
+  }
+
+  function handleClickFav() {
+    nav("/fav");
+  }
+
+  function handleClickMap() {
+    nav("/map");
+  }
+
+  const { user, isAuthenticated, loading, error, login, logout } = useAuth();
+
   return (
     <>
       <div className="w-full">
         {/* Banner Top */}
         <div className="banner-top bg-[#80e0e2]">
-          <div className="container mx-auto w-4/5">
-            <a href="">
+          <div className="container w-[65%] h-auto mx-auto">
+            <a href="#">
               <img src={imgBanner} alt="Banner-Dola Pharmacy" />
             </a>
           </div>
@@ -57,7 +76,7 @@ const Header = React.memo(() => {
         {/* Header chính */}
         <div className="header h-46 bg-gradient-to-b from-[#7fadff] to-[#0f62f9] text-white w-full">
           {/* Contact Header */}
-          <div className="container mx-auto w-4/5">
+          <div className="container mx-auto w-[80%]">
             {/* Contact Information */}
             <div className="w-full">
               <div className="flex justify-between items-center text-base font-semibold">
@@ -66,30 +85,34 @@ const Header = React.memo(() => {
                     {memoizedText}
                   </p>
                 </div>
-                <div className="my-1 flex items-center">
-                  <a className="mx-1 hover:text-blue-800" href="">
-                    Đăng ký |
-                  </a>
-                  <a className="mx-1 hover:text-blue-800" href="">
-                    Đăng nhập |
-                  </a>
-                  <p className="mx-1 flex items-center" href="">
-                    Hotline đặt hàng:
-                    <button className="flex items-center bg-blue-800 text-white px-2.5 py-1 rounded-full text-base hover:bg-white hover:text-blue-800 ml-2 cursor-pointer">
-                      <PhoneIcon className="mr-2 h-3 w-3" />
-                      1900 6750
-                    </button>
-                  </p>
-                </div>
+                {isAuthenticated ? (
+                  <UserInfo user={user} />
+                ) : (
+                  <div className="my-1 flex items-center">
+                    <a className="mx-1 hover:text-blue-800" href="/register">
+                      Đăng ký |
+                    </a>
+                    <a className="mx-1 hover:text-blue-800" href="/login  ">
+                      Đăng nhập |
+                    </a>
+                    <p className="mx-1 flex items-center">
+                      Hotline đặt hàng:
+                      <button className="flex items-center bg-blue-800 text-white px-2.5 py-1 rounded-full text-base hover:bg-white hover:text-blue-800 ml-2 cursor-pointer">
+                        <PhoneIcon className="mr-2 h-3 w-3" />
+                        1900 6750
+                      </button>
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Category Header */}
             <div className="flex items-center my-1 justify-between">
               {/* Logo */}
-              <a href="" className="mr-10">
+              <a href="#" className="mr-10">
                 <img
-                  className="w-[200px] h-[50px] align-middle border-none max-w-full h-auto"
+                  className="w-[200px] align-middle border-none max-w-full h-auto"
                   src={imgLogo}
                   alt="Logo-Dola Pharmacy"
                 />
@@ -119,7 +142,11 @@ const Header = React.memo(() => {
               <Search categories={category} />
 
               <div className="flex items-center">
-                <a className="mx-1 hover:text-blue-800" href="">
+                <a
+                  className="mx-1 hover:text-blue-800"
+                  href=""
+                  onClick={() => handleClickMap()}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -140,7 +167,11 @@ const Header = React.memo(() => {
                     />
                   </svg>
                 </a>
-                <a className="mx-1 hover:text-blue-800" href="">
+                <a
+                  className="mx-1 hover:text-blue-800"
+                  href=""
+                  onClick={() => handleClickFav()}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -156,7 +187,7 @@ const Header = React.memo(() => {
                     />
                   </svg>
                 </a>
-                <a className="mx-1 hover:text-blue-800" href="">
+                <a className="mx-1 hover:text-blue-800" href="#">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -172,7 +203,10 @@ const Header = React.memo(() => {
                     />
                   </svg>
                 </a>
-                <button className="mx-2 flex items-center bg-blue-800 text-white px-2.5 py-1 rounded-lg text-base hover:bg-white hover:text-blue-800 cursor-pointer">
+                <button
+                  className="mx-2 flex items-center bg-blue-800 text-white px-2.5 py-1 rounded-lg text-base hover:bg-white hover:text-blue-800 cursor-pointer"
+                  onClick={() => handleClickCart()}
+                >
                   Giỏ hàng
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

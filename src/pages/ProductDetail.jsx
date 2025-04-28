@@ -22,7 +22,9 @@ function ProductDetail() {
       .then((res) => res.json())
       .then((data) => {
         setProduct(data[0]);
-      });
+      })
+      .catch((e) => console.log(e))
+      .finally(() => {});
   }, [id]); // Run only when the ID changes
 
   useEffect(() => {
@@ -142,7 +144,7 @@ function ProductDetail() {
                     )}
                 <span className="text-sm font-medium ml-1">₫</span>
               </span>
-              {product.salePrice && (
+              {product.discount && (
                 <span className="line-through text-gray-500 text-lg">
                   {new Intl.NumberFormat("vi-VN").format(
                     parseFloat(product.basePrice).toFixed(0)
@@ -150,7 +152,7 @@ function ProductDetail() {
                   <span className="text-xs">₫</span>
                 </span>
               )}
-              {product.salePrice && (
+              {product.discount && (
                 <span className="bg-red-600 text-white text-xs px-2 py-1 rounded-full ml-2">
                   -
                   {Math.round(
@@ -162,7 +164,7 @@ function ProductDetail() {
                 </span>
               )}
             </div>
-            {product.salePrice && (
+            {product.discount && (
               <div className="mt-2 flex items-center">
                 <span className="text-sm text-gray-700 font-medium">
                   Tiết kiệm:{" "}
@@ -207,19 +209,21 @@ function ProductDetail() {
           </div>
 
           <div className="flex mt-4 justify-between">
-            <div className="flex h-[48px] ring-2 ring-blue-800 rounded-[5px] hover:ring-green-800 ">
+            <div className="flex h-[48px] ring-2 ring-blue-800 rounded-[5px] hover:ring-green-800 w-full">
               <div className="bg-white p-2 aspect-square h-full flex justify-center items-center rounded-l-[5px]">
                 <ShoppingCartOutlined
                   style={{ color: "blue", fontSize: "30px" }}
                 />
               </div>
               <button
-                className="text-center bg-blue-700 hover:bg-green-800 text-white rounded-r-[5px] p-2 transition-colors"
+                className="text-center bg-blue-700 hover:bg-green-800 text-white rounded-r-[5px] p-4 w-full transition-colors flex justify-center items-center"
                 onClick={() => handleAddToCart(product)}
               >
-                <span className="font-medium">Thêm vào giỏ</span>
-                <br></br>
-                <span className="text-xs opacity-90">Miễn phí giao hàng</span>
+                <div>
+                  <span className="font-bold text-[15px]">Thêm vào giỏ</span>
+                  <br />
+                  <span className="text-[12px]">Miễn phí giao hàng</span>
+                </div>
               </button>
             </div>
             <button

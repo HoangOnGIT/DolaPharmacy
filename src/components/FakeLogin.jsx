@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import "../styles/Login.css"; // You'll need to create this CSS file
 
 const FakeLogin = () => {
   const [username, setUsername] = useState("");

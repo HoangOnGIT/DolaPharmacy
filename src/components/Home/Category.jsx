@@ -11,11 +11,11 @@ import img9 from '../../img/Header/imgCategory/image9.png';
 import img10 from '../../img/Header/imgCategory/image10.png';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import img1a from '../../img/Header/imgDiscount/image1.png';
-import img2a from '../../img/Header/imgDiscount/image2.png';   
+import img2a from '../../img/Header/imgDiscount/image2.png';
 import img3a from '../../img/Header/imgDiscount/image3.png';
 import img4a from '../../img/Header/imgDiscount/image4.png';
 
-const HomeCategory = () => {
+const Category = () => {
     const categories = [
         { name: 'Quà Tặng Sức Khỏe', img: img1 },
         { name: 'Thiết Bị Y Tế', img: img2 },
@@ -34,7 +34,6 @@ const HomeCategory = () => {
         { name: 'FREESHIP', desc: "Miễn phí vận chuyển", expiry: 'Không thời hạn', img: img2a },
         { name: 'DOLA20', desc: "Giảm 20.000đ giá trị đơn hàng", expiry: '1/1/2024', img: img3a },
         { name: 'DOLA50K', desc: "Giảm 50.000đ giá trị đơn hàng", expiry: '1/1/2024', img: img4a },
-        
     ];
 
     const [categoryIndex, setCategoryIndex] = useState(0);
@@ -109,12 +108,13 @@ const HomeCategory = () => {
                     </div>
                     {categoryIndex > 0 && (
                         <div className="absolute top-1/2 transform -translate-y-1/2 left-0">
-                            <button
+                            <button dir="ltr"
                                 onClick={handleCategoryPrev}
-                                className="p-2 rounded-full shadow-md bg-gray-200"
+                                className="group hover:bg-blue-500 transition-colors cursor-pointer
+                                rounded-full shadow-md bg-gray-200 py-4 px-1 rounded-s-lg"
                             >
                                 <svg
-                                    className="w-6 h-6 text-gray-600"
+                                    className="w-6 h-6 text-gray-600 group-hover:text-white"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -132,12 +132,13 @@ const HomeCategory = () => {
                     )}
                     {categoryIndex + itemsPerPage < categories.length && (
                         <div className="absolute top-1/2 transform -translate-y-1/2 right-0">
-                            <button
+                            <button dir="rtl"
                                 onClick={handleCategoryNext}
-                                className="p-2 rounded-full shadow-md bg-gray-200"
+                                className="group hover:bg-blue-500 transition-colors cursor-pointer
+                                p-2 rounded-full shadow-md bg-gray-200 py-4 px-1 rounded-s-lg"
                             >
                                 <svg
-                                    className="w-6 h-6 text-gray-600"
+                                    className="w-6 h-6 text-gray-600 group-hover:text-white"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -209,12 +210,12 @@ const HomeCategory = () => {
                     </div>
                     {discountIndex > 0 && (
                         <div className="absolute top-1/2 transform -translate-y-1/2 left-0">
-                            <button
+                            <button dỉr="ltr"
                                 onClick={handleDiscountPrev}
-                                className="p-2 rounded-full shadow-md bg-gray-200"
+                                className="p-2 rounded-full shadow-md bg-gray-200 py-4 px-1 rounded-s-lg group hover:bg-blue-500"
                             >
                                 <svg
-                                    className="w-6 h-6 text-gray-600"
+                                    className="w-6 h-6 text-gray-600 group-hover:text-white"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -232,12 +233,12 @@ const HomeCategory = () => {
                     )}
                     {discountIndex + discountItemsPerPage < discount.length && (
                         <div className="absolute top-1/2 transform -translate-y-1/2 right-0">
-                            <button
+                            <button dir="rtl"
                                 onClick={handleDiscountNext}
-                                className="p-2 rounded-full shadow-md bg-gray-200"
+                                className="p-2 rounded-full shadow-md bg-gray-200 py-4 px-1 rounded-s-lg group hover:bg-blue-500"
                             >
                                 <svg
-                                    className="w-6 h-6 text-gray-600"
+                                    className="w-6 h-6 text-gray-600 group-hover:text-white"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -259,4 +260,4 @@ const HomeCategory = () => {
     );
 };
 
-export default HomeCategory;
+export default Category;

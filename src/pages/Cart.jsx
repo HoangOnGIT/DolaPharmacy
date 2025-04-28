@@ -1,13 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCart } from "../contexts/CartContext";
 import { ShoppingOutlined } from "@ant-design/icons";
 import CartList from "../components/cartList/CartList";
 import { Form, Input, Button, Checkbox, Select, DatePicker } from "antd";
 import TextArea from "antd/lib/input/TextArea";
+import { useAuth } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const { cart } = useCart();
-  const [showInvoiceForm, setShowInvoiceForm] = useState(true);
+  const { isAuthenticated } = useAuth();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      if (!localStorage.getItem("token")) navigate("/login");
+    }
+  }, [isAuthenticated]);
+
+  const [showInvoiceForm, setShowInvoiceForm] = useState(false);
 
   // Calculate total price
   const total =
@@ -60,7 +72,6 @@ function Cart() {
           </div>
         </div>
 
-        {/* Right column - Delivery information */}
         {cart.items?.length > 0 && (
           <div className="lg:w-1/3">
             <h2 className="text-xl font-medium mb-4">Thông tin đơn hàng</h2>
