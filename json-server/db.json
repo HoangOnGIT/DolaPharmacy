@@ -3266,7 +3266,7 @@
       "dateOfBirth": "1990-01-01",
       "role": "admin",
       "verificationStatus": "verified",
-      "lastLogin": "2025-05-01T09:10:20.402Z",
+      "lastLogin": "2025-05-01T13:15:34.024Z",
       "addresses": [
         {
           "id": "0a6f558e-5df2-452b-84b6-7bdab82878ce",
@@ -6505,30 +6505,6 @@
   "wishlist": [],
   "tokens": [
     {
-      "id": "901d5a17-e53d-44f6-a365-627a9a131d38",
-      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjA2NTA3OCwiZXhwIjoxNzQ2MDY4Njc4fQ.Dok4D4Ji32u2kG29MykutUJvXj3XEs_RrPT7OuLiXCU",
-      "createdAt": "2025-05-01T09:04:38.119Z",
-      "expiresAt": "2025-05-01T10:04:38.119Z",
-      "isValid": true
-    },
-    {
-      "id": "8ca0b524-12c4-4d05-92bb-30f5bcdbfb65",
-      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjA2ODc2MiwiZXhwIjoxNzQ2MDcyMzYyfQ.HbnbvWvO6xrvBbjnIb5r2013pN7QSrC84KUcs_mtbIM",
-      "createdAt": "2025-05-01T10:06:02.119Z",
-      "expiresAt": "2025-05-01T11:06:02.118Z",
-      "isValid": true
-    },
-    {
-      "id": "3c21d0af-4c8f-4bfa-9e63-17c02601e00c",
-      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjA3MDQ5NSwiZXhwIjoxNzQ2MDc0MDk1fQ.6vJ1ia5cUrgDjlzglkQ7sQvl5hCNKNTe-FYJOmxp5tk",
-      "createdAt": "2025-05-01T10:34:55.443Z",
-      "expiresAt": "2025-05-01T11:34:55.443Z",
-      "isValid": true
-    },
-    {
       "id": "0421bdf3-c665-4fab-be57-1f229e140093",
       "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjA4NjkzNiwiZXhwIjoxNzQ2MDkwNTM2fQ.V-UUokqBPdbvfIFarbdeiYJE6E7CMo4qJMEXGXim2sw",
@@ -6542,6 +6518,14 @@
       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjA5MDYyMCwiZXhwIjoxNzQ2MDk0MjIwfQ.jm-Jz857OXG7WDvGZbRXBkV9BFRAQBl0m_OZ1wtlgxA",
       "createdAt": "2025-05-01T16:10:20.402Z",
       "expiresAt": "2025-05-01T17:10:20.402Z",
+      "isValid": true
+    },
+    {
+      "id": "517c2aac-0de3-4ed7-a61a-f704dd60f1b9",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjEwNTMzNCwiZXhwIjoxNzQ2MTA4OTM0fQ.uX90wRn475WU4I2mUuK3z20eO7sdXR9ByJmjR6m6HxI",
+      "createdAt": "2025-05-01T20:15:34.024Z",
+      "expiresAt": "2025-05-01T21:15:34.023Z",
       "isValid": true
     }
   ]

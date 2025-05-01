@@ -213,7 +213,6 @@ const Header = () => {
                 </Badge>
               </div>
             </div>
-
             <Menu />
           </div>
         </div>
