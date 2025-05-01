@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const TableDashboard = () => {
+const TableDashboard = ({ category, filter }) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -15,10 +15,6 @@ const TableDashboard = () => {
         itemsPerPage: 10,
     });
 
-    const totalPages = Math.ceil(data.length / pagination.itemsPerPage);
-    const startIndex = (pagination.currentPage - 1) * pagination.itemsPerPage;
-    const endIndex = pagination.currentPage * pagination.itemsPerPage;
-    const paginationData = data.slice(startIndex, endIndex);
     const arrItemsPerPage = [10, 15, 20];
 
     const handleSetPage = (page) => {
@@ -28,7 +24,35 @@ const TableDashboard = () => {
         }));
     };
 
-    
+    // ===== LỌC & SẮP XẾP =====
+    const filteredData = data
+        .filter(item => {
+            if (!category) return true;
+            return item.categoryName === category;
+        })
+        .sort((a, b) => {
+            switch (filter) {
+                case 'name_asc':
+                    return a.name.localeCompare(b.name);
+                case 'name_desc':
+                    return b.name.localeCompare(a.name);
+                case 'price_asc':
+                    return a.cost - b.cost;
+                case 'price_desc':
+                    return b.cost - a.cost;
+                case 'quantity_asc':
+                    return (a.stock?.available ?? 0) - (b.stock?.available ?? 0);
+                case 'quantity_desc':
+                    return (b.stock?.available ?? 0) - (a.stock?.available ?? 0);
+                default:
+                    return 0;
+            }
+        });
+
+    const totalPages = Math.ceil(filteredData.length / pagination.itemsPerPage);
+    const startIndex = (pagination.currentPage - 1) * pagination.itemsPerPage;
+    const endIndex = pagination.currentPage * pagination.itemsPerPage;
+    const paginationData = filteredData.slice(startIndex, endIndex);
 
     return (
         <div className='bg-white px-4 py-3 flex-1'>
