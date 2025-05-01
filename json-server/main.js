@@ -193,6 +193,61 @@ server.post("/api/logout", (req, res) => {
   res.status(200).jsonp({ message: "Logged out successfully" });
 });
 
+// Token validation endpoint
+server.get("/api/validate-token", (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).jsonp({
+      valid: false,
+      error: "No token provided",
+    });
+  }
+
+  const token = authHeader.split(" ")[1];
+  try {
+    // First verify JWT signature
+    const decoded = jwt.verify(token, SECRET_KEY);
+
+    // Then check if token exists in database and is valid
+    const storedToken = router.db
+      .get("tokens")
+      .find({ token: token, isValid: true })
+      .value();
+
+    if (!storedToken) {
+      return res.status(401).jsonp({
+        valid: false,
+        error: "Token not found or invalid",
+      });
+    }
+
+    // Check if token has expired
+    if (new Date(storedToken.expiresAt) < new Date()) {
+      // Mark token as invalid
+      router.db
+        .get("tokens")
+        .find({ token: token })
+        .assign({ isValid: false })
+        .write();
+      return res.status(401).jsonp({
+        valid: false,
+        error: "Token expired",
+      });
+    }
+
+    // Token is valid
+    return res.status(200).jsonp({
+      valid: true,
+      user: { id: decoded.id, role: decoded.role },
+    });
+  } catch (err) {
+    return res.status(401).jsonp({
+      valid: false,
+      error: "Invalid or expired token",
+    });
+  }
+});
+
 // Authentication middleware with token verification from database
 server.use((req, res, next) => {
   if (

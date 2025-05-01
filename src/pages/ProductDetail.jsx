@@ -9,15 +9,30 @@ import VariantCard from "../components/product/VariantCard";
 import queryString from "query-string";
 import ProductSuggetionCard from "../components/product/ProductSuggetionCard";
 import { useParams } from "react-router-dom";
+import { useFav } from "../contexts/FavouriteContext";
+import { useCart } from "../contexts/CartContext";
+import { useAuth } from "../contexts/AuthContext";
+import { notification } from "antd";
 
 function ProductDetail() {
   const { id } = useParams();
+  const { user, isAuthenticated } = useAuth();
+  const { toggleFavourite } = useFav();
+  const { addToCartWithDetail } = useCart();
   const [product, setProduct] = useState({});
   const [suggest, setSuggestion] = useState([]);
   const [samePricing, setSamePricing] = useState([]);
+  const [quantity, setQuantity] = useState(1);
+  const [toggle, setToggle] = useState(true);
+  const [showMore, setShowMore] = useState(false);
+  const [fav, setFav] = useState(false);
+  const [activeVariant, setActiveVariant] = useState("");
+  const [api, contextHolder] = notification.useNotification();
+  const imageArr = product.images
+    ? product.images.map((image) => image.url)
+    : [];
 
   useEffect(() => {
-    // Fetch product data based on the ID
     fetch(`http://localhost:3000/api/products?id=${id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -25,14 +40,37 @@ function ProductDetail() {
       })
       .catch((e) => console.log(e))
       .finally(() => {});
-  }, [id]); // Run only when the ID changes
+  }, [id]);
 
   useEffect(() => {
-    // Fetch suggestions and same pricing only when product data is available
+    if (user && isAuthenticated) {
+      console.log(`http://localhost:3000/api/favourites?userId=${user.id}`);
+
+      fetch(`http://localhost:3000/api/favourites?userId=${user.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data[0].items) {
+            const exist = data[0].items.find((item) => {
+              console.log("list id: ", item.id);
+              console.log("product id: ", id);
+              return item.id === id;
+            });
+            if (exist) {
+              setFav(true);
+            }
+          }
+        })
+        .catch((e) => console.log(e))
+        .finally(() => {});
+    }
+  }, [id]);
+
+  useEffect(() => {
     if (product.category && product.priceRange) {
       const categoryParam = queryString.stringify({
         category: product.category,
       });
+
       fetch(`http://localhost:3000/api/products?${categoryParam}`)
         .then((res) => res.json())
         .then((data) => setSuggestion(data));
@@ -41,24 +79,12 @@ function ProductDetail() {
         category: product.category,
         priceRange: product.priceRange,
       });
+
       fetch(`http://localhost:3000/api/products?${pricingParam}`)
         .then((res) => res.json())
         .then((data) => setSamePricing(data));
     }
-  }, [product.category, product.priceRange]); // Run only when category or priceRange changes
-
-  const [quantity, setQuantity] = useState(1);
-  const [fav, setFav] = useState(false);
-  const [toggle, setToggle] = useState(true);
-  const [showMore, setShowMore] = useState(false);
-
-  const imageArr = product.images
-    ? product.images.map((image) => image.url)
-    : [];
-
-  function increase() {
-    setQuantity((prev) => prev + 1);
-  }
+  }, [product.category, product.priceRange]);
 
   const infoCardData = [
     {
@@ -87,6 +113,10 @@ function ProductDetail() {
     },
   ];
 
+  function increase() {
+    setQuantity((prev) => prev + 1);
+  }
+
   function decrease(n) {
     if (n > 1) {
       setQuantity((prev) => prev - 1);
@@ -94,11 +124,43 @@ function ProductDetail() {
   }
 
   function handleFav() {
+    if (!product || !product.name) {
+      alert("Invalid item passed to handleAddToCart:", item);
+      return;
+    }
+
+    toggleFavourite(product);
     setFav(!fav);
   }
 
-  function handleAddToCart() {
-    //add logic add to cart}
+  function handleAddToCart(item) {
+    if (!item || !item.name) {
+      alert("Không thể thêm vào giỏ hàng!");
+      return;
+    }
+
+    if (!activeVariant) {
+      api.warning({
+        message: "Vui lòng chọn loại sản phẩm",
+        duration: 2,
+      });
+      return;
+    }
+
+    const updatedItem = { ...item, quantity: quantity, variant: activeVariant };
+
+    console.log(updatedItem);
+    addToCartWithDetail(updatedItem);
+
+    api.success({
+      message: "Thêm giỏ hàng thành công",
+      description: `${item.name} được thêm vào giỏ hàng thành công!`,
+      duration: 2,
+    });
+  }
+
+  function handleClickVari(vari) {
+    setActiveVariant(vari);
   }
 
   return (
@@ -107,6 +169,7 @@ function ProductDetail() {
       className="flex items-center justify-center my-10 flex-wrap"
     >
       <div className="w-[70%] min-h-screen h-fit grid grid-cols-9 gap-10">
+        {contextHolder}
         <div className="col-span-3 img-slide">
           <div className="product-page">
             <ProductImageGallery imgArr={imageArr} />
@@ -182,9 +245,20 @@ function ProductDetail() {
             <div className="space-y-2">
               <div className="font-medium">Loại sản phẩm:</div>
               <div className="grid gap-3 grid-cols-3">
-                {product.variants.map((vari) => (
-                  <VariantCard variant={vari} key={vari.id} />
-                ))}
+                {product.variants.map((vari) => {
+                  let active = false;
+                  if (activeVariant === vari.name) {
+                    active = true;
+                  }
+                  return (
+                    <VariantCard
+                      variant={vari}
+                      key={vari.id}
+                      handleClickVari={handleClickVari}
+                      active={active}
+                    />
+                  );
+                })}
               </div>
             </div>
           )}
@@ -356,7 +430,7 @@ function ProductDetail() {
               Để được hỗ trợ tốt nhất. Hãy gọi:
               <br></br>
               <span className="text-blue-800 text-2xl">1900 6750</span>
-              <legend style={{ float: "center" }}>Hoặc:</legend>
+              <div className="divide-gray-600">Hoặc:</div> <br></br>
               <span>Chat hỗ trợ trực tuyến</span>
               <br></br>
               <button className="p-2 bg-blue-600 text-white w-full rounded-[5px]">
@@ -483,7 +557,7 @@ function SuggestionField({ title, list }) {
       <div className="bg-blue-700 text-white px-2 py-1 rounded-t-[5px]">
         {title}
       </div>
-      <div className="product-suggestion">
+      <div className="product-suggestion space-y-5">
         {list &&
           list.map((item, index) => {
             if (index < 5)

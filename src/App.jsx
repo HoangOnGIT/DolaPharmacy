@@ -14,6 +14,10 @@ import PersonalInfomation from "./pages/PersonalInfomation";
 import Favourite from "./pages/Favourite";
 import FavContext from "./contexts/FavouriteContext";
 import FavProvider from "./contexts/FavouriteContext";
+import About from "./pages/About";
+import Payment from "./pages/Payment";
+import Confirmation from "./pages/OrdersDetail";
+import OrderDetail from "./pages/OrdersDetail";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +65,26 @@ const router = createBrowserRouter([
       {
         path: "fav",
         element: <Favourite />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "about",
+        element: <About />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "payment",
+        element: <Payment />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "confirmation/:orderId",
+        element: <OrderDetail confirm={true} />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "orders/:orderId",
+        element: <OrderDetail />,
         errorElement: <ErrorPage />,
       },
       // { path: "qna", element: <QnA /> },

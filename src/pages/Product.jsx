@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import CatergoryCard from "../components/catergory/CatergoryCard";
-import { Row } from "antd";
+import { notification, Row } from "antd";
 import FilterContent from "../components/filter/FilterContent";
 import { SortAscendingOutlined } from "@ant-design/icons";
 import ProductCard from "../components/product/ProductCard";
@@ -11,10 +11,12 @@ import SelectedFilter from "../components/filter/SelectedFilter";
 import SortCard from "../components/filter/SortCard";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useFav } from "../contexts/FavouriteContext";
+import { useCart } from "../contexts/CartContext";
 
 const Product = (props) => {
-  const { category } = useParams();
   const { favList } = useFav();
+  const { toggleFavourite } = useFav();
+  const { addToCart } = useCart();
   const [catergories, setCatergories] = useState([]);
   const [branding, setBranding] = useState([]);
   const [products, setProducts] = useState([]);
@@ -35,6 +37,7 @@ const Product = (props) => {
   const [activeSort, setActiveSort] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [api, contextHolder] = notification.useNotification();
   function handleChangeFilter(e, queryParam) {
     setFilter({ ...filter, [queryParam]: e });
   }
@@ -59,6 +62,28 @@ const Product = (props) => {
   function handlePageChange(n) {
     setPagination({ ...pagination, _page: n });
     setFilter({ ...filter, _page: n });
+  }
+
+  function handleAddToCart(item) {
+    if (!item || !item.name) {
+      alert("Không thể thêm vào giỏ hàng!");
+      return;
+    }
+
+    addToCart(item);
+    api.success({
+      message: "Thêm giỏ hàng thành công",
+      description: `${item.name} được thêm vào giỏ hàng thành công!`,
+      duration: 2,
+    });
+  }
+
+  function handleToggleFav(item) {
+    if (!item || !item.name) {
+      console.error("Invalid item passed to handleAddToCart:", item);
+      return;
+    }
+    toggleFavourite(item);
   }
 
   useEffect(() => {
@@ -144,7 +169,6 @@ const Product = (props) => {
 
   useEffect(() => {
     const params = queryString.stringify(filter);
-
     setSearchParams(params); // This updates the URL query parameters
   }, [filter]);
 
@@ -218,7 +242,8 @@ const Product = (props) => {
               </div>
             </div>
           </div>
-
+          {/* context holder for notification */}
+          {contextHolder}
           {/* Product grid */}
           <div className="product-section">
             <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
@@ -259,6 +284,7 @@ const Product = (props) => {
                     {products.map((product) => {
                       let isFavourited = false;
                       if (
+                        favList.items &&
                         favList.items.find(
                           (favItem) => favItem.id === product.id
                         )
@@ -271,6 +297,8 @@ const Product = (props) => {
                           product={product}
                           key={product.id}
                           isFavourited={isFavourited}
+                          handleAddToCart={handleAddToCart}
+                          handleToggleFav={handleToggleFav}
                         />
                       );
                     })}

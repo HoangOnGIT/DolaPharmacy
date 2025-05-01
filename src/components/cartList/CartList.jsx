@@ -6,6 +6,19 @@ import { useCart } from "../../contexts/CartContext";
 function CartList() {
   const { cart, updateItemQuantity, removeItemFromCart } = useCart();
 
+  // Ensure cart items are properly formatted for table rendering
+  const safeCartItems = (cart.items || []).map((item) => {
+    return {
+      ...item,
+      // Convert any potential object values to strings
+      name: item.name ? String(item.name) : "Unnamed Product",
+      variant:
+        typeof item.variant === "object"
+          ? JSON.stringify(item.variant)
+          : item.variant || "Hiện tại sản phẩm chưa có phân loại",
+    };
+  });
+
   const columns = [
     {
       title: "Thông tin sản phẩm",
@@ -19,14 +32,14 @@ function CartList() {
                 ? record.images[0].url
                 : "https://placeholder.com/80"
             }
-            alt={record.name}
+            alt={String(record.name)}
             width={80}
             height={80}
             style={{ marginRight: "16px", objectFit: "contain" }}
           />
           <div className="ml-5">
             <div style={{ maxWidth: 300, fontWeight: 500, marginBottom: 4 }}>
-              {record.name}
+              {String(record.name)}
             </div>
             <Button
               type="link"
@@ -39,6 +52,16 @@ function CartList() {
           </div>
         </div>
       ),
+    },
+    {
+      title: "Loại sản phẩm",
+      dataIndex: "variant",
+      key: "variant",
+      render: (_, record) => {
+        console.log(record.variant.name);
+
+        return <span>{record.variant ? record.variant : "Mặc định"}</span>;
+      },
     },
     {
       title: "Đơn giá",
@@ -111,7 +134,7 @@ function CartList() {
   return (
     <div className="cart-table">
       <Table
-        dataSource={cart.items || []}
+        dataSource={safeCartItems}
         columns={columns}
         pagination={false}
         rowKey="id"

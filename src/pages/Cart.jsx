@@ -9,6 +9,10 @@ import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const { cart } = useCart();
+
+  // Debug cart contents properly
+  console.log("Cart content:", JSON.stringify(cart, null, 2));
+
   const { isAuthenticated } = useAuth();
 
   const navigate = useNavigate();
@@ -21,11 +25,10 @@ function Cart() {
 
   const [showInvoiceForm, setShowInvoiceForm] = useState(false);
 
-  // Calculate total price
   const total =
     cart.items?.reduce((acc, item) => {
       const price = item.salePrice || item.basePrice;
-      return acc + price * item.quantity;
+      return (acc += item.quantity * price);
     }, 0) || 0;
 
   return (
@@ -63,6 +66,7 @@ function Cart() {
                     block
                     size="large"
                     className="bg-blue-500 hover:bg-blue-600"
+                    onClick={() => navigate("/payment")}
                   >
                     Thanh toán
                   </Button>

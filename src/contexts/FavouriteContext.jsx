@@ -15,9 +15,6 @@ const FavProvider = ({ children }) => {
   useEffect(() => {
     if (isAuthenticated && user) {
       const userId = { userId: user.id };
-      console.log(
-        `http://localhost:3000/api/favourites?${queryString.stringify(userId)}`
-      );
       const fetchCart = async () => {
         try {
           const response = await fetch(
@@ -43,7 +40,6 @@ const FavProvider = ({ children }) => {
   const toggleFavourite = async (item) => {
     try {
       const currentItems = favList.items;
-      console.log("current items: ", currentItems);
 
       const existingItemIndex = currentItems.findIndex(
         (favItem) => favItem.id === item.id
@@ -52,18 +48,13 @@ const FavProvider = ({ children }) => {
 
       if (existingItemIndex >= 0) {
         updatedItems = currentItems.filter((favItem) => favItem.id !== item.id);
-        console.log("item bi xoa: ", updatedItems);
       } else {
         updatedItems.push(item);
-        console.log("item duoc them: ", updatedItems);
       }
 
       const token = localStorage.getItem("token");
 
       const updatedFavList = { ...favList, items: updatedItems };
-
-      console.log(`http://localhost:3000/api/favourites/${favList.id}`);
-
       const response = await fetch(
         `http://localhost:3000/api/favourites/${favList.id}`,
         {
