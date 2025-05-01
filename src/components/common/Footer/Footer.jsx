@@ -42,11 +42,11 @@ const Footer = () => {
   ];
 
   return (
-    <div className="w-full">
-      <footer>
+    <div className="w-full ">
+      <footer className="bg-white text-dark font-sans">
         {/* Top Footer */}
         <div className="flex justify-around w-full bg-blue-600 text-white py-2">
-          <div>
+          <div className="">
             <input
               dir="ltr"
               type="email"
@@ -60,7 +60,7 @@ const Footer = () => {
               ĐĂNG KÝ
             </button>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 ml-55">
             <p className="font-medium">Kết nối với chúng tôi:</p>
             <a href="">
               <ChatBubbleLeftRightIcon className="w-8 h-8 text-white hover:opacity-90" />

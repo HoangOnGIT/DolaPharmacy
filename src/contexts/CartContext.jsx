@@ -9,7 +9,6 @@ export const CartProvider = ({ children }) => {
   const initialCart = {};
 
   const [cart, setCart] = useState(initialCart);
-
   const { isAuthenticated, user } = useAuth();
 
   useEffect(() => {

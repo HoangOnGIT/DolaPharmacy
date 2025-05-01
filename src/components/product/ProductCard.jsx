@@ -3,10 +3,12 @@ import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import AddToCart from "./AddToCart";
 import { useFav } from "../../contexts/FavouriteContext";
+import { Skeleton } from "antd";
 
-const ProductCard = memo(
+const ProductCard =
   ({ product, isFavourited, handleAddToCart, handleToggleFav }) => {
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(true);
 
     function handleToggleFavourite(e) {
       e.stopPropagation();
@@ -40,11 +42,22 @@ const ProductCard = memo(
         </div>
 
         <div className="flex items-center justify-center bg-gray-100 h-[200px]">
+
+          {loading && (
+            <Skeleton.Image
+              active
+            />
+          )}
+
           <img
             src={product.images[0].url}
             alt={product.name}
+            onLoad={() => setLoading(false)}
             className="h-full object-contain hover:scale-110 transition-transform duration-500 ease-in-out"
           />
+
+
+
         </div>
 
         <div className="flex flex-col justify-between px-3 py-2">
@@ -55,11 +68,11 @@ const ProductCard = memo(
             <span className="text-green-600 text-[16px] font-bold">
               {product.salePrice
                 ? new Intl.NumberFormat("vi-VN").format(
-                    parseFloat(product.salePrice).toFixed(0)
-                  )
+                  parseFloat(product.salePrice).toFixed(0)
+                )
                 : new Intl.NumberFormat("vi-VN").format(
-                    parseFloat(product.basePrice).toFixed(0)
-                  )}
+                  parseFloat(product.basePrice).toFixed(0)
+                )}
               <span className="text-[13px] font-medium ml-1">₫</span>
             </span>
             {product.salePrice && (
@@ -74,8 +87,7 @@ const ProductCard = memo(
         </div>
       </div>
     );
-  }
-);
+  };
 
 function BadgeDiscount({ discount }) {
   return <div className="bg-red-600 text-white py-0.5 px-2">-{discount}</div>;

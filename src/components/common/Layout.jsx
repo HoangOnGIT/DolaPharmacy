@@ -2,11 +2,10 @@ import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
 import FloatingButton from "./FloatingButton/FloatingButtons";
 import { Outlet, useNavigate } from "react-router-dom";
-import { memo, useEffect } from "react";
 
-const Layout =() => {
+const Layout = () => {
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   navigate("/homepage", { replace: true });
@@ -14,12 +13,14 @@ const navigate = useNavigate();
 
   return (
     <>
-      <Header />
-      <div>
-        <Outlet />
-      </div>
-      <Footer />
-      <FloatingButton />
+  
+        <Header />
+        <div className="">
+          <Outlet />
+        </div>
+        <Footer />
+        <FloatingButton />
+    
     </>
   );
 };

@@ -1,6 +1,6 @@
 .floating-buttons-wrapper {
   position: fixed;
-  bottom: 150px;
+  bottom: 160px;
   z-index: 50;
   display: flex;
   justify-content: space-between;
@@ -31,7 +31,7 @@
   padding: 12px;
   border-radius: 9999px; /* Fully rounded */
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Tailwind shadow-md */
-  transition: background-color 0.15s ease-in-out;
+  transition: background-color 0.3s ease-in-out; /* Reduced transition duration for better feel */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -47,21 +47,15 @@
 }
 
 /* Animation for shake effect */
-@keyframes shake {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-5px);
-  }
-  50% {
-    transform: translateX(5px);
-  }
-  75% {
-    transform: translateX(-5px);
-  }
+@keyframes shake-pause {
+  0% { transform: translateX(0); }
+  8.33% { transform: translateX(-5px); }   /* Start Shake */
+  16.66% { transform: translateX(5px); }
+  25% { transform: translateX(-5px); }
+  33.33% { transform: translateX(0); }    /* End Shake (approx 1 second) */
+  100% { transform: translateX(0); }     /* Pause (approx 2 seconds) */
 }
 
 .animate-shake-delay {
-  animation: shake 0.5s ease-in-out infinite 3s;
+  animation: shake-pause 2s ease-in-out infinite; /* Total duration: 3 seconds */
 }

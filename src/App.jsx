@@ -1,8 +1,9 @@
-import "./App.css";
+
 import Layout from "./components/common/Layout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Product from "./pages/Product";
 import ProductDetail from "./pages/ProductDetail";
+import Home from "./pages/Home";
 import Video from "./pages/Video";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/CartContext";
@@ -12,12 +13,12 @@ import ErrorBoundary from "./components/common/ErrorBoundary";
 import ErrorPage from "./pages/ErrorPage";
 import PersonalInfomation from "./pages/PersonalInfomation";
 import Favourite from "./pages/Favourite";
-import FavContext from "./contexts/FavouriteContext";
 import FavProvider from "./contexts/FavouriteContext";
 import About from "./pages/About";
 import Payment from "./pages/Payment";
-import Confirmation from "./pages/OrdersDetail";
 import OrderDetail from "./pages/OrdersDetail";
+import News from "./pages/News";
+import Contact from "./pages/Contact";
 
 const router = createBrowserRouter([
   {
@@ -55,8 +56,8 @@ const router = createBrowserRouter([
         element: <UserCrediential loginPage={false} />,
         errorElement: <ErrorPage />,
       },
-      // { path: "homepage", element: <Homepage /> },
-      // { path: "news", element: <News /> },
+      { path: "homepage", element: <Home /> },
+      { path: "news", element: <News /> },
       {
         path: "video",
         element: <Video />,
@@ -93,8 +94,7 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       // { path: "qna", element: <QnA /> },
-      // { path: "contact", element: <Contact /> },
-      // { path: "cart", element: <Contact /> },
+      { path: "contact", element: <Contact /> },
       // { path: "favourite", element: <Contact /> },
       // { path: "map", element: <Map /> },
     ],

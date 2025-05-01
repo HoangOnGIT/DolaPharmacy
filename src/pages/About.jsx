@@ -3,12 +3,12 @@ import BreadCrumb from "../components/common/BreadCrumb";
 
 function About() {
   return (
-    <div className="flex  justify-center">
+    <div className="flex justify-center">
 
-      <div className="mx-auto ">
+      <div className="mx-auto mb-10">
         <BreadCrumb title="Giới thiệu" />
-
-        <div className="w-[80%] mx-auto"><h1 className="text-2xl font-bold mb-4">Giới thiệu</h1>
+        <div className="w-[80%] mx-auto mt-3" >
+          <h1 className="text-2xl font-bold mb-4">Giới thiệu</h1>
           <p className="mb-4">
             Dola Pharmacy - Điểm đến tin cậy cho sức khỏe của bạn!
           </p>

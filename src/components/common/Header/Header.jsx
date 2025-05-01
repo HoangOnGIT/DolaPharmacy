@@ -73,8 +73,8 @@ const Header = () => {
       <div className="w-full">
         {/* Banner Top */}
         <div className="banner-top bg-[#80e0e2]">
-          <div className="container mx-auto w-4/5">
-            <a href="">
+          <div className="container w-[65%] h-auto mx-auto">
+            <a href="#">
               <img src={imgBanner} alt="Banner-Dola Pharmacy" />
             </a>
           </div>
@@ -83,7 +83,7 @@ const Header = () => {
         {/* Header chính */}
         <div className="header h-46 bg-gradient-to-b from-[#7fadff] to-[#0f62f9] text-white w-full">
           {/* Contact Header */}
-          <div className="container mx-auto w-4/5">
+          <div className="container mx-auto w-[80%]">
             {/* Contact Information */}
             <div className="w-full">
               <div className="flex justify-between items-center text-base font-semibold">
@@ -92,7 +92,6 @@ const Header = () => {
                     {memoizedText}
                   </p>
                 </div>
-
                 {isAuthenticated ? (
                   <UserInfo user={user} />
                 ) : (
@@ -118,7 +117,7 @@ const Header = () => {
             {/* Category Header */}
             <div className="flex items-center my-1 justify-between">
               {/* Logo */}
-              <a href="" className="mr-10">
+              <a href="#" className="mr-10">
                 <img
                   className="w-[200px] align-middle border-none max-w-full h-auto"
                   src={imgLogo}
@@ -190,6 +189,7 @@ const Header = () => {
                 </a>
 
                 <a className="mx-1 hover:text-blue-800" href="">
+              
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -214,26 +214,6 @@ const Header = () => {
               </div>
             </div>
             <Menu />
-          </div>
-        </div>
-
-        {/*Breadcrumb*/}
-        <div className="container mx-auto w-4/5">
-          <div className="h-10 justify-center items-center ">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-9"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 12h18m-9 9l9-9-9-9"
-              />
-            </svg>
           </div>
         </div>
 
