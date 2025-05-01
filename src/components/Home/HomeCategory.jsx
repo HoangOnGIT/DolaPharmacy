@@ -230,7 +230,7 @@ const HomeCategory = () => {
                             </button>
                         </div>
                     )}
-                    {discountIndex + discountItemsPerPage < discount.length && (
+                    {/* {discountIndex + discountItemsPerPage < discount.length && (
                         <div className="absolute top-1/2 transform -translate-y-1/2 right-0">
                             <button
                                 onClick={handleDiscountNext}
@@ -252,7 +252,7 @@ const HomeCategory = () => {
                                 </svg>
                             </button>
                         </div>
-                    )}
+                    )} */}
                 </div>
             </div>
         </>

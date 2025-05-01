@@ -31,6 +31,11 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       {
+        path: "promotion",
+        element: <Product key={"promotion"} promotion={true} />,
+        errorElement: <ErrorPage />,
+      },
+      {
         path: "product-detail/:id",
         element: <ProductDetail />,
         errorElement: <ErrorPage />,

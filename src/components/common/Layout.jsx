@@ -1,10 +1,17 @@
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
 import FloatingButton from "./FloatingButton/FloatingButtons";
-import { Outlet } from "react-router-dom";
-import { memo } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import { memo, useEffect } from "react";
 
-const Layout = memo(() => {
+const Layout =() => {
+
+const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   navigate("/homepage", { replace: true });
+  // }, []);
+
   return (
     <>
       <Header />
@@ -15,6 +22,6 @@ const Layout = memo(() => {
       <FloatingButton />
     </>
   );
-});
+};
 
 export default Layout;

@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import CatergoryCard from "../components/catergory/CatergoryCard";
-import { notification, Row } from "antd";
+import { Breadcrumb, notification, Row } from "antd";
 import FilterContent from "../components/filter/FilterContent";
 import { SortAscendingOutlined } from "@ant-design/icons";
 import ProductCard from "../components/product/ProductCard";
@@ -9,11 +9,11 @@ import { Pagination } from "antd";
 import LoadingComponent from "../components/common/Loading/LoadingCompoent";
 import SelectedFilter from "../components/filter/SelectedFilter";
 import SortCard from "../components/filter/SortCard";
-import { useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useFav } from "../contexts/FavouriteContext";
 import { useCart } from "../contexts/CartContext";
 
-const Product = (props) => {
+const Product = ({ promotion = false }) => {
   const { favList } = useFav();
   const { toggleFavourite } = useFav();
   const { addToCart } = useCart();
@@ -25,7 +25,8 @@ const Product = (props) => {
     _limit: 16,
     _totalRows: 1,
   });
-  const [filter, setFilter] = useState({
+
+  let initalFilter = {
     _page: 1,
     _limit: 16,
     status: "active",
@@ -33,7 +34,17 @@ const Product = (props) => {
     brand: [],
     targeted: [],
     weight: [],
-  });
+  }
+
+  if (promotion) {
+    initalFilter = {
+      ...initalFilter,
+      discount_ne:null,
+    };
+  }
+
+  const [filter, setFilter] = useState(initalFilter);
+
   const [activeSort, setActiveSort] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -212,9 +223,9 @@ const Product = (props) => {
                 {filterArr && (
                   <>
                     {filter.priceRange.length !== 0 ||
-                    filter.targeted.length !== 0 ||
-                    filter.weight.length !== 0 ||
-                    filter.brand.length !== 0 ? (
+                      filter.targeted.length !== 0 ||
+                      filter.weight.length !== 0 ||
+                      filter.brand.length !== 0 ? (
                       <div className="mb-4">
                         <h3 className="font-medium text-gray-700 mb-2">
                           Bạn đã chọn
@@ -317,11 +328,10 @@ const Product = (props) => {
                         if (type === "page") {
                           return (
                             <div
-                              className={`pagination-item ${
-                                pagination._page === page
+                              className={`pagination-item ${pagination._page === page
                                   ? "pagination-item-active"
                                   : ""
-                              }`}
+                                }`}
                             >
                               {page}
                             </div>
@@ -387,7 +397,4 @@ const Product = (props) => {
   );
 };
 
-export default memo(Product, (prevProps, nextProps) => {
-  // Custom comparison logic
-  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-});
+export default Product;

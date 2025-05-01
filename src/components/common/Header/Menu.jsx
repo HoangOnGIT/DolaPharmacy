@@ -7,7 +7,7 @@ const Menu = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const menuItems = [
-    { title: "Trang chủ", path: "/" },
+    { title: "Trang chủ", path: "/homepage" },
     { title: "Giới thiệu", path: "/about" },
     { title: "Sản phẩm", path: "/product" },
     { title: "Sản phẩm khuyến mãi", path: "/promotion" },
@@ -19,10 +19,10 @@ const Menu = () => {
 
   const subMenus = {
     "Sản phẩm": [
-      { title: "Dược phẩm", path: "/product?category=pharmaceutical" },
-      { title: "Chăm sóc sức khỏe", path: "/product?category=healthcare" },
-      { title: "Chăm sóc cá nhân", path: "/product?category=personal-care" },
-      { title: "Sản phẩm tiện lợi", path: "/product?category=convenience" },
+      { title: "Dược phẩm", path: "/product" },
+      { title: "Chăm sóc sức khỏe", path: "/product" },
+      { title: "Chăm sóc cá nhân", path: "/product" },
+      { title: "Sản phẩm tiện lợi", path: "/product" },
     ],
     "Tin tức": [
       { title: "Tin thị trường", path: "/news/market" },

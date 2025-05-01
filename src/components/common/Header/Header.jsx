@@ -13,8 +13,9 @@ import { Badge } from "antd";
 import { useCart } from "../../../contexts/CartContext";
 import { useFav } from "../../../contexts/FavouriteContext";
 import { HeartOutlined } from "@ant-design/icons";
+import CartButton from "./CartButton";
 
-const Header = React.memo(() => {
+const Header = () => {
   const textList = [
     "Ưu đãi lớn dành cho thành viên mới",
     "Chào mừng bạn đến với cửa hàng Dola Pharmacy!",
@@ -208,26 +209,7 @@ const Header = React.memo(() => {
                   count={cart.items ? cart.items.length : 0}
                   showZero={true}
                 >
-                  <button
-                    className="mx-2 flex items-center bg-blue-800 text-white px-2.5 py-1 rounded-lg text-base hover:bg-white hover:text-blue-800 cursor-pointer"
-                    onClick={() => handleClickCart()}
-                  >
-                    Giỏ hàng
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="size-9"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                      />
-                    </svg>
-                  </button>
+                  <CartButton />
                 </Badge>
               </div>
             </div>
@@ -235,16 +217,36 @@ const Header = React.memo(() => {
             <Menu />
           </div>
         </div>
-      </div>
 
-      {/* Modal */}
-      <Modal
-        categories={category}
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-      />
+        {/*Breadcrumb*/}
+        <div className="container mx-auto w-4/5">
+          <div className="h-10 justify-center items-center ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-9"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 12h18m-9 9l9-9-9-9"
+              />
+            </svg>
+          </div>
+        </div>
+
+        {/* Modal */}
+        <Modal
+          categories={category}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      </div>
     </>
   );
-});
+};
 
 export default Header;

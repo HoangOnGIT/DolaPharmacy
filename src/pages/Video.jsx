@@ -47,31 +47,31 @@ function Video() {
       id: 1,
       title: "Trẻ em sau tiêm vắc xin bao lâu thì sốt?",
       date: "18/07/2023",
-      image: "/images/news/vaccine.jpg",
+      image: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
     },
     {
       id: 2,
       title: "Có cần xét nghiệm trước khi tiêm HPV hay không?",
       date: "18/07/2023",
-      image: "/images/news/hpv.jpg",
+      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
     },
     {
       id: 3,
       title: "Trước và sau khi tiêm vắc xin cơ thể cần gì, nên ăn gì?",
       date: "18/07/2023",
-      image: "/images/news/vaccine-care.jpg",
+      image: "https://images.unsplash.com/photo-1536064479547-7ee40b74b807?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
     },
     {
       id: 4,
       title: "Phân khác các loại thuốc trị lạc đông tiền hiệu quả",
       date: "18/07/2023",
-      image: "/images/news/medicine.jpg",
+      image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
     },
     {
       id: 5,
       title: "Người bị u xơ tuyến giáp có uống được collagen không?",
       date: "18/07/2023",
-      image: "/images/news/collagen.jpg",
+      image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
     },
   ];
 
@@ -88,124 +88,39 @@ function Video() {
               ))}
             </div>
           </div>
-
-          {/* Sidebar */}
-          <div className="w-full md:w-72 lg:w-80 space-y-6">
-            {/* Navigation Menu */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="bg-blue-600 text-white px-4 py-3">
-                <span className="font-medium text-lg">Danh mục tin tức</span>
-              </div>
-              <div>
-                <Link
-                  to="/"
-                  className="block px-4 py-3 hover:bg-blue-50 transition-colors"
-                >
-                  Trang chủ
-                </Link>
-                <Link
-                  to="/gioi-thieu"
-                  className="block px-4 py-3 hover:bg-blue-50 transition-colors"
-                >
-                  Giới thiệu
-                </Link>
-                <div className="block px-4 py-3">
-                  <div className="flex justify-between items-center cursor-pointer">
-                    <span>Sản phẩm</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div className="block px-4 py-3">
-                  <div className="flex justify-between items-center cursor-pointer">
-                    <span>Tin tức</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <Link
-                  to="/video"
-                  className="block px-4 py-3 bg-blue-50 text-blue-600 font-medium"
-                >
-                  Video
-                </Link>
-                <Link
-                  to="/cau-hoi-thuong-gap"
-                  className="block px-4 py-3 hover:bg-blue-50 transition-colors"
-                >
-                  Câu hỏi thường gặp
-                </Link>
-                <Link
-                  to="/lien-he"
-                  className="block px-4 py-3 hover:bg-blue-50 transition-colors"
-                >
-                  Liên hệ
-                </Link>
-              </div>
+  
+          {/* Sidebar area */}
+          <div className="md:w-80 bg-white rounded-lg shadow-md">
+            <div className="bg-blue-800 text-white py-3 px-4 rounded-t-lg">
+              <h2 className="text-xl font-semibold">Tin tức mới nhất</h2>
             </div>
-
-            {/* Latest News Section */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="bg-blue-600 text-white px-4 py-3">
-                <span className="font-medium text-lg">Tin mới nhất</span>
-              </div>
-              <div>
-                {latestNews.map((news) => (
-                  <div
-                    key={news.id}
-                    className="flex p-3 hover:bg-blue-50 transition-colors cursor-pointer"
-                  >
-                    <div className="flex-shrink-0 mr-3">
-                      <span className="flex items-center justify-center w-6 h-6 bg-blue-600 text-white rounded-full text-sm">
-                        {news.id}
-                      </span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex">
-                        <div className="w-16 h-16 bg-gray-200 rounded overflow-hidden mr-3 flex-shrink-0">
-                          <img
-                            src={news.image}
-                            alt={news.title}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <div>
-                          <h3 className="text-sm font-medium text-gray-800 line-clamp-2">
-                            {news.title}
-                          </h3>
-                          <p className="text-xs text-gray-500 mt-1">
-                            {news.date}
-                          </p>
-                        </div>
-                      </div>
+            <div className="divide-y">
+              {latestNews.map((news) => (
+                <Link key={news.id} to={`/news/${news.id}`} className="block hover:bg-blue-50 transition-colors">
+                  <div className="p-4 flex gap-3">
+                    <img 
+                      src={news.image} 
+                      alt={news.title} 
+                      className="w-20 h-20 object-cover rounded"
+                    />
+                    <div>
+                      <h3 className="font-medium text-gray-800 line-clamp-2">{news.title}</h3>
+                      <p className="text-sm text-gray-500 mt-1">{news.date}</p>
                     </div>
                   </div>
-                ))}
-              </div>
+                </Link>
+              ))}
+            </div>
+            <div className="p-4 border-t">
+              <Link 
+                to="/news" 
+                className="text-blue-800 font-medium hover:text-blue-600 flex items-center justify-center"
+              >
+                Xem tất cả tin tức
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-1">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+              </Link>
             </div>
           </div>
         </div>
