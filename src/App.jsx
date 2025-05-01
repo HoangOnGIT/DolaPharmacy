@@ -5,38 +5,59 @@ import Product from "./pages/Product";
 import ProductDetail from "./pages/ProductDetail";
 import Home from "./pages/Home";
 import FakeLogin from "./components/FakeLogin";
+import Video from "./pages/Video";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/CartContext";
 import Cart from "./pages/Cart";
+import UserCrediential from "./pages/UserCrediential";
+import ErrorBoundary from "./components/common/ErrorBoundary";
+import ErrorPage from "./pages/ErrorPage";
+import PersonalInfomation from "./pages/PersonalInfomation";
+import Favourite from "./pages/Favourite";
+import FavProvider from "./contexts/FavouriteContext";
+import Dashboard from "./pages/Dashboard";
+import DashboardLayout from "./components/dashboard/LayoutDashboard"; 
+import DashboardProduct from "./components/dashboard/DashboardProduct"; 
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    errorElement: <ErrorPage />,
     children: [
       { path: "product", element: <Product /> },
       { path: "product-detail/:id", element: <ProductDetail /> },
-      { path: "login", element: <FakeLogin /> },
       { path: "cart", element: <Cart /> },
+      { path: "login", element: <UserCrediential loginPage={true} /> },
+      { path: "register", element: <UserCrediential loginPage={false} /> },
       { path: "homepage", element: <Home /> },
-      // { path: "news", element: <News /> },
-      // { path: "video", element: <Video /> },
-      // { path: "qna", element: <QnA /> },
-      // { path: "contact", element: <Contact /> },
-      // { path: "cart", element: <Contact /> },
-      // { path: "favourite", element: <Contact /> },
-      // { path: "map", element: <Map /> },
+      { path: "video", element: <Video /> },
+      { path: "profile", element: <PersonalInfomation /> },
+      { path: "fav", element: <Favourite /> },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { index: true, element: <Dashboard /> },
+      { path: "product", element: <DashboardProduct /> },
     ],
   },
 ]);
 
 function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <RouterProvider router={router} />
-      </CartProvider>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <CartProvider>
+          <FavProvider>
+            <RouterProvider router={router} />
+          </FavProvider>
+        </CartProvider>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

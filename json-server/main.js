@@ -56,6 +56,7 @@ server.post("/api/login", (req, res) => {
   }
 
   // Verify password
+
   const isPasswordValid = bcrypt.compareSync(password, user.passwordHash);
   if (!isPasswordValid) {
     return res.status(401).jsonp({ error: "Invalid email or password" });
@@ -72,8 +73,8 @@ server.post("/api/login", (req, res) => {
     id: faker.string.uuid(),
     userId: user.id,
     token: token,
-    createdAt: new Date().toISOString(),
-    expiresAt: new Date(expiresAt).toISOString(),
+    createdAt: new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString(), // Adjusted to UTC+7
+    expiresAt: new Date(expiresAt + 7 * 60 * 60 * 1000).toISOString(), // Adjusted to UTC+7
     isValid: true,
   };
 
@@ -155,8 +156,8 @@ server.post("/api/register", (req, res) => {
     id: faker.string.uuid(),
     userId: newUser.id,
     token: token,
-    createdAt: new Date().toISOString(),
-    expiresAt: new Date(expiresAt).toISOString(),
+    createdAt: new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString(), // Adjusted to UTC+7
+    expiresAt: new Date(expiresAt + 7 * 60 * 60 * 1000).toISOString(), // Adjusted to UTC+7
     isValid: true,
   };
 

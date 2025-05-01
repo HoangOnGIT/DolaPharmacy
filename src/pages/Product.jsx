@@ -1,28 +1,24 @@
-import React, { memo, useEffect, useState } from "react";
-import CatergoryCard from "../components/catergory/CatergoryCard";
-import { Row } from "antd";
-import FilterContent from "../components/filter/FilterContent";
+import React, { useEffect, useState } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
+import { Row, Pagination } from "antd";
 import { SortAscendingOutlined } from "@ant-design/icons";
-import ProductCard from "../components/product/ProductCard";
 import queryString from "query-string";
-import { Pagination } from "antd";
-import LoadingComponent from "../components/common/Loading/LoadingCompoent";
+
+import CatergoryCard from "../components/catergory/CatergoryCard";
+import FilterContent from "../components/filter/FilterContent";
 import SelectedFilter from "../components/filter/SelectedFilter";
 import SortCard from "../components/filter/SortCard";
-import { useParams, useSearchParams } from "react-router-dom";
+import ProductCard from "../components/product/ProductCard";
+import LoadingComponent from "../components/common/Loading/LoadingCompoent";
 import { useFav } from "../contexts/FavouriteContext";
 
-const Product = (props) => {
+const Product = () => {
   const { category } = useParams();
   const { favList } = useFav();
-  const [catergories, setCatergories] = useState([]);
-  const [branding, setBranding] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
   const [products, setProducts] = useState([]);
-  const [pagination, setPagination] = useState({
-    _page: 1,
-    _limit: 16,
-    _totalRows: 1,
-  });
+  const [pagination, setPagination] = useState({ _page: 1, _limit: 16, _totalRows: 0 });
   const [filter, setFilter] = useState({
     _page: 1,
     _limit: 16,
@@ -34,63 +30,9 @@ const Product = (props) => {
   });
   const [activeSort, setActiveSort] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  function handleChangeFilter(e, queryParam) {
-    setFilter({ ...filter, [queryParam]: e });
-  }
-
-  function handleChangeSort(name, order) {
-    setFilter({ ...filter, _sort: name, _order: order, _page: 1 });
-    setActiveSort({ sort_name: name, order: order });
-  }
-
-  function handleDeleteFilter(queryParam, content) {
-    setFilter((prevFilter) => {
-      const updatedQueryParam = prevFilter[queryParam].filter(
-        (item) => item !== content
-      );
-      return {
-        ...prevFilter,
-        [queryParam]: updatedQueryParam,
-      };
-    });
-  }
-
-  function handlePageChange(n) {
-    setPagination({ ...pagination, _page: n });
-    setFilter({ ...filter, _page: n });
-  }
-
-  useEffect(() => {
-    fetch("http://localhost:3000/api/categories")
-      .then((res) => res.json())
-      .then((data) => {
-        setCatergories(data);
-      });
-  }, []); // Fetch categories only once on component mount
-
-  useEffect(() => {
-    fetch("http://localhost:3000/api/brands")
-      .then((res) => res.json())
-      .then((data) => {
-        setBranding(data);
-      });
-  }, []);
-
-  useEffect(() => {
-    setLoading(true);
-    const params = queryString.stringify(filter);
-    fetch(`http://localhost:3000/api/products?${params}`)
-      .then((res) => res.json())
-      .then(({ body, pagination }) => {
-        setProducts(body);
-        setPagination(pagination);
-      })
-      .catch((e) => console.log(e))
-      .finally(() => setLoading(false));
-  }, [filter]); // Fetch products whenever the filter changes
-
-  const filterArr = [
+  const filterOptions = [
     {
       title: "Chọn mức giá",
       options: [
@@ -108,7 +50,7 @@ const Product = (props) => {
     },
     {
       title: "Thương hiệu",
-      options: branding,
+      options: brands,
       queryParam: "brand",
     },
     {
@@ -129,7 +71,7 @@ const Product = (props) => {
     },
   ];
 
-  const sortArr = [
+  const sortOptions = [
     { name: "Tên A-Z", order: "asc", sort_name: "name" },
     { name: "Tên Z-A", order: "desc", sort_name: "name" },
     { name: "Hàng mới", order: "desc", sort_name: "createdAt" },
@@ -137,233 +79,216 @@ const Product = (props) => {
     { name: "Giá cao xuống thấp", order: "desc", sort_name: "salePrice" },
   ];
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const handleChangeFilter = (value, key) => {
+    setFilter((prev) => ({
+      ...prev,
+      [key]: value,
+      _page: 1,
+    }));
+  };
+
+  const handleChangeSort = (sortName, order) => {
+    setFilter((prev) => ({
+      ...prev,
+      _sort: sortName,
+      _order: order,
+      _page: 1,
+    }));
+    setActiveSort({ sort_name: sortName, order });
+  };
+
+  const handleDeleteFilter = (key, value) => {
+    setFilter((prev) => ({
+      ...prev,
+      [key]: prev[key].filter((item) => item !== value),
+      _page: 1,
+    }));
+  };
+
+  const handlePageChange = (page) => {
+    setFilter((prev) => ({
+      ...prev,
+      _page: page,
+    }));
+  };
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/categories")
+      .then((res) => res.json())
+      .then((data) => setCategories(data))
+      .catch((e) => console.error(e));
+  }, []);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/brands")
+      .then((res) => res.json())
+      .then((data) => setBrands(data))
+      .catch((e) => console.error(e));
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    const params = queryString.stringify(filter);
+
+    fetch(`http://localhost:3000/api/products?${params}`)
+      .then((res) => res.json())
+      .then(({ body, pagination }) => {
+        setProducts(body);
+        setPagination(pagination);
+      })
+      .catch((e) => console.error(e))
+      .finally(() => setLoading(false));
+  }, [filter]);
 
   useEffect(() => {
     const params = queryString.stringify(filter);
-
-    setSearchParams(params); // This updates the URL query parameters
+    setSearchParams(params);
   }, [filter]);
 
   return (
-    <div
-      style={{ width: "100%" }}
-      className="flex items-center justify-center my-10"
-    >
+    <div className="w-full flex justify-center my-10">
       <div className="w-[80%]">
-        <div className="bg-gray-50 py-10">
-          <div className="container mx-auto max-w-8xl px-4">
-            <div className="category-section mb-8">
-              <h2 className="text-3xl font-semibold text-center mb-4 text-gray-800 pb-2">
-                Danh mục sản phẩm
-              </h2>
-              <div className="mx-auto flex justify-center items-center">
-                <Row gutter={[16, 16]} className="w-full">
-                  {catergories &&
-                    catergories.map((catergory) => {
-                      if (catergory.displayOrder <= 6) {
-                        return (
-                          <CatergoryCard
-                            catergory={catergory}
-                            onFilter={setFilter}
-                            key={catergory.id}
-                          />
-                        );
-                      }
-                    })}
-                </Row>
-              </div>
+        {/* CATEGORY */}
+        <section className="bg-gray-50 py-10 mb-8">
+          <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">
+            Danh mục sản phẩm
+          </h2>
+          <Row gutter={[16, 16]}>
+            {categories.map((cat) => (
+              cat.displayOrder <= 6 && (
+                <CatergoryCard
+                  key={cat.id}
+                  catergory={cat}
+                  onFilter={setFilter}
+                />
+              )
+            ))}
+          </Row>
+        </section>
+
+        {/* FILTER + PRODUCT LIST */}
+        <section className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
+          {/* FILTER SIDEBAR */}
+          <div className="bg-white rounded-lg shadow-sm p-4">
+            <div className="bg-blue-600 text-white px-4 py-3 rounded mb-4">
+              <span className="font-medium text-lg">Bộ lọc sản phẩm</span>
+              <p className="text-sm opacity-90 mt-0.5">
+                Giúp bạn tìm sản phẩm nhanh hơn
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
-              {/* Filter sidebar */}
-              <div className="filter-sidebar">
-                <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-                  <div className="bg-blue-600 text-white px-4 py-3">
-                    <span className="font-medium text-lg">Bộ lọc sản phẩm</span>
-                    <p className="text-sm opacity-90 mt-0.5">
-                      Giúp bạn tìm sản phẩm nhanh hơn
-                    </p>
-                  </div>
+            {(filter.priceRange.length > 0 ||
+              filter.brand.length > 0 ||
+              filter.targeted.length > 0 ||
+              filter.weight.length > 0) && (
+              <div className="mb-6">
+                <h3 className="font-medium text-gray-700 mb-2">Bạn đã chọn</h3>
+                <SelectedFilter filter={filter} onDelete={handleDeleteFilter} />
+              </div>
+            )}
 
-                  <div className="p-4">
-                    {filterArr && (
-                      <>
-                        {filter.priceRange.length !== 0 ||
-                        filter.targeted.length !== 0 ||
-                        filter.weight.length !== 0 ||
-                        filter.brand.length !== 0 ? (
-                          <div className="mb-4">
-                            <h3 className="font-medium text-gray-700 mb-2">
-                              Bạn đã chọn
-                            </h3>
-                            <SelectedFilter
-                              filter={filter}
-                              onDelete={handleDeleteFilter}
-                            />
-                          </div>
-                        ) : null}
+            <div className="space-y-6">
+              {filterOptions.map((item, idx) => (
+                <FilterContent
+                  key={idx}
+                  filterObj={item}
+                  onChange={handleChangeFilter}
+                  selected={filter}
+                  filtering={filter[item.queryParam]}
+                />
+              ))}
+            </div>
+          </div>
 
-                        <div className="space-y-6">
-                          {filterArr.map((filterObj, index) => (
-                            <FilterContent
-                              filterObj={filterObj}
-                              onChange={handleChangeFilter}
-                              selected={filter}
-                              filtering={filter[filterObj.queryParam]}
-                              key={index}
-                            />
-                          ))}
-                        </div>
-                      </>
-                    )}
-                  </div>
+          {/* PRODUCT CONTENT */}
+          <div>
+            <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
+              <h1 className="text-2xl font-semibold text-gray-800 mb-4">
+                Tất cả sản phẩm
+              </h1>
+
+              {/* Sort */}
+              <div className="flex items-center gap-2 mb-4">
+                <SortAscendingOutlined className="text-gray-600" />
+                <span className="text-gray-600">Xếp theo:</span>
+                <div className="flex gap-2 flex-wrap">
+                  {sortOptions.map((sortItem, idx) => (
+                    <SortCard
+                      key={idx}
+                      sortObj={sortItem}
+                      handleChangeSort={handleChangeSort}
+                      isActive={
+                        activeSort &&
+                        activeSort.sort_name === sortItem.sort_name &&
+                        activeSort.order === sortItem.order
+                      }
+                    />
+                  ))}
                 </div>
               </div>
 
               {/* Product grid */}
-              <div className="product-section">
-                <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
-                  <h1 className="text-2xl font-semibold text-gray-800 mb-3">
-                    Tất cả sản phẩm
-                  </h1>
-                  <div className="flex flex-wrap items-center gap-2 pb-2">
-                    <div className="flex items-center text-gray-600 mr-2">
-                      <SortAscendingOutlined className="mr-1" />
-                      <span>Xếp theo: </span>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {sortArr &&
-                        sortArr.map((sortObj, index) => (
-                          <SortCard
-                            sortObj={sortObj}
-                            key={index}
-                            handleChangeSort={handleChangeSort}
-                            isActive={
-                              activeSort &&
-                              activeSort.sort_name === sortObj.sort_name &&
-                              activeSort.order === sortObj.order
-                            }
-                          />
-                        ))}
-                    </div>
+              {loading ? (
+                <LoadingComponent />
+              ) : products.length > 0 ? (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {products.map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        isFavourited={favList.items.some(
+                          (favItem) => favItem.id === product.id
+                        )}
+                      />
+                    ))}
                   </div>
+
+                  {/* Pagination */}
+                  <div className="flex justify-center mt-8">
+                    <Pagination
+                      current={pagination._page}
+                      pageSize={pagination._limit}
+                      total={pagination._totalRows}
+                      onChange={handlePageChange}
+                      showSizeChanger={false}
+                      hideOnSinglePage
+                      className="custom-pagination"
+                    />
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-20 bg-white rounded-lg shadow-sm">
+                  <h3 className="text-2xl font-medium text-gray-700 mb-2">
+                    Không tìm thấy sản phẩm
+                  </h3>
+                  <p className="text-gray-500 mb-6 text-center">
+                    Hãy thử thay đổi bộ lọc hoặc xóa bộ lọc hiện tại
+                  </p>
+                  <button
+                    onClick={() =>
+                      setFilter({
+                        _page: 1,
+                        _limit: 16,
+                        status: "active",
+                        priceRange: [],
+                        brand: [],
+                        targeted: [],
+                        weight: [],
+                      })
+                    }
+                    className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition"
+                  >
+                    Xóa bộ lọc
+                  </button>
                 </div>
-
-                {products && products.length > 0 ? (
-                  loading ? (
-                    <div className="fade-in">
-                      <LoadingComponent />
-                    </div>
-                  ) : (
-                    <>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {products.map((product) => {
-                          let isFavourited = false;
-                          if (
-                            favList.items.find(
-                              (favItem) => favItem.id === product.id
-                            )
-                          ) {
-                            isFavourited = true;
-                          }
-
-                          return (
-                            <ProductCard
-                              product={product}
-                              key={product.id}
-                              isFavourited={isFavourited}
-                            />
-                          );
-                        })}
-                      </div>
-
-                      <div className="flex justify-center mt-8">
-                        <Pagination
-                          current={pagination._page}
-                          pageSize={pagination._limit}
-                          total={pagination._totalRows}
-                          onChange={handlePageChange}
-                          showSizeChanger={false}
-                          hideOnSinglePage={true}
-                          className="custom-pagination"
-                          itemRender={(page, type, originalElement) => {
-                            if (type === "page") {
-                              return (
-                                <div
-                                  className={`pagination-item ${
-                                    pagination._page === page
-                                      ? "pagination-item-active"
-                                      : ""
-                                  }`}
-                                >
-                                  {page}
-                                </div>
-                              );
-                            }
-                            if (type === "prev" || type === "next") {
-                              return (
-                                <div className="pagination-nav-button">
-                                  {originalElement}
-                                </div>
-                              );
-                            }
-                            return originalElement;
-                          }}
-                        />
-                      </div>
-                    </>
-                  )
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-16 px-4 bg-white rounded-lg shadow-sm">
-                    <svg
-                      className="w-16 h-16 text-gray-300 mb-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                      ></path>
-                    </svg>
-                    <h3 className="text-xl font-medium text-gray-700 mb-2">
-                      Không tìm thấy sản phẩm nào
-                    </h3>
-                    <p className="text-gray-500 text-center mb-4">
-                      Không có sản phẩm nào phù hợp với tiêu chí tìm kiếm của bạn.
-                    </p>
-                    <button
-                      onClick={() =>
-                        setFilter({
-                          _page: 1,
-                          _limit: 16,
-                          status: "active",
-                          priceRange: [],
-                          brand: [],
-                          targeted: [],
-                          weight: [],
-                        })
-                      }
-                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                    >
-                      Xóa bộ lọc
-                    </button>
-                  </div>
-                )}
-              </div>
+              )}
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );
 };
 
-export default memo(Product, (prevProps, nextProps) => {
-  // Custom comparison logic
-  return JSON.stringify(prevProps) === JSON.stringify(nextProps);
-});
+export default Product;

@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import fs from "fs/promises";
+import bcrypt from "bcrypt";
 
 // Helper function to generate unique IDs
 const generateId = () => faker.string.uuid();
@@ -163,8 +164,61 @@ const generatePharmacySuppliers = (count) => {
 };
 
 // Generate pharmacy users with Vietnamese names and locations
-const generatePharmacyUsers = (count) => {
+const generatePharmacyUsers = async (count) => {
   const users = [];
+  const carts = []; // Initialize carts array
+  const favourites = []; // Initialize favourites array
+
+  // Always add admin user first
+  const adminUser = {
+    id: generateId(),
+    email: "admin@gmail.com",
+    passwordHash: await bcrypt.hash("admin", 10), // Hash the admin password
+    firstName: "Admin",
+    lastName: "User",
+    phone: "0987654321",
+    dateOfBirth: "1990-01-01",
+    role: "admin",
+    verificationStatus: "verified",
+    lastLogin: faker.date.recent().toISOString(),
+    addresses: [
+      {
+        id: generateId(),
+        type: "billing",
+        isPrimary: true,
+        firstName: "Admin",
+        lastName: "User",
+        street: "123 Đường Admin, Quận 1",
+        city: "TP. Hồ Chí Minh",
+        state: "",
+        postalCode: "70000",
+        country: "Việt Nam",
+        phone: "0987654321",
+      },
+    ],
+    createdAt: faker.date.past({ years: 2 }).toISOString(),
+    updatedAt: faker.date.recent().toISOString(),
+  };
+
+  users.push(adminUser);
+
+  // Generate a cart for the admin user
+  carts.push({
+    id: generateId(),
+    userId: adminUser.id,
+    items: [],
+    createdAt: faker.date.past({ years: 1 }).toISOString(),
+    updatedAt: faker.date.recent().toISOString(),
+  });
+
+  // Generate a favourites list for the admin user
+  favourites.push({
+    id: generateId(),
+    userId: adminUser.id,
+    items: [],
+    createdAt: faker.date.past({ years: 1 }).toISOString(),
+    updatedAt: faker.date.recent().toISOString(),
+  });
 
   const vietnameseCities = [
     "Hà Nội",
@@ -224,31 +278,31 @@ const generatePharmacyUsers = (count) => {
     "Vy",
   ];
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < count - 1; i++) {
+    // Reduced count by 1 since we already added admin
     const lastName = faker.helpers.arrayElement(vietnameseLastNames);
     const firstName = faker.helpers.arrayElement(vietnameseFirstNames);
     const fullName = `${lastName} ${firstName}`;
 
     const city = faker.helpers.arrayElement(vietnameseCities);
 
-    // Admin should be a small percentage
-    const role =
-      i === 0
-        ? "admin"
-        : faker.helpers.arrayElement([
-            "customer",
-            "customer",
-            "customer",
-            "staff",
-            "guest",
-          ]);
+    const role = faker.helpers.arrayElement([
+      "customer",
+      "customer",
+      "customer",
+      "staff",
+      "guest",
+    ]);
 
     const user = {
       id: generateId(),
       email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}${faker.number.int(
         999
       )}@gmail.com`,
-      passwordHash: faker.internet.password({ length: 64 }),
+      passwordHash: await bcrypt.hash(
+        faker.internet.password({ length: 12 }),
+        10
+      ),
       firstName: firstName,
       lastName: lastName,
       phone: `0${faker.string.numeric(9)}`,
@@ -290,9 +344,33 @@ const generatePharmacyUsers = (count) => {
     };
 
     users.push(user);
+
+    // Generate a cart for the user
+    carts.push({
+      id: generateId(),
+      userId: user.id,
+      items: [],
+      createdAt: faker.date.past({ years: 1 }).toISOString(),
+      updatedAt: faker.date.recent().toISOString(),
+    });
+
+    // Generate a favourites list for the user
+    favourites.push({
+      id: generateId(),
+      userId: user.id,
+      items: Array.from(
+        { length: faker.number.int({ min: 1, max: 5 }) },
+        () => ({
+          productId: generateId(),
+          addedAt: faker.date.recent().toISOString(),
+        })
+      ),
+      createdAt: faker.date.past({ years: 1 }).toISOString(),
+      updatedAt: faker.date.recent().toISOString(),
+    });
   }
 
-  return users;
+  return { users, carts, favourites }; // Include favourites in the return
 };
 
 // Update generatePharmacyProducts for Vietnamese products
@@ -350,15 +428,20 @@ const generatePharmacyProducts = (count, categories, suppliers, brands) => {
       3
     )}`;
 
-    const discountValue = faker.number.int({ min: 5, max: 25 });
-    const maxDiscountAmount = faker.number.int({ min: 500000, max: 2000000 });
+    const discountValue = faker.datatype.boolean(0.7) // 70% chance to have a discount
+      ? faker.number.int({ min: 5, max: 25 })
+      : null;
+    const maxDiscountAmount = discountValue
+      ? faker.number.int({ min: 500000, max: 2000000 })
+      : null;
 
     const basePrice = roundToNearest10k(
       faker.number.int({ min: 20000, max: 100000000 })
     );
-    const salePrice = faker.datatype.boolean(0.3)
-      ? roundToNearest10k(faker.number.int({ min: 20000, max: basePrice }))
-      : null;
+    const salePrice = discountValue
+      ? roundToNearest10k(basePrice * (1 - discountValue / 100))
+      : basePrice; // Set salePrice to basePrice if no discount
+
     const cost = roundToNearest10k(
       faker.number.int({ min: 20000, max: basePrice })
     );
@@ -388,14 +471,16 @@ const generatePharmacyProducts = (count, categories, suppliers, brands) => {
       sku: `DOLA-${faker.string.alphanumeric(6).toUpperCase()}`,
       requiresPrescription: faker.datatype.boolean(0.5),
       basePrice: basePrice,
-      salePrice: salePrice,
+      salePrice: salePrice, // Ensure salePrice is set
       cost: cost,
       priceRange: getPriceRange(basePrice),
-      discount: {
-        type: "percentage",
-        value: discountValue,
-        maxDiscountAmount: maxDiscountAmount,
-      },
+      discount: discountValue
+        ? {
+            type: "percentage",
+            value: discountValue,
+            maxDiscountAmount: maxDiscountAmount,
+          }
+        : null,
       discountedPrice: calculateDiscountedPrice(basePrice, {
         type: "percentage",
         value: discountValue,
@@ -538,20 +623,28 @@ const generateData = async () => {
 
   const categories = generatePharmacyCategories(10);
   const suppliers = generatePharmacySuppliers(10);
-  const users = generatePharmacyUsers(30);
+  const { users, carts, favourites } = await generatePharmacyUsers(30); // Destructure favourites
   const brands = []; // Initialize brands array
   const products = generatePharmacyProducts(40, categories, suppliers, brands);
   const { orders, orderItems } = generateOrders(20, users, products);
+
+  // Calculate total products for each category
+  categories.forEach((category) => {
+    category.totalProducts = products.filter(
+      (product) => product.category === category.id
+    ).length;
+  });
 
   const data = {
     categories,
     suppliers,
     products,
     users,
+    carts, // Include carts in the output
+    favourites, // Include favourites in the output
     orders,
     orderItems,
     brands, // Include brands in the output
-    carts: [],
     prescriptions: [],
     reviews: [],
     wishlist: [],
