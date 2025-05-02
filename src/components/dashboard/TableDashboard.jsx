@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const TableDashboard = ({ category, filter }) => {
+const TableDashboard = ({ category, filter, choose }) => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
@@ -24,7 +24,6 @@ const TableDashboard = ({ category, filter }) => {
         }));
     };
 
-    // ===== LỌC & SẮP XẾP =====
     const filteredData = data
         .filter(item => {
             if (!category) return true;
@@ -111,12 +110,36 @@ const TableDashboard = ({ category, filter }) => {
                                         />
                                     </td>
                                     <td className="px-4 py-2 text-center">
-                                        <Link
-                                            to={`/product/${item.id}`}
-                                            className="text-sm px-2 py-1 rounded bg-blue-100 text-blue-600 hover:bg-blue-200 transition"
-                                        >
-                                            Xem
-                                        </Link>
+                                        {choose === 0 ?
+                                            <Link
+                                                to={`product/${item.id}`}
+                                                className="inline-block px-4 py-2 text-sm font-medium text-blue-600 bg-blue-100 border border-blue-200 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors"
+                                            >
+                                                Xem
+                                            </Link>
+                                            :
+                                            <div className='flex items-center justify-center space-x-2'>
+                                                <Link
+                                                    to={`${item.id}`}
+                                                    className="inline-block px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-100 border border-blue-200 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors"
+                                                >
+                                                    Xem
+                                                </Link>
+                                                <Link
+                                                    to={`product/${item.id}`}
+                                                    className="inline-block px-3 py-1.5 text-sm font-medium text-green-600 bg-green-100 border border-green-200 rounded-md hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1 transition-colors"
+                                                >
+                                                    Cập nhật
+                                                </Link>
+                                                <Link
+                                                    to={`product/${item.id}`}
+                                                    className="inline-block px-3 py-1.5 text-sm font-medium text-red-600 bg-red-100 border border-red-200 rounded-md hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition-colors"
+                                                >
+                                                    Xóa
+                                                </Link>
+                                            </div>
+
+                                        }
                                     </td>
                                 </tr>
                             );

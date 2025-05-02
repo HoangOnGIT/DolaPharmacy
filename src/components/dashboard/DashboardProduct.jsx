@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import TableDashboard from './TableDashboard';
 import { FaPlus } from "react-icons/fa6";
+import { Link } from 'react-router-dom';
 
 const DashboardProduct = () => {
   const [categoryData, setCategoryData] = useState([]);
@@ -40,7 +41,8 @@ const DashboardProduct = () => {
       <div className='flex justify-between items-center'>
         <h1 className='text-3xl font-bold'>Products</h1>
         <button className='bg-[#3782f7] hover:opacity-80 text-white transition-colors duration-300 px-4 py-2 rounded-sm font-medium flex items-center'>
-          <FaPlus className='mr-2' /> <span>Add Product</span>
+          {/* Thêm sản phẩm */}
+          <FaPlus className='mr-2' /> <Link to="add">Add Product</Link>
         </button>
       </div>
 

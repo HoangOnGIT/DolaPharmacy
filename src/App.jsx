@@ -18,6 +18,8 @@ import FavProvider from "./contexts/FavouriteContext";
 import Dashboard from "./pages/Dashboard";
 import DashboardLayout from "./components/dashboard/LayoutDashboard"; 
 import DashboardProduct from "./components/dashboard/DashboardProduct"; 
+import AddProduct from "./components/dashboard/AddProduct";
+import DashboardProductDetail from "./components/dashboard/ProductDetail";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +45,8 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Dashboard /> },
       { path: "product", element: <DashboardProduct /> },
+      { path: "product/add", element: <AddProduct /> },
+      { path: "product/:id", element: <DashboardProductDetail /> },
     ],
   },
 ]);
