@@ -68,6 +68,8 @@ const Header = () => {
 
   const { user, isAuthenticated, loading, error, login, logout } = useAuth();
 
+  console.log(favList);
+
   return (
     <>
       <div className="w-full">

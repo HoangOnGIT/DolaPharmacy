@@ -45,7 +45,7 @@ export const CartProvider = ({ children }) => {
     basePrice: item.basePrice,
     quantity: item.quantity || 1,
     images: item.images,
-    variant: item.variant ? item.variant : item.variants[0].name,
+    variant: item.variant ? item.variant : "",
   });
 
   const addToCart = async (item) => {

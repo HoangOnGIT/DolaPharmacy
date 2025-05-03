@@ -21,6 +21,13 @@ import AddProduct from "./components/dashboard/AddProduct";
 import DashboardProductDetail from "./components/dashboard/ProductDetail";
 import ProtectedRoute from "./contexts/AuthDashboard";
 import UpdateProduct from "./components/dashboard/UpdateProduct";
+import Payment from "./pages/Payment";
+import News from "./components/Home/News";
+import NewsDetail from "./pages/NewsDetail";
+import About from "./pages/About";
+import OrderDetail from "./pages/OrdersDetail";
+import QnA from "./pages/QnA";
+import Contact from "./pages/Contact";
 
 const router = createBrowserRouter([
   {
@@ -64,9 +71,51 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       { path: "homepage", element: <Home /> },
-      { path: "video", element: <Video /> },
-      { path: "profile", element: <PersonalInfomation /> },
-      { path: "fav", element: <Favourite /> },
+      { path: "news", element: <News /> },
+      {
+        path: "news/:slug",
+        element: <NewsDetail />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "video",
+        element: <Video />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "profile",
+        element: <PersonalInfomation />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "fav",
+        element: <Favourite />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "about",
+        element: <About />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "payment",
+        element: <Payment />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "confirmation/:orderId",
+        element: <OrderDetail confirm={true} />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "orders/:orderId",
+        element: <OrderDetail />,
+        errorElement: <ErrorPage />,
+      },
+      { path: "faq", element: <QnA /> },
+      { path: "contact", element: <Contact /> },
+      // { path: "favourite", element: <Contact /> },
+      { path: "map", element: <Contact /> },
     ],
   },
   {

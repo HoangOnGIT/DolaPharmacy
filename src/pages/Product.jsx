@@ -83,7 +83,12 @@ const Product = ({ promotion = false }) => {
       return;
     }
 
-    addToCart(item);
+    if (item.variant) {
+      addToCart(item);
+    } else {
+      addToCart(item);
+    }
+
     api.success({
       message: "Thêm giỏ hàng thành công",
       description: `${item.name} được thêm vào giỏ hàng thành công!`,

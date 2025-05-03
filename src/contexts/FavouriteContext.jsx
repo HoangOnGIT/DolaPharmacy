@@ -17,6 +17,10 @@ const FavProvider = ({ children }) => {
   useEffect(() => {
     if (isAuthenticated && user) {
       const userId = { userId: user.id };
+
+      console.log(
+        `${BASE_URL}/api/favourites?${queryString.stringify(userId)}`
+      );
       const fetchCart = async () => {
         try {
           const response = await fetch(

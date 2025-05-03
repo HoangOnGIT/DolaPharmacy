@@ -139,12 +139,16 @@ function ProductDetail() {
       return;
     }
 
-    if (!activeVariant) {
-      api.warning({
-        message: "Vui lòng chọn loại sản phẩm",
-        duration: 2,
-      });
-      return;
+    console.log(!product.variants.length == 0);
+
+    if (!product.variants.length == 0) {
+      if (!activeVariant) {
+        api.warning({
+          message: "Vui lòng chọn loại sản phẩm",
+          duration: 2,
+        });
+        return;
+      }
     }
 
     const updatedItem = { ...item, quantity: quantity, variant: activeVariant };
@@ -298,7 +302,7 @@ function ProductDetail() {
                 )}
               </div>
 
-              {product.variants && (
+              {product.variants.length != 0 && (
                 <div className="space-y-3">
                   <div className="font-medium text-gray-800">
                     Loại sản phẩm:
