@@ -8,13 +8,14 @@ function UserInfo({ user }) {
   const { logout } = useAuth();
 
   const navigate = useNavigate();
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     if (!user || !user.id) {
       console.error("User or user.id is undefined");
       return;
     }
-    fetch(`http://localhost:3000/api/users/${user.id}`)
+    fetch(`${BASE_URL}/api/users/${user.id}`)
       .then((res) => res.json())
       .then((data) => {
         setUserCurr(data);

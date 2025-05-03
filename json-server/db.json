@@ -3274,7 +3274,7 @@
       "dateOfBirth": "1990-01-01",
       "role": "admin",
       "verificationStatus": "verified",
-      "lastLogin": "2025-05-03T05:13:37.092Z",
+      "lastLogin": "2025-05-03T07:24:59.026Z",
       "addresses": [
         {
           "id": "0a6f558e-5df2-452b-84b6-7bdab82878ce",
@@ -4443,10 +4443,106 @@
             }
           ],
           "variant": "mắt - Loại 50"
+        },
+        {
+          "id": "7a66a24d-1881-4d34-bbfd-aef196f30dd2",
+          "productId": "7a66a24d-1881-4d34-bbfd-aef196f30dd2",
+          "name": "Kem thảo dược Domesco 626",
+          "salePrice": 50520000,
+          "basePrice": 66470000,
+          "quantity": 2,
+          "images": [
+            {
+              "id": "3892aed6-c7dc-4c45-b0fc-cca23c4b48c0",
+              "url": "https://picsum.photos/seed/962/500/500",
+              "alt": "Kem thảo dược Domesco 626 - Sản phẩm",
+              "isPrimary": true,
+              "sortOrder": 0
+            }
+          ],
+          "variant": "thảo dược - Loại 81"
+        },
+        {
+          "id": "dcb0f5c6-51aa-4ed0-bcab-19b2b5535abb",
+          "productId": "dcb0f5c6-51aa-4ed0-bcab-19b2b5535abb",
+          "name": "Vitamin hô hấp OPC Pharma 277",
+          "salePrice": 7180000,
+          "basePrice": 7180000,
+          "quantity": 1,
+          "images": [
+            {
+              "id": "581b72a3-a033-4678-bca5-658787b1ebb9",
+              "url": "https://picsum.photos/seed/610/500/500",
+              "alt": "Vitamin hô hấp OPC Pharma 277 - Sản phẩm",
+              "isPrimary": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "3fd621c7-53e6-42d1-97a6-826d34449fc9",
+              "url": "https://picsum.photos/seed/752/500/500",
+              "alt": "Vitamin hô hấp OPC Pharma 277 - Hình chi tiết",
+              "isPrimary": false,
+              "sortOrder": 1
+            },
+            {
+              "id": "ea3db4cd-f89d-4652-b5a4-05abb8ebee52",
+              "url": "https://picsum.photos/seed/573/500/500",
+              "alt": "Vitamin hô hấp OPC Pharma 277 - Hình chi tiết",
+              "isPrimary": false,
+              "sortOrder": 2
+            },
+            {
+              "id": "83910f8f-ba03-4d99-89f5-044efefc0f3f",
+              "url": "https://picsum.photos/seed/315/500/500",
+              "alt": "Vitamin hô hấp OPC Pharma 277 - Hình chi tiết",
+              "isPrimary": false,
+              "sortOrder": 3
+            }
+          ],
+          "variant": "hô hấp - Loại 55"
+        },
+        {
+          "id": "181aa00b-0bf8-4d55-8c77-d402d70a7190",
+          "productId": "181aa00b-0bf8-4d55-8c77-d402d70a7190",
+          "name": "Nước dinh dưỡng Dược phẩm 232",
+          "salePrice": 26060000,
+          "basePrice": 26060000,
+          "quantity": 2,
+          "images": [
+            {
+              "id": "e771e4be-384c-4abc-843e-4c7a94fef14b",
+              "url": "https://picsum.photos/seed/706/500/500",
+              "alt": "Nước dinh dưỡng Dược phẩm 232 - Sản phẩm",
+              "isPrimary": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "9db94a26-f5f2-4d4c-8a07-742a7fde93af",
+              "url": "https://picsum.photos/seed/520/500/500",
+              "alt": "Nước dinh dưỡng Dược phẩm 232 - Hình chi tiết",
+              "isPrimary": false,
+              "sortOrder": 1
+            },
+            {
+              "id": "92cf1785-bac9-4543-9b32-59000a1326be",
+              "url": "https://picsum.photos/seed/835/500/500",
+              "alt": "Nước dinh dưỡng Dược phẩm 232 - Hình chi tiết",
+              "isPrimary": false,
+              "sortOrder": 2
+            },
+            {
+              "id": "b7fefcba-171c-4c4f-89b4-0c3b0e321cfb",
+              "url": "https://picsum.photos/seed/787/500/500",
+              "alt": "Nước dinh dưỡng Dược phẩm 232 - Hình chi tiết",
+              "isPrimary": false,
+              "sortOrder": 3
+            }
+          ],
+          "variant": "dinh dưỡng - Loại 49"
         }
       ],
       "createdAt": "2024-06-22T06:49:14.733Z",
-      "updatedAt": 1746248257635
+      "updatedAt": 1746256129937
     },
     {
       "id": "3903b8a1-e8ef-46e6-9482-64b79d296445",
@@ -4658,7 +4754,7 @@
       "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
       "items": [],
       "createdAt": "2025-03-15T20:40:52.249Z",
-      "updatedAt": 1746249725915,
+      "updatedAt": 1746256378670,
       "item": []
     },
     {
@@ -6538,6 +6634,46 @@
       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI0OTIxNywiZXhwIjoxNzQ2MjUyODE3fQ.qmn6z27s9qKMXI8pDaeMleRlWrNxAPXMsZkdp6GDwpE",
       "createdAt": "2025-05-03T12:13:37.092Z",
       "expiresAt": "2025-05-03T13:13:37.091Z",
+      "isValid": true
+    },
+    {
+      "id": "f999e144-0e1e-4ee3-aa7a-d91930f3b2e7",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NTM3NSwiZXhwIjoxNzQ2MjU4OTc1fQ.va9oPX3YgakbDSeD_SXvBpJ0jVHwhJ2Hu6XEobPOkE0",
+      "createdAt": "2025-05-03T13:56:15.711Z",
+      "expiresAt": "2025-05-03T14:56:15.711Z",
+      "isValid": true
+    },
+    {
+      "id": "e0b9100f-fb4e-4d90-880f-9e5cd48fad13",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NTkzMywiZXhwIjoxNzQ2MjU5NTMzfQ.aXgWemlMfVzxzED3duCJu4uafIDvZbOFZVMDEqxg5l8",
+      "createdAt": "2025-05-03T14:05:33.448Z",
+      "expiresAt": "2025-05-03T15:05:33.448Z",
+      "isValid": true
+    },
+    {
+      "id": "f914582a-6ff0-4566-84d7-ba3b3b1c8831",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1Njk4OSwiZXhwIjoxNzQ2MjYwNTg5fQ.5FMjSC4UT_GAEI-5aNvDID3eo3tXtZ4ptgiDzBXRWgk",
+      "createdAt": "2025-05-03T14:23:09.174Z",
+      "expiresAt": "2025-05-03T15:23:09.174Z",
+      "isValid": true
+    },
+    {
+      "id": "e5cce7b3-f110-4797-a258-d6e02e48290c",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NzAzOCwiZXhwIjoxNzQ2MjYwNjM4fQ.cVvhYwCDRV8PoEZjsksubBc_aJ1BffMTuPcjc_fSmZs",
+      "createdAt": "2025-05-03T14:23:58.645Z",
+      "expiresAt": "2025-05-03T15:23:58.645Z",
+      "isValid": true
+    },
+    {
+      "id": "685c7842-fed9-4be1-9d11-3ff910e2a76f",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NzA5OSwiZXhwIjoxNzQ2MjYwNjk5fQ.zr-qskNUcm3HTgawfHLQMQ9nt5rTzKexL4odE-DqylI",
+      "createdAt": "2025-05-03T14:24:59.026Z",
+      "expiresAt": "2025-05-03T15:24:59.026Z",
       "isValid": true
     }
   ]

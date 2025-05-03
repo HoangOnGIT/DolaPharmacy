@@ -5,6 +5,8 @@ const CartContext = createContext();
 
 export const useCart = () => useContext(CartContext);
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const CartProvider = ({ children }) => {
   const initialCart = {};
 
@@ -17,7 +19,7 @@ export const CartProvider = ({ children }) => {
       const fetchCart = async () => {
         try {
           const response = await fetch(
-            `http://localhost:3000/api/carts?${queryString.stringify(userId)}`
+            `${BASE_URL}/api/carts?${queryString.stringify(userId)}`
           );
           if (!response.ok) {
             throw new Error("Failed to fetch cart data");
@@ -73,17 +75,14 @@ export const CartProvider = ({ children }) => {
 
       const token = localStorage.getItem("token");
 
-      const response = await fetch(
-        `http://localhost:3000/api/carts/${cart.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(updatedCart),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/carts/${cart.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedCart),
+      });
       if (!response.ok) {
         throw new Error("Failed to update cart on server");
       }
@@ -121,17 +120,14 @@ export const CartProvider = ({ children }) => {
 
       const token = localStorage.getItem("token");
 
-      const response = await fetch(
-        `http://localhost:3000/api/carts/${cart.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(updatedCart),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/carts/${cart.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedCart),
+      });
       if (!response.ok) {
         throw new Error("Failed to update cart on server");
       }
@@ -167,7 +163,7 @@ export const CartProvider = ({ children }) => {
 
     const token = localStorage.getItem("token");
 
-    fetch(`http://localhost:3000/api/carts/${cart.id}`, {
+    fetch(`${BASE_URL}/api/carts/${cart.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -195,7 +191,7 @@ export const CartProvider = ({ children }) => {
     const updatedCart = { ...cart, items: updatedItems };
     const token = localStorage.getItem("token");
 
-    fetch(`http://localhost:3000/api/carts/${cart.id}`, {
+    fetch(`${BASE_URL}/api/carts/${cart.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -232,17 +228,14 @@ export const CartProvider = ({ children }) => {
 
       const token = localStorage.getItem("token");
 
-      const response = await fetch(
-        `http://localhost:3000/api/carts/${cart.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(updatedCart),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/carts/${cart.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedCart),
+      });
       if (!response.ok) {
         throw new Error("Failed to update cart on server");
       }

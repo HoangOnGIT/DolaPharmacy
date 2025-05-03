@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 const FavContext = createContext();
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 export const useFav = () => useContext(FavContext);
 
 const FavProvider = ({ children }) => {
@@ -18,9 +20,7 @@ const FavProvider = ({ children }) => {
       const fetchCart = async () => {
         try {
           const response = await fetch(
-            `http://localhost:3000/api/favourites?${queryString.stringify(
-              userId
-            )}`
+            `${BASE_URL}/api/favourites?${queryString.stringify(userId)}`
           );
           if (!response.ok) {
             throw new Error("Failed to fetch cart data");
@@ -55,17 +55,14 @@ const FavProvider = ({ children }) => {
       const token = localStorage.getItem("token");
 
       const updatedFavList = { ...favList, items: updatedItems };
-      const response = await fetch(
-        `http://localhost:3000/api/favourites/${favList.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(updatedFavList),
-        }
-      );
+      const response = await fetch(`${BASE_URL}/api/favourites/${favList.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedFavList),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to favourite list on server");
