@@ -5314,9 +5314,7 @@
     {
       "id": "96f5111b-3b36-40ae-948c-d0092f8689ef",
       "userId": "18b54b2a-243e-4c0b-aab0-b3124d3da334",
-      "items": [
-        "a54ebbfb-2088-4063-baeb-1ac5525822c2"
-      ],
+      "items": ["a54ebbfb-2088-4063-baeb-1ac5525822c2"],
       "total": 188380000,
       "status": "completed",
       "createdAt": "2024-12-16T22:55:03.615Z",
@@ -5377,9 +5375,7 @@
     {
       "id": "cb03b93a-611c-4d44-a721-eda63050de56",
       "userId": "b3fe4c36-0d07-4d05-a430-027f8cfe1a74",
-      "items": [
-        "4e0539ff-6654-4bdb-a5c1-0ba9241578f3"
-      ],
+      "items": ["4e0539ff-6654-4bdb-a5c1-0ba9241578f3"],
       "total": 352900000,
       "status": "completed",
       "createdAt": "2024-08-28T18:56:39.565Z",
@@ -5418,9 +5414,7 @@
     {
       "id": "0f4931ae-135f-4e6b-b529-24ebb74234a0",
       "userId": "c6cbf3a7-865a-470c-a887-39b41bdf5282",
-      "items": [
-        "056933de-61cc-4380-bca1-d7ecb3cee8f5"
-      ],
+      "items": ["056933de-61cc-4380-bca1-d7ecb3cee8f5"],
       "total": 106530000,
       "status": "cancelled",
       "createdAt": "2025-03-27T23:17:10.259Z",
@@ -5453,9 +5447,7 @@
     {
       "id": "fb933eb7-83b9-4918-a31f-c51cc55088cc",
       "userId": "b09288fe-3217-4100-bdb5-1eca6acbd5ab",
-      "items": [
-        "d24b7acc-df00-4e9a-957c-4010950d8af2"
-      ],
+      "items": ["d24b7acc-df00-4e9a-957c-4010950d8af2"],
       "total": 144420000,
       "status": "pending",
       "createdAt": "2025-01-28T05:51:41.669Z",
@@ -5464,9 +5456,7 @@
     {
       "id": "aa1fbfce-98b2-4a7b-bc3b-5354dff804be",
       "userId": "8cf8e3b9-fdcb-4670-a5bf-2f5ec93eefae",
-      "items": [
-        "34fe38bf-e3de-44aa-8d05-8fdb5279519f"
-      ],
+      "items": ["34fe38bf-e3de-44aa-8d05-8fdb5279519f"],
       "total": 153960000,
       "status": "pending",
       "createdAt": "2024-11-17T22:47:42.455Z",
@@ -5539,9 +5529,7 @@
     {
       "id": "b3329bbd-58f3-446f-8e80-946b9d44a5fe",
       "userId": "284aa013-7282-4925-bec3-e0a2aa76acd8",
-      "items": [
-        "7ad5f261-517c-410b-9268-0cafc6f8a601"
-      ],
+      "items": ["7ad5f261-517c-410b-9268-0cafc6f8a601"],
       "total": 420200000,
       "status": "cancelled",
       "createdAt": "2025-05-01T12:17:33.000Z",

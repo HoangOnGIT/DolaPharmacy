@@ -32,7 +32,13 @@ function UserCrediential({ loginPage }) {
       alert(result.error || "Login failed");
     } else {
       alert("Login successful!");
-      navigate("/");
+      // Chuyển hướng đến /dashboard nếu là admin, hoặc /homepage nếu không
+      const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+      if (storedUser.role === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/homepage");
+      }
     }
   };
 
@@ -176,7 +182,7 @@ function UserCrediential({ loginPage }) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`w-full py-2 !text-white rounded-md transition-colors ${
+                  className={`w-full py-2 text-white rounded-md transition-colors ${
                     loading
                       ? "bg-blue-400 cursor-not-allowed"
                       : "bg-blue-600 hover:bg-blue-700"

@@ -1,11 +1,22 @@
-// pages/DashboardProduct.jsx
 import React, { useEffect, useState } from 'react';
-
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import TableDashboard from './TableDashboard';
+import { FaPlus } from "react-icons/fa6";
+import { Link } from 'react-router-dom';
 
 const DashboardProduct = () => {
   const [categoryData, setCategoryData] = useState([]);
   const [currentCategory, setCurrentCategory] = useState('');
+  const [currentFilter, setCurrentFilter] = useState('');
   const [pageSize, setPageSize] = useState('');
+  const [listFilter, setListFilter] = useState([
+    { id: 'name_asc', name: 'Name A-Z' },
+    { id: 'name_desc', name: 'Name Z-A' },
+    { id: 'price_asc', name: 'Price Ascending' },
+    { id: 'price_desc', name: 'Price Descending' },
+    { id: 'quantity_asc', name: 'Quantity Ascending' },
+    { id: 'quantity_desc', name: 'Quantity Descending' },
+  ]);
 
   useEffect(() => {
     fetch("http://localhost:3000/api/categories")
@@ -16,56 +27,59 @@ const DashboardProduct = () => {
   }, []);
 
   const handleCategoryChange = (e) => {
+    console.log(e.target.value);
+    
     setCurrentCategory(e.target.value);
   };
 
-  const handlePageSizeChange = (e) => {
-    setPageSize(e.target.value);
+  const handleFilterChange = (e) => {
+    setCurrentFilter(e.target.value);
   };
 
   return (
     <>
-      <div className='flex justify-between'>
+      <div className='flex justify-between items-center'>
         <h1 className='text-3xl font-bold'>Products</h1>
-        <button className='bg-[#3782f7] hover:opacity-[0.8] text-white cursor-pointer transition-colors duration-300 px-4 py-2 rounded-sm font-lg'>
-          Thêm sản phẩm
+        <button className='bg-[#3782f7] hover:opacity-80 text-white transition-colors duration-300 px-4 py-2 rounded-sm font-medium flex items-center'>
+          {/* Thêm sản phẩm */}
+          <FaPlus className='mr-2' /> <Link to="add">Add Product</Link>
         </button>
       </div>
 
-      <div className='bg-white py-6 w-full flex justify-between mt-5 items-center'>
+      <div className='bg-white py-6 px-4 w-full flex flex-wrap gap-8 mt-5 items-center rounded-md shadow'>
         {/* Danh mục sản phẩm */}
-        <div className='flex items-center gap-2'>
-          <p>Danh mục sản phẩm: </p>
+        <div className='flex items-center'>
+          <label className="text-lg font-medium text-gray-700 mb-1">Category: </label>
           <select
             value={currentCategory}
-            className='border rounded-sm p-1 text-sm cursor-pointer'
             onChange={handleCategoryChange}
+            className="ml-4 w-64 rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             <option value="">Tất cả</option>
             {categoryData.map((item, index) => (
-              <option value={item.id} key={index}>{item.name}</option>
+              <option value={item.name} key={index}>{item.name}</option>
             ))}
           </select>
         </div>
 
-        {/* Dropdown hiển thị số lượng */}
-        <FormControl sx={{ minWidth: 120 }} size="small">
-          <InputLabel id="page-size-label">Hiển thị</InputLabel>
-          <Select
-            labelId="page-size-label"
-            id="page-size"
-            value={pageSize}
-            label="Hiển thị"
-            onChange={handlePageSizeChange}
+        {/* Bộ lọc */}
+        <div className='flex items-center'>
+          <label className="text-lg font-medium text-gray-700 mb-1">Filter:</label>
+          <select
+            value={currentFilter}
+            onChange={handleFilterChange}
+            className="ml-4 w-64 rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value={10}>Ten</MenuItem>
-            <MenuItem value={20}>Twenty</MenuItem>
-            <MenuItem value={30}>Thirty</MenuItem>
-          </Select>
-        </FormControl>
+            <option value="">Tất cả</option>
+            {listFilter.map((item, index) => (
+              <option value={item.id} key={index}>{item.name}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className='bg-white mt-6 p-6 rounded-md shadow'>
+        <TableDashboard category={currentCategory} filter={currentFilter}/>
       </div>
     </>
   );
