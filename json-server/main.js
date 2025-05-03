@@ -24,6 +24,12 @@ server.use((req, res, next) => {
   if (!db.has("tokens").value()) {
     db.set("tokens", []).write();
   }
+
+  // Initialize carts array if it doesn't exist
+  if (!db.has("carts").value()) {
+    db.set("carts", []).write();
+  }
+
   next();
 });
 
@@ -50,6 +56,7 @@ server.post("/api/login", (req, res) => {
   }
 
   // Verify password
+
   const isPasswordValid = bcrypt.compareSync(password, user.passwordHash);
   if (!isPasswordValid) {
     return res.status(401).jsonp({ error: "Invalid email or password" });
@@ -66,8 +73,8 @@ server.post("/api/login", (req, res) => {
     id: faker.string.uuid(),
     userId: user.id,
     token: token,
-    createdAt: new Date().toISOString(),
-    expiresAt: new Date(expiresAt).toISOString(),
+    createdAt: new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString(), // Adjusted to UTC+7
+    expiresAt: new Date(expiresAt + 7 * 60 * 60 * 1000).toISOString(), // Adjusted to UTC+7
     isValid: true,
   };
 
@@ -126,6 +133,18 @@ server.post("/api/register", (req, res) => {
   // Add the new user to the database
   router.db.get("users").push(newUser).write();
 
+  // Create an empty cart for the new user
+  const newCart = {
+    id: generateId(),
+    userId: newUser.id,
+    items: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  // Add the cart to the database
+  router.db.get("carts").push(newCart).write();
+
   // Generate a token for the new user
   const token = jwt.sign({ id: newUser.id, role: newUser.role }, SECRET_KEY, {
     expiresIn: TOKEN_EXPIRATION,
@@ -137,8 +156,8 @@ server.post("/api/register", (req, res) => {
     id: faker.string.uuid(),
     userId: newUser.id,
     token: token,
-    createdAt: new Date().toISOString(),
-    expiresAt: new Date(expiresAt).toISOString(),
+    createdAt: new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString(), // Adjusted to UTC+7
+    expiresAt: new Date(expiresAt + 7 * 60 * 60 * 1000).toISOString(), // Adjusted to UTC+7
     isValid: true,
   };
 
@@ -172,6 +191,61 @@ server.post("/api/logout", (req, res) => {
   }
 
   res.status(200).jsonp({ message: "Logged out successfully" });
+});
+
+// Token validation endpoint
+server.get("/api/validate-token", (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).jsonp({
+      valid: false,
+      error: "No token provided",
+    });
+  }
+
+  const token = authHeader.split(" ")[1];
+  try {
+    // First verify JWT signature
+    const decoded = jwt.verify(token, SECRET_KEY);
+
+    // Then check if token exists in database and is valid
+    const storedToken = router.db
+      .get("tokens")
+      .find({ token: token, isValid: true })
+      .value();
+
+    if (!storedToken) {
+      return res.status(401).jsonp({
+        valid: false,
+        error: "Token not found or invalid",
+      });
+    }
+
+    // Check if token has expired
+    if (new Date(storedToken.expiresAt) < new Date()) {
+      // Mark token as invalid
+      router.db
+        .get("tokens")
+        .find({ token: token })
+        .assign({ isValid: false })
+        .write();
+      return res.status(401).jsonp({
+        valid: false,
+        error: "Token expired",
+      });
+    }
+
+    // Token is valid
+    return res.status(200).jsonp({
+      valid: true,
+      user: { id: decoded.id, role: decoded.role },
+    });
+  } catch (err) {
+    return res.status(401).jsonp({
+      valid: false,
+      error: "Invalid or expired token",
+    });
+  }
 });
 
 // Authentication middleware with token verification from database

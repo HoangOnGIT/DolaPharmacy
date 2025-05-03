@@ -1,0 +1,61 @@
+.floating-buttons-wrapper {
+  position: fixed;
+  bottom: 160px;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  width: 100%; /* Đảm bảo wrapper trải dài toàn màn hình */
+  padding: 0 16px; /* Khoảng cách hai bên */
+  box-sizing: border-box;
+}
+
+.left-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: absolute;
+  left: 16px; /* Đặt các nút bên trái sát lề trái */
+}
+
+.right-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: absolute;
+  right: 16px; /* Đặt các nút bên phải sát lề phải */
+}
+
+.floating-button {
+  background-color: #3b82f6; /* Tailwind blue-600 */
+  color: white;
+  padding: 12px;
+  border-radius: 9999px; /* Fully rounded */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Tailwind shadow-md */
+  transition: background-color 0.3s ease-in-out; /* Reduced transition duration for better feel */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.floating-button:hover {
+  background-color: #2563eb; /* Tailwind blue-700 */
+}
+
+.floating-button svg {
+  width: 20px; /* Icon size */
+  height: 20px;
+}
+
+/* Animation for shake effect */
+@keyframes shake-pause {
+  0% { transform: translateX(0); }
+  8.33% { transform: translateX(-5px); }   /* Start Shake */
+  16.66% { transform: translateX(5px); }
+  25% { transform: translateX(-5px); }
+  33.33% { transform: translateX(0); }    /* End Shake (approx 1 second) */
+  100% { transform: translateX(0); }     /* Pause (approx 2 seconds) */
+}
+
+.animate-shake-delay {
+  animation: shake-pause 2s ease-in-out infinite; /* Total duration: 3 seconds */
+}
