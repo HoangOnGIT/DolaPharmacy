@@ -31,7 +31,6 @@ function Payment() {
   const [paymentMethod, setPaymentMethod] = useState("transfer");
   const [provinces, setProvices] = useState([]);
   const [districts, setDistricts] = useState([]);
-  const [wards, setWards] = useState([]);
   const { cart, emptyCart } = useCart();
   const { user } = useAuth();
   const [form] = Form.useForm();
@@ -42,6 +41,8 @@ function Payment() {
       const price = item.salePrice || item.basePrice;
       return (acc += item.quantity * price);
     }, 0) || 0;
+
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     fetch("https://provinces.open-api.vn/api/p")
@@ -79,7 +80,7 @@ function Payment() {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(`http://localhost:3000/api/orders`, {
+      const response = await fetch(`${BASE_URL}/api/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

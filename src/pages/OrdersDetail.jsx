@@ -24,9 +24,11 @@ function OrderDetail({ confirm = false }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:3000/api/orders/${orderId}`)
+    fetch(`${BASE_URL}/api/orders/${orderId}`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch order");
         return res.json();

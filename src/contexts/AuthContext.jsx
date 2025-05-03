@@ -1,5 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 // Create the auth context
 const AuthContext = createContext();
 
@@ -19,7 +21,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("http://localhost:3000/api/login", {
+      const response = await fetch(`${BASE_URL}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +61,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("http://localhost:3000/api/register", {
+      const response = await fetch(`${BASE_URL}/api/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,7 +100,7 @@ export const AuthProvider = ({ children }) => {
     if (!token) return false;
 
     try {
-      const response = await fetch("http://localhost:3000/api/validate-token", {
+      const response = await fetch(`${BASE_URL}/api/validate-token`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

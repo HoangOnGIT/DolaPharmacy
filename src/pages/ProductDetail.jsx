@@ -32,8 +32,10 @@ function ProductDetail() {
     ? product.images.map((image) => image.url)
     : [];
 
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
-    fetch(`http://localhost:3000/api/products?id=${id}`)
+    fetch(`${BASE_URL}/api/products?id=${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data[0]);
@@ -44,9 +46,7 @@ function ProductDetail() {
 
   useEffect(() => {
     if (user && isAuthenticated) {
-      console.log(`http://localhost:3000/api/favourites?userId=${user.id}`);
-
-      fetch(`http://localhost:3000/api/favourites?userId=${user.id}`)
+      fetch(`${BASE_URL}/api/favourites?userId=${user.id}`)
         .then((res) => res.json())
         .then((data) => {
           if (data[0].items) {
@@ -71,7 +71,7 @@ function ProductDetail() {
         category: product.category,
       });
 
-      fetch(`http://localhost:3000/api/products?${categoryParam}`)
+      fetch(`${BASE_URL}/api/products?${categoryParam}`)
         .then((res) => res.json())
         .then((data) => setSuggestion(data));
 

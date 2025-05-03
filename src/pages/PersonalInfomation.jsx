@@ -23,9 +23,13 @@ function PersonalInfomation() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     if (isAuthenticated) {
-      fetch(`http://localhost:3000/api/users/${user.id}`)
+      console.log(`${BASE_URL}/api/users/${user.id}`);
+
+      fetch(`${BASE_URL}/api/users/${user.id}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Failed to fetch user information");
@@ -42,7 +46,7 @@ function PersonalInfomation() {
         });
 
       // Fetch user orders
-      fetch(`http://localhost:3000/api/orders?userId=${user.id}`)
+      fetch(`${BASE_URL}/api/orders?userId=${user.id}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Failed to fetch orders");

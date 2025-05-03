@@ -14,6 +14,8 @@ import { useFav } from "../contexts/FavouriteContext";
 import { useCart } from "../contexts/CartContext";
 
 const Product = ({ promotion = false }) => {
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const { favList } = useFav();
   const { toggleFavourite } = useFav();
   const { addToCart } = useCart();
@@ -98,7 +100,7 @@ const Product = ({ promotion = false }) => {
   }
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/categories")
+    fetch(BASE_URL + "/api/categories")
       .then((res) => res.json())
       .then((data) => {
         setCatergories(data);
@@ -106,7 +108,7 @@ const Product = ({ promotion = false }) => {
   }, []); // Fetch categories only once on component mount
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/brands")
+    fetch(BASE_URL + "/api/brands")
       .then((res) => res.json())
       .then((data) => {
         setBranding(data);
@@ -117,9 +119,7 @@ const Product = ({ promotion = false }) => {
     setLoading(true);
     const params = queryString.stringify(filter);
 
-    console.log(`http://localhost:3000/api/products?${params}`);
-
-    fetch(`http://localhost:3000/api/products?${params}`)
+    fetch(`${BASE_URL}/api/products?${params}`)
       .then((res) => res.json())
       .then(({ body, pagination }) => {
         setProducts(body);
@@ -182,6 +182,8 @@ const Product = ({ promotion = false }) => {
     const params = queryString.stringify(filter);
     setSearchParams(params); // This updates the URL query parameters
   }, [filter]);
+
+  console.log("BASE URL:", import.meta.env.VITE_API_BASE_URL);
 
   return (
     <div className="bg-gradient-to-br from-blue-50 via-white to-gray-100 min-h-screen py-12">
@@ -402,7 +404,7 @@ const Product = ({ promotion = false }) => {
                       weight: [],
                     })
                   }
-                  className="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
+                  className="px-5 py-2 bg-blue-600 !text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
                 >
                   Xóa bộ lọc
                 </button>
