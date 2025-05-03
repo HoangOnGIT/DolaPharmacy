@@ -1,16 +1,18 @@
 import React, { useState, useRef } from "react";
 import { FiPlus, FiTrash2, FiArrowLeft, FiImage } from "react-icons/fi";
 import { Editor } from "@tinymce/tinymce-react";
+import { useNavigate } from "react-router-dom";
 
 export default function AddProduct() {
+  const navigate = useNavigate();
   const editorRef = useRef(null);
   const [activeTab, setActiveTab] = useState("general");
   const [variants, setVariants] = useState([
     { id: crypto.randomUUID(), name: "", sku: "", price: 0, stock: 0 },
   ]);
   const [images, setImages] = useState([]);
+  const [isUploading, setIsUploading] = useState(false); // Thêm trạng thái loading
 
-  // State quản lý toàn bộ dữ liệu form
   const [formData, setFormData] = useState({
     name: "",
     sku: "",
@@ -18,7 +20,7 @@ export default function AddProduct() {
     category: "",
     subCategory: "",
     basePrice: 0,
-    salePrice: 0, // Sửa từ saleOpenPrice thành salePrice
+    salePrice: 0,
     cost: 0,
     discount: { type: "percentage", value: 0, maxDiscountAmount: 0 },
     stock: { total: 0, lowStockThreshold: 0 },
@@ -70,22 +72,78 @@ export default function AddProduct() {
     setVariants(variants.map((v) => (v.id === id ? { ...v, [field]: value } : v)));
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files);
-    const newImages = files.map((file, index) => ({
-      id: crypto.randomUUID(),
-      url: URL.createObjectURL(file),
-      alt: `Product image ${index + 1}`,
-      isPrimary: images.length === 0 && index === 0,
-      sortOrder: images.length + index,
-    }));
-    setImages([...images, ...newImages]);
+    if (files.length === 0) return;
+
+    setIsUploading(true); // Bật trạng thái loading
+    const cloudName = "dysjwopcc";
+    const uploadPreset = "Dola-Pharmacy";
+
+    // Tải ảnh đồng thời bằng Promise.all
+    const uploadPromises = files.map(async (file) => {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", uploadPreset);
+
+      try {
+        const response = await fetch(
+          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(`Lỗi khi tải ảnh lên Cloudinary: ${errorData.message || "Không xác định"}`);
+        }
+
+        const data = await response.json();
+        return {
+          id: crypto.randomUUID(),
+          url: data.secure_url,
+          alt: `Product image ${images.length + 1}`,
+          isPrimary: images.length === 0,
+          sortOrder: images.length,
+        };
+      } catch (error) {
+        console.error("Lỗi khi tải ảnh:", error);
+        return null; // Trả về null nếu có lỗi, sẽ lọc sau
+      }
+    });
+
+    try {
+      const results = await Promise.all(uploadPromises);
+      const uploadedImages = results.filter((img) => img !== null); // Lọc bỏ các ảnh tải lên thất bại
+
+      if (uploadedImages.length === 0) {
+        alert("Không thể tải bất kỳ ảnh nào lên Cloudinary. Vui lòng thử lại.");
+      } else if (uploadedImages.length < files.length) {
+        alert("Một số ảnh không thể tải lên. Vui lòng kiểm tra lại.");
+      }
+
+      setImages((prevImages) => [
+        ...prevImages,
+        ...uploadedImages.map((img, index) => ({
+          ...img,
+          sortOrder: prevImages.length + index,
+          isPrimary: prevImages.length === 0 && index === 0,
+        })),
+      ]);
+    } catch (error) {
+      console.error("Lỗi tổng thể khi tải ảnh:", error);
+      alert("Đã xảy ra lỗi khi tải ảnh. Vui lòng thử lại.");
+    } finally {
+      setIsUploading(false); // Tắt trạng thái loading
+    }
   };
+
   const removeImage = (id) => {
     setImages(images.filter((img) => img.id !== id));
   };
 
-  // Xử lý thay đổi input
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (type === "checkbox") {
@@ -103,6 +161,14 @@ export default function AddProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Không tìm thấy token. Vui lòng đăng nhập lại");
+      navigate("/login");
+      return;
+    }
+
     const product = {
       id: crypto.randomUUID(),
       ...formData,
@@ -119,40 +185,36 @@ export default function AddProduct() {
         isPrimary: img.isPrimary,
         sortOrder: img.sortOrder,
       })),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     };
-
-    console.log("Dữ liệu gửi đi:", product);
 
     try {
       const response = await fetch("http://localhost:3000/api/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify(product),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Lỗi từ server:", errorData);
         alert(
           `Lỗi khi thêm sản phẩm: ${response.status} - ${
-            errorData.message || "Lỗi khi thêm sản phẩm từ server."
+            errorData.message || "Lỗi không xác định"
           }`
         );
         return;
       }
 
-      const data = await response.json();
-      console.log("Sản phẩm đã được thêm:", data);
       alert("Sản phẩm đã được thêm thành công!");
+      navigate("/dashboard");
     } catch (error) {
       console.error("Lỗi khi gửi yêu cầu:", error);
       alert("Đã xảy ra lỗi khi thêm sản phẩm. Vui lòng thử lại sau.");
     }
   };
+
   return (
     <div className="">
       <div className="flex justify-between items-center mb-6">
@@ -166,7 +228,6 @@ export default function AddProduct() {
 
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main content - 2/3 width */}
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white rounded-lg shadow p-6">
               <div className="space-y-4">
@@ -747,7 +808,6 @@ export default function AddProduct() {
             </div>
           </div>
 
-          {/* Sidebar - 1/3 width */}
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-medium mb-4">Trạng thái sản phẩm</h3>
@@ -828,8 +888,14 @@ export default function AddProduct() {
                   ))}
                   <div className="border border-dashed rounded-md flex items-center justify-center h-32">
                     <label htmlFor="image-upload" className="cursor-pointer flex flex-col items-center p-4">
-                      <FiImage className="h-8 w-8 text-gray-400 mb-2" />
-                      <span className="text-sm text-gray-500 text-center">Tải lên hình ảnh</span>
+                      {isUploading ? (
+                        <span className="text-sm text-gray-500">Đang tải ảnh...</span>
+                      ) : (
+                        <>
+                          <FiImage className="h-8 w-8 text-gray-400 mb-2" />
+                          <span className="text-sm text-gray-500 text-center">Tải lên hình ảnh</span>
+                        </>
+                      )}
                       <input
                         id="image-upload"
                         type="file"
@@ -837,6 +903,7 @@ export default function AddProduct() {
                         accept="image/*"
                         className="hidden"
                         onChange={handleImageUpload}
+                        disabled={isUploading} // Vô hiệu hóa input khi đang tải
                       />
                     </label>
                   </div>

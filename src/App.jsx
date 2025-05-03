@@ -1,25 +1,25 @@
-import "./App.css";
+import React from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./components/common/Layout";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Product from "./pages/Product";
 import ProductDetail from "./pages/ProductDetail";
 import Home from "./pages/Home";
-import FakeLogin from "./components/FakeLogin";
+import UserCrediential from "./pages/UserCrediential";
 import Video from "./pages/Video";
 import { AuthProvider } from "./contexts/AuthContext";
 import { CartProvider } from "./contexts/CartContext";
 import Cart from "./pages/Cart";
-import UserCrediential from "./pages/UserCrediential";
 import ErrorBoundary from "./components/common/ErrorBoundary";
 import ErrorPage from "./pages/ErrorPage";
 import PersonalInfomation from "./pages/PersonalInfomation";
 import Favourite from "./pages/Favourite";
 import FavProvider from "./contexts/FavouriteContext";
 import Dashboard from "./pages/Dashboard";
-import DashboardLayout from "./components/dashboard/LayoutDashboard"; 
-import DashboardProduct from "./components/dashboard/DashboardProduct"; 
+import DashboardLayout from "./components/dashboard/LayoutDashboard";
+import DashboardProduct from "./components/dashboard/DashboardProduct";
 import AddProduct from "./components/dashboard/AddProduct";
 import DashboardProductDetail from "./components/dashboard/ProductDetail";
+import ProtectedRoute from "./contexts/AuthDashboard";
 
 const router = createBrowserRouter([
   {
@@ -39,14 +39,19 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/dashboard",
-    element: <DashboardLayout />,
-    errorElement: <ErrorPage />,
+    element: <ProtectedRoute adminOnly={true} />,
     children: [
-      { index: true, element: <Dashboard /> },
-      { path: "product", element: <DashboardProduct /> },
-      { path: "product/add", element: <AddProduct /> },
-      { path: "product/:id", element: <DashboardProductDetail /> },
+      {
+        path: "/dashboard",
+        element: <DashboardLayout />,
+        errorElement: <ErrorPage />,
+        children: [
+          { index: true, element: <Dashboard /> },
+          { path: "product", element: <DashboardProduct /> },
+          { path: "product/add", element: <AddProduct /> },
+          { path: "product/:id", element: <DashboardProductDetail /> },
+        ],
+      },
     ],
   },
 ]);

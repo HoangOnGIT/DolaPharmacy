@@ -32,7 +32,13 @@ function UserCrediential({ loginPage }) {
       alert(result.error || "Login failed");
     } else {
       alert("Login successful!");
-      navigate("/");
+      // Chuyển hướng đến /dashboard nếu là admin, hoặc /homepage nếu không
+      const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+      if (storedUser.role === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/homepage");
+      }
     }
   };
 
@@ -73,21 +79,19 @@ function UserCrediential({ loginPage }) {
         {/* Tab Navigation */}
         <div className="flex mb-6 border-b">
           <button
-            className={`w-1/2 pb-3 text-center font-medium transition-colors duration-300 ${
-              activeTab === "login"
+            className={`w-1/2 pb-3 text-center font-medium transition-colors duration-300 ${activeTab === "login"
                 ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-500 hover:text-blue-500"
-            }`}
+              }`}
             onClick={() => handleTabChange("login")}
           >
             Đăng nhập
           </button>
           <button
-            className={`w-1/2 pb-3 text-center font-medium transition-colors duration-300 ${
-              activeTab === "register"
+            className={`w-1/2 pb-3 text-center font-medium transition-colors duration-300 ${activeTab === "register"
                 ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-500 hover:text-blue-500"
-            }`}
+              }`}
             onClick={() => handleTabChange("register")}
           >
             Đăng ký
@@ -95,9 +99,8 @@ function UserCrediential({ loginPage }) {
         </div>
 
         <div
-          className={`transition-opacity duration-300 ease-in-out ${
-            isAnimating ? "opacity-0" : "opacity-100"
-          }`}
+          className={`transition-opacity duration-300 ease-in-out ${isAnimating ? "opacity-0" : "opacity-100"
+            }`}
         >
           {activeTab === "login" ? (
             <>
@@ -176,11 +179,10 @@ function UserCrediential({ loginPage }) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`w-full py-2 text-white rounded-md transition-colors ${
-                    loading
+                  className={`w-full py-2 text-white rounded-md transition-colors ${loading
                       ? "bg-blue-400 cursor-not-allowed"
                       : "bg-blue-600 hover:bg-blue-700"
-                  }`}
+                    }`}
                 >
                   {loading ? "Đang đăng nhập..." : "Đăng nhập"}
                 </button>
