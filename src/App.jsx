@@ -53,12 +53,12 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       {
-        path: "/login",
+        path: "login",
         element: <UserCrediential loginPage={true} />,
         errorElement: <ErrorPage />,
       },
       {
-        path: "/register",
+        path: "register",
         element: <UserCrediential loginPage={false} />,
         errorElement: <ErrorPage />,
       },
