@@ -1040,7 +1040,15 @@
           "sortOrder": 0
         }
       ],
-      "variants": [],
+      "variants": [
+        {
+          "id": "d067accc-f143-4618-b14f-d79e71368d83",
+          "name": "mắt - Loại 50",
+          "sku": "DOLA-RSQIOHGK6R",
+          "price": 460000,
+          "stock": 38
+        }
+      ],
       "stock": {
         "total": 39,
         "reserved": 10,
@@ -3266,7 +3274,7 @@
       "dateOfBirth": "1990-01-01",
       "role": "admin",
       "verificationStatus": "verified",
-      "lastLogin": "2025-05-01T14:16:51.077Z",
+      "lastLogin": "2025-05-03T05:13:37.092Z",
       "addresses": [
         {
           "id": "0a6f558e-5df2-452b-84b6-7bdab82878ce",
@@ -4419,97 +4427,26 @@
       "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
       "items": [
         {
-          "id": "e4242e74-c2c2-4376-8591-0c623317fd18",
-          "productId": "e4242e74-c2c2-4376-8591-0c623317fd18",
-          "name": "Thực phẩm chức năng kháng viêm Công ty 748",
-          "salePrice": 900000,
-          "basePrice": 900000,
-          "quantity": 1,
-          "images": [
-            {
-              "id": "a8c9c6b1-341a-41b6-87a8-c91532479145",
-              "url": "https://picsum.photos/seed/181/500/500",
-              "alt": "Thực phẩm chức năng kháng viêm Công ty 748 - Sản phẩm",
-              "isPrimary": true,
-              "sortOrder": 0
-            },
-            {
-              "id": "59c909cb-047e-46ef-b52e-c994e51ee457",
-              "url": "https://picsum.photos/seed/963/500/500",
-              "alt": "Thực phẩm chức năng kháng viêm Công ty 748 - Hình chi tiết",
-              "isPrimary": false,
-              "sortOrder": 1
-            }
-          ],
-          "variant": "kháng viêm - Loại 5"
-        },
-        {
-          "id": "656d7762-1b25-4d1f-86e1-e949ec2d62e7",
-          "productId": "656d7762-1b25-4d1f-86e1-e949ec2d62e7",
-          "name": "Vitamin tim mạch OPC Pharma 764",
-          "salePrice": 6980000,
-          "basePrice": 6980000,
-          "quantity": 1,
-          "images": [
-            {
-              "id": "a5063d58-2081-4d48-8e2a-6c05ac312100",
-              "url": "https://picsum.photos/seed/884/500/500",
-              "alt": "Vitamin tim mạch OPC Pharma 764 - Sản phẩm",
-              "isPrimary": true,
-              "sortOrder": 0
-            },
-            {
-              "id": "224b51f4-7e7a-4bbb-9b12-3ceaac882944",
-              "url": "https://picsum.photos/seed/122/500/500",
-              "alt": "Vitamin tim mạch OPC Pharma 764 - Hình chi tiết",
-              "isPrimary": false,
-              "sortOrder": 1
-            },
-            {
-              "id": "eb057452-81b2-400e-9e6c-609ad69ef1c0",
-              "url": "https://picsum.photos/seed/992/500/500",
-              "alt": "Vitamin tim mạch OPC Pharma 764 - Hình chi tiết",
-              "isPrimary": false,
-              "sortOrder": 2
-            }
-          ],
-          "variant": "tim mạch - Loại 93"
-        },
-        {
-          "id": "6a8701f7-b615-418d-9825-91cfdb552c5e",
-          "productId": "6a8701f7-b615-418d-9825-91cfdb552c5e",
-          "name": "Bột hô hấp Dược phẩm 276",
-          "salePrice": 36810000,
-          "basePrice": 48430000,
+          "id": "107716d5-b9d1-4550-80ba-e670dee25fd2",
+          "productId": "107716d5-b9d1-4550-80ba-e670dee25fd2",
+          "name": "Bột tiêu hóa Dược phẩm 972",
+          "salePrice": 3760000,
+          "basePrice": 4640000,
           "quantity": 2,
           "images": [
             {
-              "id": "7e2b0ded-4615-403c-ba79-11bae9f84b73",
-              "url": "https://picsum.photos/seed/963/500/500",
-              "alt": "Bột hô hấp Dược phẩm 276 - Sản phẩm",
+              "id": "c009c407-5aae-4a64-a4d3-3f3e7d674584",
+              "url": "https://picsum.photos/seed/895/500/500",
+              "alt": "Bột tiêu hóa Dược phẩm 972 - Sản phẩm",
               "isPrimary": true,
               "sortOrder": 0
-            },
-            {
-              "id": "13cf610b-4264-4ddb-9899-81c5d2718192",
-              "url": "https://picsum.photos/seed/834/500/500",
-              "alt": "Bột hô hấp Dược phẩm 276 - Hình chi tiết",
-              "isPrimary": false,
-              "sortOrder": 1
-            },
-            {
-              "id": "c5da2e47-532c-4726-9ddc-916fff88eb32",
-              "url": "https://picsum.photos/seed/554/500/500",
-              "alt": "Bột hô hấp Dược phẩm 276 - Hình chi tiết",
-              "isPrimary": false,
-              "sortOrder": 2
             }
           ],
-          "variant": "hô hấp - Loại 5"
+          "variant": "mắt - Loại 50"
         }
       ],
       "createdAt": "2024-06-22T06:49:14.733Z",
-      "updatedAt": 1746092675229
+      "updatedAt": 1746248257635
     },
     {
       "id": "3903b8a1-e8ef-46e6-9482-64b79d296445",
@@ -4719,63 +4656,9 @@
     {
       "id": "241fac3d-83c7-4e98-961f-71f3a6ee3a54",
       "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
-      "items": [
-        {
-          "id": "107716d5-b9d1-4550-80ba-e670dee25fd2",
-          "name": "Bột tiêu hóa Dược phẩm 972",
-          "category": "27d957d7-458b-419d-bd84-d88198a58eeb",
-          "categoryName": "Chăm sóc da",
-          "subCategory": "tiêu hóa",
-          "sku": "DOLA-ZSZMKR",
-          "requiresPrescription": true,
-          "basePrice": 4640000,
-          "salePrice": 3760000,
-          "cost": 3930000,
-          "priceRange": "4 triệu - 5 triệu",
-          "discount": {
-            "type": "percentage",
-            "value": 19,
-            "maxDiscountAmount": 1915566
-          },
-          "discountedPrice": 3758400,
-          "supplierId": "9b908051-a648-42cf-9925-a4ece91d6b12",
-          "brand": "Dược phẩm",
-          "images": [
-            {
-              "id": "c009c407-5aae-4a64-a4d3-3f3e7d674584",
-              "url": "https://picsum.photos/seed/895/500/500",
-              "alt": "Bột tiêu hóa Dược phẩm 972 - Sản phẩm",
-              "isPrimary": true,
-              "sortOrder": 0
-            }
-          ],
-          "variants": [],
-          "stock": {
-            "total": 39,
-            "reserved": 10,
-            "available": 758,
-            "lowStockThreshold": 18,
-            "lastRestocked": "2025-04-19T18:42:44.309Z"
-          },
-          "description": "<h3>Thông tin sản phẩm Bột tiêu hóa Dược phẩm 972</h3>\n<p><strong>Công dụng:</strong> Sản phẩm Bột tiêu hóa Dược phẩm 972 giúp điều trị các vấn đề sức khỏe liên quan đến tiêu hóa. Sử dụng đúng liều lượng để đạt hiệu quả tốt nhất.</p>\n<p><strong>Đặc điểm nổi bật:</strong></p>\n<ul>\n  <li>Được sản xuất bởi Dược phẩm Traphaco</li>\n  <li>Hiệu quả trong việc tăng cường miễn dịch</li>\n  <li>Phù hợp với người lớn</li>\n</ul>\n<p><em>Lưu ý: Đọc kỹ hướng dẫn sử dụng trước khi dùng. Bảo quản nơi khô ráo, thoáng mát, tránh ánh nắng trực tiếp.</em></p>",
-          "ingredients": "Thành phần chính: utique cito tyrannus vindico cariosus",
-          "dosage": "Liều dùng: 2 lần/ngày, 2 viên/lần.",
-          "warnings": "Cảnh báo: Không sử dụng khi Aestivus callide autus tenetur.",
-          "origin": "Việt Nam",
-          "manufacturerName": "Dược phẩm Traphaco",
-          "status": "active",
-          "isFeatured": true,
-          "isPopular": false,
-          "averageRating": 4.678887523676295,
-          "reviewCount": 122,
-          "targeted": "Phụ nữ mang thai",
-          "weight": "500g - 1kg",
-          "createdAt": "2024-07-14T18:13:39.253Z",
-          "updatedAt": "2025-04-20T10:01:27.101Z"
-        }
-      ],
+      "items": [],
       "createdAt": "2025-03-15T20:40:52.249Z",
-      "updatedAt": 1746088999856,
+      "updatedAt": 1746249725915,
       "item": []
     },
     {
@@ -5888,6 +5771,113 @@
       "createdAt": 1746087000891,
       "updatedAt": 1746087000891,
       "id": "7ZAGlle"
+    },
+    {
+      "fullName": "Nguyễn",
+      "phoneNumber": "03891731728",
+      "email": "foasjdoaijo",
+      "province": "Thành phố Hà Nội",
+      "district": "Huyện Cư Jút",
+      "address": "123",
+      "notes": "123",
+      "items": [
+        {
+          "id": "e4242e74-c2c2-4376-8591-0c623317fd18",
+          "productId": "e4242e74-c2c2-4376-8591-0c623317fd18",
+          "name": "Thực phẩm chức năng kháng viêm Công ty 748",
+          "salePrice": 900000,
+          "basePrice": 900000,
+          "quantity": 1,
+          "images": [
+            {
+              "id": "a8c9c6b1-341a-41b6-87a8-c91532479145",
+              "url": "https://picsum.photos/seed/181/500/500",
+              "alt": "Thực phẩm chức năng kháng viêm Công ty 748 - Sản phẩm",
+              "isPrimary": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "59c909cb-047e-46ef-b52e-c994e51ee457",
+              "url": "https://picsum.photos/seed/963/500/500",
+              "alt": "Thực phẩm chức năng kháng viêm Công ty 748 - Hình chi tiết",
+              "isPrimary": false,
+              "sortOrder": 1
+            }
+          ],
+          "variant": "kháng viêm - Loại 5"
+        },
+        {
+          "id": "656d7762-1b25-4d1f-86e1-e949ec2d62e7",
+          "productId": "656d7762-1b25-4d1f-86e1-e949ec2d62e7",
+          "name": "Vitamin tim mạch OPC Pharma 764",
+          "salePrice": 6980000,
+          "basePrice": 6980000,
+          "quantity": 1,
+          "images": [
+            {
+              "id": "a5063d58-2081-4d48-8e2a-6c05ac312100",
+              "url": "https://picsum.photos/seed/884/500/500",
+              "alt": "Vitamin tim mạch OPC Pharma 764 - Sản phẩm",
+              "isPrimary": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "224b51f4-7e7a-4bbb-9b12-3ceaac882944",
+              "url": "https://picsum.photos/seed/122/500/500",
+              "alt": "Vitamin tim mạch OPC Pharma 764 - Hình chi tiết",
+              "isPrimary": false,
+              "sortOrder": 1
+            },
+            {
+              "id": "eb057452-81b2-400e-9e6c-609ad69ef1c0",
+              "url": "https://picsum.photos/seed/992/500/500",
+              "alt": "Vitamin tim mạch OPC Pharma 764 - Hình chi tiết",
+              "isPrimary": false,
+              "sortOrder": 2
+            }
+          ],
+          "variant": "tim mạch - Loại 93"
+        },
+        {
+          "id": "6a8701f7-b615-418d-9825-91cfdb552c5e",
+          "productId": "6a8701f7-b615-418d-9825-91cfdb552c5e",
+          "name": "Bột hô hấp Dược phẩm 276",
+          "salePrice": 36810000,
+          "basePrice": 48430000,
+          "quantity": 2,
+          "images": [
+            {
+              "id": "7e2b0ded-4615-403c-ba79-11bae9f84b73",
+              "url": "https://picsum.photos/seed/963/500/500",
+              "alt": "Bột hô hấp Dược phẩm 276 - Sản phẩm",
+              "isPrimary": true,
+              "sortOrder": 0
+            },
+            {
+              "id": "13cf610b-4264-4ddb-9899-81c5d2718192",
+              "url": "https://picsum.photos/seed/834/500/500",
+              "alt": "Bột hô hấp Dược phẩm 276 - Hình chi tiết",
+              "isPrimary": false,
+              "sortOrder": 1
+            },
+            {
+              "id": "c5da2e47-532c-4726-9ddc-916fff88eb32",
+              "url": "https://picsum.photos/seed/554/500/500",
+              "alt": "Bột hô hấp Dược phẩm 276 - Hình chi tiết",
+              "isPrimary": false,
+              "sortOrder": 2
+            }
+          ],
+          "variant": "hô hấp - Loại 5"
+        }
+      ],
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "paymentMethod": "transfer",
+      "status": "pending",
+      "total": 81500000,
+      "createdAt": 1746166523635,
+      "updatedAt": 1746166523635,
+      "id": "nokBDF6"
     }
   ],
   "orderItems": [
@@ -6527,35 +6517,27 @@
   "wishlist": [],
   "tokens": [
     {
-      "id": "0421bdf3-c665-4fab-be57-1f229e140093",
+      "id": "161d736f-0948-4347-88fa-e34ae038c8da",
       "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjA4NjkzNiwiZXhwIjoxNzQ2MDkwNTM2fQ.V-UUokqBPdbvfIFarbdeiYJE6E7CMo4qJMEXGXim2sw",
-      "createdAt": "2025-05-01T15:08:56.110Z",
-      "expiresAt": "2025-05-01T16:08:56.110Z",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI0MTUzMywiZXhwIjoxNzQ2MjQ1MTMzfQ.uCxPDctaPuzqrHVHyjmcXIPz2ifxC3Al03BNq6mwPTs",
+      "createdAt": "2025-05-03T10:05:33.411Z",
+      "expiresAt": "2025-05-03T11:05:33.410Z",
       "isValid": true
     },
     {
-      "id": "a46454cd-1d3e-4dce-b7af-8a7cdab711b0",
+      "id": "d4b70e05-22d8-4446-a854-1765d1c5d8be",
       "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjA5MDYyMCwiZXhwIjoxNzQ2MDk0MjIwfQ.jm-Jz857OXG7WDvGZbRXBkV9BFRAQBl0m_OZ1wtlgxA",
-      "createdAt": "2025-05-01T16:10:20.402Z",
-      "expiresAt": "2025-05-01T17:10:20.402Z",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI0NTM3NSwiZXhwIjoxNzQ2MjQ4OTc1fQ.udq1AMzRZWKtJHwXnOHfUkxVQ4icAl6jI6T7GOT5rv0",
+      "createdAt": "2025-05-03T11:09:35.157Z",
+      "expiresAt": "2025-05-03T12:09:35.156Z",
       "isValid": true
     },
     {
-      "id": "517c2aac-0de3-4ed7-a61a-f704dd60f1b9",
+      "id": "bfae96c2-558e-4cb6-9716-efadf55f5c9c",
       "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjEwNTMzNCwiZXhwIjoxNzQ2MTA4OTM0fQ.uX90wRn475WU4I2mUuK3z20eO7sdXR9ByJmjR6m6HxI",
-      "createdAt": "2025-05-01T20:15:34.024Z",
-      "expiresAt": "2025-05-01T21:15:34.023Z",
-      "isValid": true
-    },
-    {
-      "id": "a60fc2d7-f392-4b81-a449-358ab513911d",
-      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
-      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjEwOTAxMSwiZXhwIjoxNzQ2MTEyNjExfQ.SL_hsqqK-HS3Bt5eNdmgaxS4Q3-kkL2z1gUbadRSWTM",
-      "createdAt": "2025-05-01T21:16:51.077Z",
-      "expiresAt": "2025-05-01T22:16:51.077Z",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI0OTIxNywiZXhwIjoxNzQ2MjUyODE3fQ.qmn6z27s9qKMXI8pDaeMleRlWrNxAPXMsZkdp6GDwpE",
+      "createdAt": "2025-05-03T12:13:37.092Z",
+      "expiresAt": "2025-05-03T13:13:37.091Z",
       "isValid": true
     }
   ]

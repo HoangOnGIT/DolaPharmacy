@@ -1,6 +1,32 @@
 import React from "react";
 import VideoThumbNail from "../components/video/VideoThumbNail";
 import { Link } from "react-router-dom";
+import {
+  Typography,
+  Row,
+  Col,
+  Card,
+  Breadcrumb,
+  Divider,
+  Input,
+  Button,
+} from "antd";
+import {
+  VideoCameraOutlined,
+  ReadOutlined,
+  ThunderboltOutlined,
+  MailOutlined,
+} from "@ant-design/icons";
+import img1 from "../img/Header/imgNews/image1.png";
+import img2 from "../img/Header/imgNews/image2.png";
+import img3 from "../img/Header/imgNews/image3.png";
+import img4 from "../img/Header/imgNews/image4.png";
+import img5 from "../img/Header/imgNews/image5.png";
+import img6 from "../img/Header/imgNews/image6.png";
+import img7 from "../img/Header/imgNews/image7.png";
+import img8 from "../img/Header/imgNews/image8.png";
+import img9 from "../img/Header/imgNews/image9.png";
+const { Title, Text } = Typography;
 
 function Video() {
   const healthVideos = [
@@ -42,89 +68,163 @@ function Video() {
     },
   ];
 
+  // Function to get current date in DD/MM/YYYY format
+  const getCurrentDate = () => {
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, "0");
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const year = today.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const currentDate = getCurrentDate();
+
   const latestNews = [
     {
       id: 1,
+      date: currentDate,
       title: "Trẻ em sau tiêm vắc xin bao lâu thì sốt?",
-      date: "18/07/2023",
-      image: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
+      imageUrl: img6,
+      slug: "tre-em-sau-tiem-vac-xin",
     },
     {
       id: 2,
-      title: "Có cần xét nghiệm trước khi tiêm HPV hay không?",
-      date: "18/07/2023",
-      image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
+      date: currentDate,
+      title: "Có cần xét nghiệm trước khi đi tiêm HPV hay không?",
+      imageUrl: img7,
+      slug: "co-can-xet-nghiem-truoc-khi-di-tiem-hpv",
     },
     {
       id: 3,
-      title: "Trước và sau khi tiêm vắc xin cơ thể cần gì, nên ăn gì?",
-      date: "18/07/2023",
-      image: "https://images.unsplash.com/photo-1536064479547-7ee40b74b807?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
+      date: currentDate,
+      title: "Trước và sau khi tiêm vắc xin có ăn gì, nên ăn gì?",
+      imageUrl: img8,
+      slug: "truoc-va-sau-khi-tiem-vac-xin",
     },
     {
       id: 4,
-      title: "Phân khác các loại thuốc trị lạc đông tiền hiệu quả",
-      date: "18/07/2023",
-      image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
+      date: currentDate,
+      title: "Tham khảo các loại thuốc trị lạc đồng tiền hiệu quả",
+      imageUrl: img9,
+      slug: "tham-khao-cac-loai-thuoc-tri-lac-dong-tien",
     },
     {
       id: 5,
-      title: "Người bị u xơ tuyến giáp có uống được collagen không?",
-      date: "18/07/2023",
-      image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=300&q=80",
+      date: currentDate,
+      title: "Người bị ư huyết giáp có uống được collagen không?",
+      imageUrl: img5,
+      slug: "nguoi-bi-u-huyet-giap-co-uong-duoc-collagen",
     },
   ];
 
   return (
-    <div className="bg-gray-100 py-10">
-      <div className="container mx-auto max-w-7xl px-6">
-        <div className="flex flex-col md:flex-row gap-8">
-          {/* Main content area */}
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold mb-6 text-gray-800">Video</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div style={{ maxWidth: 1600, margin: "0 auto", padding: "20px 40px" }}>
+      <Breadcrumb
+        style={{ marginBottom: 20 }}
+        items={[{ title: "Trang chủ", href: "/" }, { title: "Video" }]}
+      />
+
+      <Title level={2} style={{ textAlign: "center", marginBottom: 30 }}>
+        Video Sức Khỏe
+      </Title>
+
+      <Row gutter={24}>
+        <Col xs={24} lg={16}>
+          <Card
+            title={
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <VideoCameraOutlined
+                  style={{ marginRight: 10, color: "#fff" }}
+                />
+                <span style={{ fontSize: 18 }}>Video Nổi Bật</span>
+              </div>
+            }
+            headStyle={{ backgroundColor: "#1890ff", color: "white" }}
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {healthVideos.map((video, index) => (
-                <VideoThumbNail urlObj={video} key={index} />
+                <div key={index} style={{ marginBottom: 20 }}>
+                  <VideoThumbNail urlObj={video} />
+                </div>
               ))}
             </div>
-          </div>
-  
-          {/* Sidebar area */}
-          <div className="md:w-80 bg-white rounded-lg shadow-md">
-            <div className="bg-blue-800 text-white py-3 px-4 rounded-t-lg">
-              <h2 className="text-xl font-semibold">Tin tức mới nhất</h2>
-            </div>
-            <div className="divide-y">
-              {latestNews.map((news) => (
-                <Link key={news.id} to={`/news/${news.id}`} className="block hover:bg-blue-50 transition-colors">
-                  <div className="p-4 flex gap-3">
-                    <img 
-                      src={news.image} 
-                      alt={news.title} 
-                      className="w-20 h-20 object-cover rounded"
+          </Card>
+        </Col>
+
+        <Col xs={24} lg={8}>
+          <Card
+            title={
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <ThunderboltOutlined
+                  style={{ color: "white", marginRight: 8 }}
+                />
+                <span style={{ fontSize: 18, color: "white" }}>
+                  Tin mới nhất
+                </span>
+              </div>
+            }
+            headStyle={{ backgroundColor: "#1890ff", color: "white" }}
+            style={{ marginBottom: 20 }}
+          >
+            {latestNews.map((item, index) => (
+              <React.Fragment key={item.id}>
+                <div style={{ display: "flex", padding: "12px 0" }}>
+                  <div
+                    style={{
+                      flexShrink: 0,
+                      marginRight: 12,
+                      width: 80,
+                      height: 80,
+                    }}
+                  >
+                    <img
+                      src={item.imageUrl}
+                      alt={item.title}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        borderRadius: 4,
+                      }}
                     />
-                    <div>
-                      <h3 className="font-medium text-gray-800 line-clamp-2">{news.title}</h3>
-                      <p className="text-sm text-gray-500 mt-1">{news.date}</p>
-                    </div>
                   </div>
-                </Link>
-              ))}
-            </div>
-            <div className="p-4 border-t">
-              <Link 
-                to="/news" 
-                className="text-blue-800 font-medium hover:text-blue-600 flex items-center justify-center"
-              >
-                Xem tất cả tin tức
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-1">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+                  <div>
+                    <Text type="secondary" style={{ fontSize: 12 }}>
+                      {item.date}
+                    </Text>
+                    <Title level={5} style={{ margin: "4px 0", fontSize: 14 }}>
+                      <a href={`/news/${item.slug}`}>{item.title}</a>
+                    </Title>
+                  </div>
+                </div>
+                {index < latestNews.length - 1 && (
+                  <Divider style={{ margin: "0" }} />
+                )}
+              </React.Fragment>
+            ))}
+          </Card>
+
+          <Card
+            title={
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <MailOutlined style={{ color: "white", marginRight: 8 }} />
+                <span style={{ fontSize: 18, color: "white" }}>
+                  Nhận tin tức mới nhất
+                </span>
+              </div>
+            }
+            headStyle={{ backgroundColor: "#1890ff", color: "white" }}
+          >
+            <Text style={{ display: "block", marginBottom: 16 }}>
+              Đăng ký nhận bản tin để cập nhật thông tin y tế mới nhất
+            </Text>
+            <Input.Group compact style={{ display: "flex" }}>
+              <Input style={{ flexGrow: 1 }} placeholder="Email của bạn" />
+              <Button type="primary">Đăng ký</Button>
+            </Input.Group>
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 }

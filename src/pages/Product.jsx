@@ -34,12 +34,12 @@ const Product = ({ promotion = false }) => {
     brand: [],
     targeted: [],
     weight: [],
-  }
+  };
 
   if (promotion) {
     initalFilter = {
       ...initalFilter,
-      discount_ne:null,
+      discount_ne: null,
     };
   }
 
@@ -184,14 +184,29 @@ const Product = ({ promotion = false }) => {
   }, [filter]);
 
   return (
-    <div className="bg-gray-50 py-10">
-      <div className="container mx-auto max-w-8xl px-4">
-        <div className="category-section mb-8">
-          <h2 className="text-3xl font-semibold text-center mb-4 text-gray-800 pb-2">
+    <div className="bg-gradient-to-br from-blue-50 via-white to-gray-100 min-h-screen py-12">
+      <div className="w-4/5 mx-auto px-4">
+        {promotion ? (
+          <Breadcrumb
+            style={{ marginBottom: 28 }}
+            items={[
+              { title: "Trang chủ", href: "/" },
+              { title: "Sản phẩm khuyến mãi" },
+            ]}
+          />
+        ) : (
+          <Breadcrumb
+            style={{ marginBottom: 28 }}
+            items={[{ title: "Trang chủ", href: "/" }, { title: "Sản phẩm" }]}
+          />
+        )}
+
+        <div className="category-section mb-10">
+          <h2 className="text-3xl font-bold text-center mb-6 text-blue-700 pb-2 tracking-tight">
             Danh mục sản phẩm
           </h2>
           <div className="mx-auto flex justify-center items-center">
-            <Row gutter={[16, 16]} className="w-full">
+            <Row gutter={[24, 24]} className="w-full">
               {catergories &&
                 catergories.map((catergory) => {
                   if (catergory.displayOrder <= 6) {
@@ -208,24 +223,24 @@ const Product = ({ promotion = false }) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
           {/* Filter sidebar */}
           <div className="filter-sidebar">
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-              <div className="bg-blue-600 text-white px-4 py-3">
-                <span className="font-medium text-lg">Bộ lọc sản phẩm</span>
-                <p className="text-sm opacity-90 mt-0.5">
+            <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+              <div className="bg-blue-600 text-white px-6 py-4">
+                <span className="font-semibold text-lg">Bộ lọc sản phẩm</span>
+                <p className="text-sm opacity-90 mt-0.5 !mb-0">
                   Giúp bạn tìm sản phẩm nhanh hơn
                 </p>
               </div>
 
-              <div className="p-4">
+              <div className="p-6">
                 {filterArr && (
                   <>
                     {filter.priceRange.length !== 0 ||
-                      filter.targeted.length !== 0 ||
-                      filter.weight.length !== 0 ||
-                      filter.brand.length !== 0 ? (
+                    filter.targeted.length !== 0 ||
+                    filter.weight.length !== 0 ||
+                    filter.brand.length !== 0 ? (
                       <div className="mb-4">
                         <h3 className="font-medium text-gray-700 mb-2">
                           Bạn đã chọn
@@ -237,7 +252,7 @@ const Product = ({ promotion = false }) => {
                       </div>
                     ) : null}
 
-                    <div className="space-y-6">
+                    <div className="space-y-7">
                       {filterArr.map((filterObj, index) => (
                         <FilterContent
                           filterObj={filterObj}
@@ -257,11 +272,11 @@ const Product = ({ promotion = false }) => {
           {contextHolder}
           {/* Product grid */}
           <div className="product-section">
-            <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
-              <h1 className="text-2xl font-semibold text-gray-800 mb-3">
+            <div className="bg-white p-6 rounded-2xl shadow-lg mb-6 border border-gray-100">
+              <h1 className="text-2xl font-bold text-blue-800 mb-4">
                 Tất cả sản phẩm
               </h1>
-              <div className="flex flex-wrap items-center gap-2 pb-2">
+              <div className="flex flex-wrap items-center gap-3 pb-2">
                 <div className="flex items-center text-gray-600 mr-2">
                   <SortAscendingOutlined className="mr-1" />
                   <span>Xếp theo: </span>
@@ -291,7 +306,7 @@ const Product = ({ promotion = false }) => {
                 </div>
               ) : (
                 <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-7">
                     {products.map((product) => {
                       let isFavourited = false;
                       if (
@@ -304,18 +319,20 @@ const Product = ({ promotion = false }) => {
                       }
 
                       return (
-                        <ProductCard
-                          product={product}
-                          key={product.id}
-                          isFavourited={isFavourited}
-                          handleAddToCart={handleAddToCart}
-                          handleToggleFav={handleToggleFav}
-                        />
+                        <div className="transition-transform hover:-translate-y-1 hover:shadow-xl rounded-xl bg-white border border-gray-100">
+                          <ProductCard
+                            product={product}
+                            key={product.id}
+                            isFavourited={isFavourited}
+                            handleAddToCart={handleAddToCart}
+                            handleToggleFav={handleToggleFav}
+                          />
+                        </div>
                       );
                     })}
                   </div>
 
-                  <div className="flex justify-center mt-8">
+                  <div className="flex justify-center mt-10">
                     <Pagination
                       current={pagination._page}
                       pageSize={pagination._limit}
@@ -328,10 +345,11 @@ const Product = ({ promotion = false }) => {
                         if (type === "page") {
                           return (
                             <div
-                              className={`pagination-item ${pagination._page === page
-                                  ? "pagination-item-active"
-                                  : ""
-                                }`}
+                              className={`pagination-item ${
+                                pagination._page === page
+                                  ? "pagination-item-active bg-blue-600 text-white"
+                                  : "hover:bg-blue-100"
+                              }`}
                             >
                               {page}
                             </div>
@@ -351,9 +369,9 @@ const Product = ({ promotion = false }) => {
                 </>
               )
             ) : (
-              <div className="flex flex-col items-center justify-center py-16 px-4 bg-white rounded-lg shadow-sm">
+              <div className="flex flex-col items-center justify-center py-20 px-6 bg-white rounded-2xl shadow-lg border border-gray-100">
                 <svg
-                  className="w-16 h-16 text-gray-300 mb-4"
+                  className="w-20 h-20 text-gray-300 mb-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -366,7 +384,7 @@ const Product = ({ promotion = false }) => {
                     d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   ></path>
                 </svg>
-                <h3 className="text-xl font-medium text-gray-700 mb-2">
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">
                   Không tìm thấy sản phẩm nào
                 </h3>
                 <p className="text-gray-500 text-center mb-4">
@@ -384,7 +402,7 @@ const Product = ({ promotion = false }) => {
                       weight: [],
                     })
                   }
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                  className="px-5 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors font-medium"
                 >
                   Xóa bộ lọc
                 </button>

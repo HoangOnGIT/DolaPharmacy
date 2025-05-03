@@ -56,13 +56,19 @@ const Menu = () => {
                 relative group cursor-pointer px-4 py-3
                 transition-all duration-300 ease-in-out
                 hover:bg-white hover:text-green-600 hover:rounded-xl hover:shadow-md
-                ${activeIndex === index ? "bg-white text-green-600 rounded-xl shadow-md" : "rounded-lg"}
+                ${
+                  activeIndex === index
+                    ? "bg-white text-green-600 rounded-xl shadow-md"
+                    : "rounded-lg"
+                }
               `}
               onClick={() => setActiveIndex(index)}
             >
               <Link to={item.path} className="flex items-center text-base">
                 {item.title}
-                {hasSubMenu && <ChevronDownIcon className="w-4 h-4 text-gray-500 ml-1" />}
+                {hasSubMenu && (
+                  <ChevronDownIcon className="w-4 h-4 text-white-500 ml-1" />
+                )}
               </Link>
 
               {hasSubMenu && (

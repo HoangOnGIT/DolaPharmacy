@@ -1,3 +1,8 @@
+/* Global text styling */
+body {
+  color: white;
+}
+
 /* Video modal styling */
 .video-modal {
   min-width: 320px;

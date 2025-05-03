@@ -1,4 +1,3 @@
-
 import Layout from "./components/common/Layout";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Product from "./pages/Product";
@@ -19,6 +18,8 @@ import Payment from "./pages/Payment";
 import OrderDetail from "./pages/OrdersDetail";
 import News from "./pages/News";
 import Contact from "./pages/Contact";
+import QnA from "./pages/QnA";
+import NewsDetail from "./pages/NewsDetail";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,11 @@ const router = createBrowserRouter([
     element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
+      {
+        path: "/",
+        element: <Home />, // Set the homepage as the default route
+        errorElement: <ErrorPage />,
+      },
       {
         path: "product",
         element: <Product />,
@@ -58,6 +64,11 @@ const router = createBrowserRouter([
       },
       { path: "homepage", element: <Home /> },
       { path: "news", element: <News /> },
+      {
+        path: "news/:slug",
+        element: <NewsDetail />,
+        errorElement: <ErrorPage />,
+      },
       {
         path: "video",
         element: <Video />,
@@ -93,10 +104,10 @@ const router = createBrowserRouter([
         element: <OrderDetail />,
         errorElement: <ErrorPage />,
       },
-      // { path: "qna", element: <QnA /> },
+      { path: "faq", element: <QnA /> },
       { path: "contact", element: <Contact /> },
       // { path: "favourite", element: <Contact /> },
-      // { path: "map", element: <Map /> },
+      { path: "map", element: <Contact /> },
     ],
   },
 ]);

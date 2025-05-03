@@ -1,20 +1,15 @@
-
 .fade-in-out {
-    animation: fade-in-out 0.5s ease-in-out;
+  animation: fade-in-out 0.5s ease-in-out;
 }
-  
+
 @keyframes fade-in-out {
-    0% { opacity: 0; }
-    50% { opacity: 1; }
-    100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
-
-.btn-contact {
-    background: #003cbf;
-    display: inline-block;
-    padding: 0 10px;
-    border-radius: 15px;
-    border: none;
-    font-size: 12px;
-}
-

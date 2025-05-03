@@ -97,14 +97,14 @@ const Header = () => {
                 ) : (
                   <div className="my-1 flex items-center">
                     <a className="mx-1 hover:text-blue-800" href="/register">
-                      Đăng ký |
+                      Đăng ký <span className="text-white">|</span>
                     </a>
                     <a className="mx-1 hover:text-blue-800" href="/login  ">
-                      Đăng nhập |
+                      Đăng nhập <span className="text-white">|</span>
                     </a>
-                    <p className="mx-1 flex items-center">
+                    <p className="!m-0 flex items-center">
                       Hotline đặt hàng:
-                      <button className="flex items-center bg-blue-800 text-white px-2.5 py-1 rounded-full text-base hover:bg-white hover:text-blue-800 ml-2 cursor-pointer">
+                      <button className="flex items-center bg-blue-800 text-white px-2.5 py-1 rounded-full text-base hover:bg-white hover:!text-blue-800 ml-2 cursor-pointer">
                         <PhoneIcon className="mr-2 h-3 w-3" />
                         1900 6750
                       </button>
@@ -127,7 +127,7 @@ const Header = () => {
               {/* Category */}
               <button
                 onClick={() => setIsModalOpen(!isModalOpen)}
-                className="flex items-center bg-white px-6 py-3 text-xl text-black rounded-lg font-medium cursor-pointer hover:bg-blue-800 hover:text-white mr-10"
+                className="flex items-center bg-white px-6 py-3 text-xl !text-black rounded-lg font-medium cursor-pointer hover:bg-blue-800 hover:!text-white mr-10"
               >
                 <div className="mr-2">
                   <svg
@@ -175,21 +175,21 @@ const Header = () => {
                   </svg>
                 </a>
 
-                <a
-                  className="mx-1 hover:text-blue-800"
-                  href=""
-                  onClick={() => handleClickFav()}
+                <Badge
+                  count={favList.items ? favList.items.length : 0}
+                  showZero={true}
+                  color="green"
                 >
-                  <Badge
-                    count={favList.items ? favList.items.length : 0}
-                    showZero={true}
+                  <a
+                    className="mx-1 hover:!text-blue-800 !text-white"
+                    href=""
+                    onClick={() => handleClickFav()}
                   >
                     <HeartOutlined style={{ fontSize: "32px" }} />
-                  </Badge>
-                </a>
+                  </a>
+                </Badge>
 
-                <a className="mx-1 hover:text-blue-800" href="">
-              
+                <a className="mx-1 hover:!text-blue-800" href="">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -208,6 +208,7 @@ const Header = () => {
                 <Badge
                   count={cart.items ? cart.items.length : 0}
                   showZero={true}
+                  color="green"
                 >
                   <CartButton />
                 </Badge>

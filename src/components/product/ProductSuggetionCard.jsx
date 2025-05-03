@@ -19,7 +19,7 @@ function ProductSuggetionCard({ product }) {
 
   return (
     <div
-      className="flex items-center text-[12px]"
+      className="flex items-center text-[14px]"
       onClick={() => handleClick()}
     >
       <Badge.Ribbon
@@ -33,14 +33,14 @@ function ProductSuggetionCard({ product }) {
         </div>{" "}
       </Badge.Ribbon>
       <div className="w-full p-2 flex flex-col justify-around">
-        <span>{product.name}</span>
+        <span className="mb-3 font-bold text-[14px]">{product.name}</span>
         <div className="space-x-3">
-          <span className="text-green-500">
+          <span className="text-green-500 text-[14px]">
             {product.salePrice
               ? formatPrice(product.salePrice)
               : formatPrice(product.basePrice)}
           </span>
-          <span className="line-through">
+          <span className="line-through text-[14px]">
             {product.salePrice ? formatPrice(product.basePrice) : ""}
           </span>
         </div>

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 export default function NewsItem({ date, title, excerpt, imageUrl, slug }) {
   return (
@@ -11,8 +11,8 @@ export default function NewsItem({ date, title, excerpt, imageUrl, slug }) {
       <div className="p-4">
         <h3 className="font-semibold text-lg mb-2">{title}</h3>
         <p className="text-gray-600 text-sm mb-4">{excerpt}</p>
-        <Link 
-          to={`/news/${slug}`} 
+        <Link
+          to={`/news/${slug}`}
           className="inline-block bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700 transition"
         >
           Đọc tiếp

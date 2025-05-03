@@ -1,0 +1,23 @@
+/* Import any required styles for the leaflet map */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Make sure popup appears above other elements */
+.leaflet-popup {
+  z-index: 1000;
+}
+
+/* Custom styles for contact page */
+.contact-info h3 {
+  margin-bottom: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
