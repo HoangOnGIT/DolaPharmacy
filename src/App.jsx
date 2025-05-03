@@ -33,7 +33,7 @@ const router = createBrowserRouter([
       { path: "cart", element: <Cart /> },
       { path: "login", element: <UserCrediential loginPage={true} /> },
       { path: "register", element: <UserCrediential loginPage={false} /> },
-      { path: "homepage", element: <Home /> },
+      { index: true, element: <Home /> },
       { path: "video", element: <Video /> },
       { path: "profile", element: <PersonalInfomation /> },
       { path: "fav", element: <Favourite /> },
