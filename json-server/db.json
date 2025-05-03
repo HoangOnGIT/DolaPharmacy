@@ -335,34 +335,40 @@
   ],
   "products": [
     {
-      "id": "7a66a24d-1881-4d34-bbfd-aef196f30dd2",
-      "name": "Kem thảo dược Domesco 626",
-      "category": "bdcfd88b-8841-44f5-aab9-10a259dd9437",
-      "categoryName": "Sức khỏe trẻ em & Trẻ sơ sinh",
-      "subCategory": "thảo dược",
+      "name": "Kem thảo dược Domesco 6261",
       "sku": "DOLA-ZHBFKX",
-      "requiresPrescription": true,
+      "brand": "Domesco",
+      "category": "bdcfd88b-8841-44f5-aab9-10a259dd9437",
+      "subCategory": "thảo dược",
       "basePrice": 66470000,
       "salePrice": 50520000,
       "cost": 47370000,
-      "priceRange": "Trên 50 triệu",
       "discount": {
         "type": "percentage",
         "value": 24,
         "maxDiscountAmount": 1641754
       },
-      "discountedPrice": 64828246,
+      "stock": {
+        "total": 968,
+        "reserved": 0,
+        "available": 730,
+        "lowStockThreshold": 16,
+        "lastRestocked": "2025-04-19T20:43:08.960Z"
+      },
+      "priceRange": "Trên 50 triệu",
+      "origin": "Việt Nam",
+      "manufacturerName": "Domesco",
+      "weight": "Dưới 100g",
+      "targeted": "Nam",
       "supplierId": "695afeb6-b6ea-46a1-9658-2ffd8a081aa5",
-      "brand": "Domesco",
-      "images": [
-        {
-          "id": "3892aed6-c7dc-4c45-b0fc-cca23c4b48c0",
-          "url": "https://picsum.photos/seed/962/500/500",
-          "alt": "Kem thảo dược Domesco 626 - Sản phẩm",
-          "isPrimary": true,
-          "sortOrder": 0
-        }
-      ],
+      "status": "active",
+      "isFeatured": false,
+      "isPopular": false,
+      "description": "<h3>Th&ocirc;ng tin sản phẩm Kem thảo dược Domesco 626</h3>\n<p><strong>C&ocirc;ng dụng:</strong> Sản phẩm Kem thảo dược Domesco 626 gi&uacute;p điều trị c&aacute;c vấn đề sức khỏe li&ecirc;n quan đến thảo dược. Sử dụng đ&uacute;ng liều lượng để đạt hiệu quả tốt nhất.</p>\n<p><strong>Đặc điểm nổi bật:</strong></p>\n<ul>\n<li>Được sản xuất bởi Domesco</li>\n<li>Hiệu quả trong việc cải thiện giấc ngủ</li>\n<li>Ph&ugrave; hợp với mọi đối tượng</li>\n</ul>\n<p><em>Lưu &yacute;: Đọc kỹ hướng dẫn sử dụng trước khi d&ugrave;ng. Bảo quản nơi kh&ocirc; r&aacute;o, tho&aacute;ng m&aacute;t, tr&aacute;nh &aacute;nh nắng trực tiếp.</em></p>",
+      "ingredients": "Thành phần chính: adfero avarus curso studio vado",
+      "dosage": "Liều dùng: 2 lần/ngày, 2 viên/lần.",
+      "warnings": "Cảnh báo: Không sử dụng khi Peccatus speculum deputo crustulum cognomen.",
+      "requiresPrescription": true,
       "variants": [
         {
           "id": "9e544147-6afb-4f93-8a9e-19f026cfccf3",
@@ -379,28 +385,16 @@
           "stock": 40
         }
       ],
-      "stock": {
-        "total": 968,
-        "reserved": 0,
-        "available": 730,
-        "lowStockThreshold": 16,
-        "lastRestocked": "2025-04-19T20:43:08.960Z"
-      },
-      "description": "<h3>Thông tin sản phẩm Kem thảo dược Domesco 626</h3>\n<p><strong>Công dụng:</strong> Sản phẩm Kem thảo dược Domesco 626 giúp điều trị các vấn đề sức khỏe liên quan đến thảo dược. Sử dụng đúng liều lượng để đạt hiệu quả tốt nhất.</p>\n<p><strong>Đặc điểm nổi bật:</strong></p>\n<ul>\n  <li>Được sản xuất bởi Domesco</li>\n  <li>Hiệu quả trong việc cải thiện giấc ngủ</li>\n  <li>Phù hợp với mọi đối tượng</li>\n</ul>\n<p><em>Lưu ý: Đọc kỹ hướng dẫn sử dụng trước khi dùng. Bảo quản nơi khô ráo, thoáng mát, tránh ánh nắng trực tiếp.</em></p>",
-      "ingredients": "Thành phần chính: adfero avarus curso studio vado",
-      "dosage": "Liều dùng: 2 lần/ngày, 2 viên/lần.",
-      "warnings": "Cảnh báo: Không sử dụng khi Peccatus speculum deputo crustulum cognomen.",
-      "origin": "Việt Nam",
-      "manufacturerName": "Domesco",
-      "status": "active",
-      "isFeatured": false,
-      "isPopular": false,
-      "averageRating": 4.958867941544295,
-      "reviewCount": 225,
-      "targeted": "Nam",
-      "weight": "Dưới 100g",
-      "createdAt": "2025-01-13T04:33:13.138Z",
-      "updatedAt": "2025-04-20T11:07:19.893Z"
+      "images": [
+        {
+          "url": "https://picsum.photos/seed/962/500/500",
+          "alt": "Kem thảo dược Domesco 626 - Sản phẩm",
+          "isPrimary": true,
+          "sortOrder": 0
+        }
+      ],
+      "updatedAt": 1746259005426,
+      "id": "7a66a24d-1881-4d34-bbfd-aef196f30dd2"
     },
     {
       "id": "6a8701f7-b615-418d-9825-91cfdb552c5e",
@@ -3253,165 +3247,6 @@
       "weight": "Trên 1kg",
       "createdAt": "2024-12-25T23:02:07.422Z",
       "updatedAt": "2025-04-19T20:30:02.435Z"
-    },
-    {
-      "id": "67c5d438-a74b-448e-b18d-20343dd5f9a8",
-      "name": "Nguyễn Quang Huy",
-      "sku": "DOLA-ZHBFKX",
-      "brand": "Domesco",
-      "category": "bdcfd88b-8841-44f5-aab9-10a259dd9437",
-      "subCategory": "thảo dược",
-      "basePrice": "1",
-      "salePrice": "1",
-      "cost": "1",
-      "discount": {
-        "type": "percentage",
-        "value": "1",
-        "maxDiscountAmount": "1"
-      },
-      "stock": {
-        "total": "11",
-        "lowStockThreshold": "1"
-      },
-      "priceRange": "5-10 triệu",
-      "origin": "Việt Nam",
-      "manufacturerName": "Domesco",
-      "weight": "",
-      "targeted": "",
-      "supplierId": "695afeb6-b6ea-46a1-9658-2ffd8a081aa5",
-      "status": "inactive",
-      "isFeatured": true,
-      "isPopular": true,
-      "description": "<p>1111111111111</p>",
-      "ingredients": "1",
-      "dosage": "1",
-      "warnings": "1",
-      "requiresPrescription": true,
-      "variants": [
-        {
-          "id": "4a72a91f-167d-4721-8289-981823e5f78a",
-          "name": "",
-          "sku": "",
-          "price": 0,
-          "stock": 0
-        }
-      ],
-      "images": [
-        {
-          "url": "blob:http://localhost:5174/bd4a3916-afda-479d-a375-3896da6e62dc",
-          "alt": "Product image 1",
-          "isPrimary": true,
-          "sortOrder": 0
-        }
-      ],
-      "createdAt": 1746194761645,
-      "updatedAt": 1746194761645
-    },
-    {
-      "id": "62edd907-6926-42a6-a754-70aab4ac60b6",
-      "name": "Nguyễn Quang Huy 123",
-      "sku": "DOLA-ZHBFKX",
-      "brand": "Domesco",
-      "category": "bdcfd88b-8841-44f5-aab9-10a259dd9437",
-      "subCategory": "thảo dược",
-      "basePrice": "11123",
-      "salePrice": "0123",
-      "cost": "123",
-      "discount": {
-        "type": "percentage",
-        "value": "11",
-        "maxDiscountAmount": "11"
-      },
-      "stock": {
-        "total": "1111",
-        "lowStockThreshold": 0
-      },
-      "priceRange": "",
-      "origin": "Việt Nam",
-      "manufacturerName": "Domesco",
-      "weight": "",
-      "targeted": "Người cao tuổi",
-      "supplierId": "695afeb6-b6ea-46a1-9658-2ffd8a081aa5",
-      "status": "draft",
-      "isFeatured": true,
-      "isPopular": true,
-      "description": "<p>123123</p>",
-      "ingredients": "123",
-      "dosage": "123",
-      "warnings": "123",
-      "requiresPrescription": true,
-      "variants": [
-        {
-          "id": "08b63dee-a73f-40b2-80f5-c7d630903ce6",
-          "name": "123",
-          "sku": "",
-          "price": 123,
-          "stock": 123
-        }
-      ],
-      "images": [
-        {
-          "url": "blob:http://localhost:5173/4686296c-af23-4cc5-ba6f-bebc550aa513",
-          "alt": "Product image 1",
-          "isPrimary": true,
-          "sortOrder": 0
-        }
-      ],
-      "createdAt": 1746247185576,
-      "updatedAt": 1746247185576
-    },
-    {
-      "id": "a28617a6-c24d-4704-ab8d-9e7667926be3",
-      "name": "Nguyễn Quang Huy 12345",
-      "sku": "a",
-      "brand": "Traphaco",
-      "category": "bdcfd88b-8841-44f5-aab9-10a259dd9437",
-      "subCategory": "thảo dược",
-      "basePrice": "11",
-      "salePrice": "11",
-      "cost": "11",
-      "discount": {
-        "type": "percentage",
-        "value": "1",
-        "maxDiscountAmount": "1"
-      },
-      "stock": {
-        "total": "1",
-        "lowStockThreshold": "1"
-      },
-      "priceRange": "1-5 triệu",
-      "origin": "1",
-      "manufacturerName": "Domesco",
-      "weight": "500g-1kg",
-      "targeted": "Mọi đối tượng",
-      "supplierId": "2",
-      "status": "draft",
-      "isFeatured": true,
-      "isPopular": true,
-      "description": "<p>avx</p>",
-      "ingredients": "1",
-      "dosage": "1",
-      "warnings": "1",
-      "requiresPrescription": true,
-      "variants": [
-        {
-          "id": "e2bd5455-bb85-4703-9abe-1650ecd3a613",
-          "name": "",
-          "sku": "",
-          "price": 0,
-          "stock": 0
-        }
-      ],
-      "images": [
-        {
-          "url": "https://res.cloudinary.com/dysjwopcc/image/upload/v1746248796/amlnnsdot9sqwno0ueju.png",
-          "alt": "Product image 1",
-          "isPrimary": true,
-          "sortOrder": 0
-        }
-      ],
-      "createdAt": 1746248823156,
-      "updatedAt": 1746248823156
     }
   ],
   "users": [
@@ -3425,7 +3260,7 @@
       "dateOfBirth": "1990-01-01",
       "role": "admin",
       "verificationStatus": "verified",
-      "lastLogin": "2025-05-03T06:20:00.898Z",
+      "lastLogin": "2025-05-03T07:56:15.822Z",
       "addresses": [
         {
           "id": "0a6f558e-5df2-452b-84b6-7bdab82878ce",
@@ -5543,17 +5378,6 @@
       "updatedAt": "2025-04-10T14:53:48.449Z"
     },
     {
-      "id": "4a598ec2-c4f0-4ba1-b245-e63d78b31bc9",
-      "userId": "75090889-1c1b-4ae5-ae31-7a1eab1bb674",
-      "items": [
-        "688d60ff-cc0f-41b9-8f8b-28b65dc8444e"
-      ],
-      "total": 358450000,
-      "status": "cancelled",
-      "createdAt": "2025-04-02T19:37:32.057Z",
-      "updatedAt": "2025-04-20T13:48:50.044Z"
-    },
-    {
       "id": "ff9f9cfb-7c39-4da2-a9e4-37f434164a2d",
       "userId": "d04cc8f0-2517-4dec-bef0-055863d33d7b",
       "items": [
@@ -5578,17 +5402,6 @@
       "status": "completed",
       "createdAt": "2025-02-28T03:30:58.152Z",
       "updatedAt": "2025-04-20T03:01:40.962Z"
-    },
-    {
-      "id": "747a9f3a-c0ce-4335-a381-72bdfa10bf3f",
-      "userId": "03c1e995-6bf6-44d3-9c51-09dec54e5609",
-      "items": [
-        "b4e45c6d-4d1a-4cce-a5c3-c225a469709f"
-      ],
-      "total": 65840000,
-      "status": "cancelled",
-      "createdAt": "2024-07-01T21:06:32.551Z",
-      "updatedAt": "2025-04-11T01:05:11.546Z"
     },
     {
       "id": "ef13b82a-c3d9-4833-92d2-48dd6b46e7d9",
@@ -6590,6 +6403,182 @@
       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1MzIwMCwiZXhwIjoxNzQ2MjU2ODAwfQ.5YcnxQ6eHbT1vMgye7ylW8OhnRAYYxfBbLor_cg5BK8",
       "createdAt": "2025-05-03T13:20:00.898Z",
       "expiresAt": "2025-05-03T14:20:00.897Z",
+      "isValid": true
+    },
+    {
+      "id": "b1d5f4b9-0b3e-4796-98db-69c71b33e940",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1MzQzNiwiZXhwIjoxNzQ2MjU3MDM2fQ.xYo7MkXQS9BDPgm-jPsFcX6RSTnRX1yWdopGLrXvq6Q",
+      "createdAt": "2025-05-03T13:23:56.819Z",
+      "expiresAt": "2025-05-03T14:23:56.819Z",
+      "isValid": true
+    },
+    {
+      "id": "160b8911-a2fd-44bc-9fe2-cb7742df53c4",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1MzUxMiwiZXhwIjoxNzQ2MjU3MTEyfQ.XR28mWDnRXveK4chE0hk466y-feVSnVOP5KAbIUfzbg",
+      "createdAt": "2025-05-03T13:25:12.078Z",
+      "expiresAt": "2025-05-03T14:25:12.078Z",
+      "isValid": true
+    },
+    {
+      "id": "ad7e0268-6213-401d-8ea6-e233eee71a59",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NDA0NCwiZXhwIjoxNzQ2MjU3NjQ0fQ.OwCNJov3nu9A8qO2iyVlsstPGjCuTuXilP3DNv8WGHA",
+      "createdAt": "2025-05-03T13:34:04.173Z",
+      "expiresAt": "2025-05-03T14:34:04.173Z",
+      "isValid": true
+    },
+    {
+      "id": "bcd41134-c35a-4033-9988-729c94ef20c2",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NDcyMiwiZXhwIjoxNzQ2MjU4MzIyfQ.XiyCnioLNxb9bjRBnCQdjFaitFPrVCMQ75ZChdVqzYM",
+      "createdAt": "2025-05-03T13:45:22.962Z",
+      "expiresAt": "2025-05-03T14:45:22.961Z",
+      "isValid": true
+    },
+    {
+      "id": "9b43a863-2d92-42e0-8cdc-a6d4a7ca9cfd",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NDc5MCwiZXhwIjoxNzQ2MjU4MzkwfQ.7H03FPBfTcMyYRDt7su_WapGlFLEwFekXykdWS9hBbc",
+      "createdAt": "2025-05-03T13:46:30.100Z",
+      "expiresAt": "2025-05-03T14:46:30.099Z",
+      "isValid": true
+    },
+    {
+      "id": "171e1d19-75e4-4fe2-9b58-f9106de2a237",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NDg0MywiZXhwIjoxNzQ2MjU4NDQzfQ.9tNUDXG8Om_3iUna5OdzwSSQOBGLQqZLPQcAK-wp-XU",
+      "createdAt": "2025-05-03T13:47:23.002Z",
+      "expiresAt": "2025-05-03T14:47:23.001Z",
+      "isValid": true
+    },
+    {
+      "id": "e8f21407-f070-49ac-8b8c-6284093ea5fb",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NDg4NSwiZXhwIjoxNzQ2MjU4NDg1fQ.VwTjRER7kq-NrPCyqY-Pe1vmMbXcfTXwT_5IbNvT6CY",
+      "createdAt": "2025-05-03T13:48:05.708Z",
+      "expiresAt": "2025-05-03T14:48:05.708Z",
+      "isValid": true
+    },
+    {
+      "id": "d4fb451b-cf3c-4f66-a124-b534c6158c71",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NTMwNSwiZXhwIjoxNzQ2MjU4OTA1fQ.WQ5sJO6LifXjT1HFTVUFt3f8l5S4ezBdXJM0uo_euBc",
+      "createdAt": "2025-05-03T13:55:05.438Z",
+      "expiresAt": "2025-05-03T14:55:05.438Z",
+      "isValid": true
+    },
+    {
+      "id": "887a95a8-2ad4-4183-92b8-ea218f274395",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NTUzMCwiZXhwIjoxNzQ2MjU5MTMwfQ.AeFmwOuvsP6Sm4ehNfzeBeU-aUxx-ghzzuCW8GIE2nM",
+      "createdAt": "2025-05-03T13:58:50.033Z",
+      "expiresAt": "2025-05-03T14:58:50.032Z",
+      "isValid": true
+    },
+    {
+      "id": "21f559a4-b44a-451e-be8b-cf319b9ca866",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NjEyNywiZXhwIjoxNzQ2MjU5NzI3fQ.u4T6x_TDYPNyrWzWRIfCV1twN1IvnuYuLo9u72skUKk",
+      "createdAt": "2025-05-03T14:08:47.309Z",
+      "expiresAt": "2025-05-03T15:08:47.309Z",
+      "isValid": true
+    },
+    {
+      "id": "d581dc13-28bd-47f6-a47c-6ef077fe3259",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NjIxMiwiZXhwIjoxNzQ2MjU5ODEyfQ.FsWoZNykgx4DnbACN-dS4ugQwdpvPTsuLQUJKDm0Bko",
+      "createdAt": "2025-05-03T14:10:12.485Z",
+      "expiresAt": "2025-05-03T15:10:12.485Z",
+      "isValid": true
+    },
+    {
+      "id": "25e5128f-c02c-416d-8fde-dcef5926eb78",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NjI0MCwiZXhwIjoxNzQ2MjU5ODQwfQ.ZwoFC3k31V2ZIWDKzFh24DYFw1vFKleTzWBBd1C3_Rc",
+      "createdAt": "2025-05-03T14:10:40.940Z",
+      "expiresAt": "2025-05-03T15:10:40.939Z",
+      "isValid": true
+    },
+    {
+      "id": "b39f5071-8e91-4459-9bc7-e5ddda90f187",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NjM2NSwiZXhwIjoxNzQ2MjU5OTY1fQ.X_kJ1IkwYm5eC5ikGnBSMFdFf8sxBRRgpWGPhF5g_bo",
+      "createdAt": "2025-05-03T14:12:45.902Z",
+      "expiresAt": "2025-05-03T15:12:45.902Z",
+      "isValid": true
+    },
+    {
+      "id": "3263add8-4fbb-46b4-afb7-4c276829dd61",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NjQwMywiZXhwIjoxNzQ2MjYwMDAzfQ.g50uu1Du9zAzo9JGnLSN_dliEAhNEf2ax-TIusejGaE",
+      "createdAt": "2025-05-03T14:13:23.021Z",
+      "expiresAt": "2025-05-03T15:13:23.021Z",
+      "isValid": true
+    },
+    {
+      "id": "3ab715d0-3447-41b7-b778-44ed100d8ce6",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NjQzMSwiZXhwIjoxNzQ2MjYwMDMxfQ.zBuwK8YQFkznsK4yNSPjxKp7lJjDC_PndA1WSqLyaXk",
+      "createdAt": "2025-05-03T14:13:51.636Z",
+      "expiresAt": "2025-05-03T15:13:51.636Z",
+      "isValid": true
+    },
+    {
+      "id": "2a1cd6ca-95ec-44ad-84b5-81efb79f6382",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NjUwOCwiZXhwIjoxNzQ2MjYwMTA4fQ.zIsa1Lt01K6AKXHYXv4gZVuBOXUYWqfwm7DpBeZeI4c",
+      "createdAt": "2025-05-03T14:15:08.134Z",
+      "expiresAt": "2025-05-03T15:15:08.134Z",
+      "isValid": true
+    },
+    {
+      "id": "d4fc0744-ed10-4ba9-8718-b9de7ebebf4d",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1NjY4NSwiZXhwIjoxNzQ2MjYwMjg1fQ.O42L7BfFAPhLxeCpqeOyWiZy_u6U546VWZcGh4EFGPk",
+      "createdAt": "2025-05-03T14:18:05.944Z",
+      "expiresAt": "2025-05-03T15:18:05.943Z",
+      "isValid": true
+    },
+    {
+      "id": "08c9d37b-6528-41b5-859a-f790e5fdbf04",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1ODIwMCwiZXhwIjoxNzQ2MjYxODAwfQ.mIIJdC1edcMbrwgO9EHR2XVyczNC_t8md12_FmEFRwc",
+      "createdAt": "2025-05-03T14:43:20.080Z",
+      "expiresAt": "2025-05-03T15:43:20.080Z",
+      "isValid": true
+    },
+    {
+      "id": "e6826cfb-7caf-4ff2-92ec-61d389f1d8ce",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1ODMyMywiZXhwIjoxNzQ2MjYxOTIzfQ.ZlNHzpOgarK_4QkHHmWKcFlDonZlYpK7PnU-DoGnb28",
+      "createdAt": "2025-05-03T14:45:23.634Z",
+      "expiresAt": "2025-05-03T15:45:23.634Z",
+      "isValid": true
+    },
+    {
+      "id": "a5e6caff-139f-4e56-8905-ade10bb82ed4",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1ODgxNCwiZXhwIjoxNzQ2MjYyNDE0fQ.H0aZVK3iqJzSp6W5SgJUGqAQf4m61sJgelacBO1VlnM",
+      "createdAt": "2025-05-03T14:53:34.053Z",
+      "expiresAt": "2025-05-03T15:53:34.053Z",
+      "isValid": true
+    },
+    {
+      "id": "6b9ce490-7413-4231-bef3-89e5b51c8174",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1ODkzNSwiZXhwIjoxNzQ2MjYyNTM1fQ.JrubnnpQelXM8ViNz3pRP_2S8F3j9VWBMQ0DfqJUUes",
+      "createdAt": "2025-05-03T14:55:35.633Z",
+      "expiresAt": "2025-05-03T15:55:35.632Z",
+      "isValid": true
+    },
+    {
+      "id": "f7b51aaf-3343-4d8c-a08d-115648eb71ba",
+      "userId": "b8d26f1f-9cba-405f-9383-e76d8d78bb9f",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImI4ZDI2ZjFmLTljYmEtNDA1Zi05MzgzLWU3NmQ4ZDc4YmI5ZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjI1ODk3NSwiZXhwIjoxNzQ2MjYyNTc1fQ.XUwR835Q5LT2eEPhVMLKwQAHP7aR9HkP7rk_j7AqUQs",
+      "createdAt": "2025-05-03T14:56:15.822Z",
+      "expiresAt": "2025-05-03T15:56:15.822Z",
       "isValid": true
     }
   ]

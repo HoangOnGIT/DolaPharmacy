@@ -24,6 +24,7 @@ const TableDashboard = ({ category, filter, choose }) => {
         }));
     };
 
+    // Filter lọc sản phẩm theo từng tiêu chí
     const filteredData = data
         .filter(item => {
             if (!category) return true;
@@ -47,6 +48,44 @@ const TableDashboard = ({ category, filter, choose }) => {
                     return 0;
             }
         });
+    // Hàm xác nhận xóa sản phẩm
+    const handleComfirmDelte = (id) => {
+        if (window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này không ?"))
+            handleDelete(id);
+    }
+    // Hàm xóa sản phẩm
+    const handleDelete = async (id) => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Không tìm thấy token. Vui lòng đăng nhập lại!")
+        }
+        try {
+            const response = await fetch(`http://localhost:3000/api/products/${id}`,{
+                method:"DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                },
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                alert(
+                    `Lỗi khi xóa sản phẩm: ${response.status} - ${
+                        errorData.message || "Lỗi không xác định"
+                    }`
+                );
+                return;
+            }
+            
+            alert("Sản phẩm đã được xóa thành công!");
+            setData(prevData => prevData.filter(item => item.id !== id));
+
+        } catch (error) {
+            console.error("Lỗi khi xóa sản phẩm:", error);
+            alert("Đã xảy ra lỗi khi xóa sản phẩm. Vui lòng thử lại sau.");
+        }
+    }
+
 
     const totalPages = Math.ceil(filteredData.length / pagination.itemsPerPage);
     const startIndex = (pagination.currentPage - 1) * pagination.itemsPerPage;
@@ -121,24 +160,23 @@ const TableDashboard = ({ category, filter, choose }) => {
                                             <div className='flex items-center justify-center space-x-2'>
                                                 <Link
                                                     to={`${item.id}`}
-                                                    className="inline-block px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-100 border border-blue-200 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors"
+                                                    className="cursor-pointer inline-block px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-100 border border-blue-200 rounded-md hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors"
                                                 >
                                                     Xem
                                                 </Link>
                                                 <Link
-                                                    to={`product/${item.id}`}
-                                                    className="inline-block px-3 py-1.5 text-sm font-medium text-green-600 bg-green-100 border border-green-200 rounded-md hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1 transition-colors"
+                                                    to={`update/${item.id}`}
+                                                    className=" cursor-pointer inline-block px-3 py-1.5 text-sm font-medium text-green-600 bg-green-100 border border-green-200 rounded-md hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-1 transition-colors"
                                                 >
                                                     Cập nhật
                                                 </Link>
-                                                <Link
-                                                    to={`product/${item.id}`}
-                                                    className="inline-block px-3 py-1.5 text-sm font-medium text-red-600 bg-red-100 border border-red-200 rounded-md hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition-colors"
+                                                <button
+                                                    onClick={() => handleComfirmDelte(item.id)}
+                                                    className="cursor-pointer inline-block px-3 py-1.5 text-sm font-medium text-red-600 bg-red-100 border border-red-200 rounded-md hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition-colors"
                                                 >
                                                     Xóa
-                                                </Link>
+                                                </button>
                                             </div>
-
                                         }
                                     </td>
                                 </tr>

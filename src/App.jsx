@@ -20,6 +20,7 @@ import DashboardProduct from "./components/dashboard/DashboardProduct";
 import AddProduct from "./components/dashboard/AddProduct";
 import DashboardProductDetail from "./components/dashboard/ProductDetail";
 import ProtectedRoute from "./contexts/AuthDashboard";
+import UpdateProduct from "./components/dashboard/UpdateProduct";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
           { index: true, element: <Dashboard /> },
           { path: "product", element: <DashboardProduct /> },
           { path: "product/add", element: <AddProduct /> },
+          { path: "product/update/:id", element: <UpdateProduct /> },
           { path: "product/:id", element: <DashboardProductDetail /> },
         ],
       },
