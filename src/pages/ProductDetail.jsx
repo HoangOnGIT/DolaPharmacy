@@ -302,7 +302,7 @@ function ProductDetail() {
                 )}
               </div>
 
-              {product.variants.length != 0 && (
+              {product.variants && (
                 <div className="space-y-3">
                   <div className="font-medium text-gray-800">
                     Loại sản phẩm:

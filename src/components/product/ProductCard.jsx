@@ -72,7 +72,7 @@ const ProductCard = ({
         </div>
       ) : (
         <>
-          <div className="flex items-center justify-center bg-gray-100 h-[200px]">
+          <div className="flex items-center justify-center h-[200px]">
             <img
               src={product.images[0].url}
               alt={product.name}
@@ -122,7 +122,7 @@ const ProductCard = ({
 };
 
 function BadgeDiscount({ discount }) {
-  return <div className="bg-red-600 text-white py-0.5 px-2">-{discount}</div>;
+  return <div className="bg-red-600 text-white font-semibold rounded-md py-0.5 px-2">-{discount}</div>;
 }
 
 export default ProductCard;
