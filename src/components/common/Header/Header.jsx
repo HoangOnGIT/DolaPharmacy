@@ -9,8 +9,13 @@ import Menu from "./Menu";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext";
 import UserInfo from "./UserInfo";
+import { Badge } from "antd";
+import { useCart } from "../../../contexts/CartContext";
+import { useFav } from "../../../contexts/FavouriteContext";
+import { HeartOutlined } from "@ant-design/icons";
+import CartButton from "./CartButton";
 
-const Header = React.memo(() => {
+const Header = () => {
   const textList = [
     "Ưu đãi lớn dành cho thành viên mới",
     "Chào mừng bạn đến với cửa hàng Dola Pharmacy!",
@@ -23,9 +28,12 @@ const Header = React.memo(() => {
   const indexRef = useRef(0);
   const memoizedText = useMemo(() => currentText, [currentText]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
+  const { cart } = useCart();
+  const { favList } = useFav();
   useEffect(() => {
-    fetch("http://localhost:3000/api/categories")
+    fetch(baseUrl+"/api/categories")
       .then((response) => response.json())
       .then((data) => {
         if (data.length > 0) {
@@ -76,7 +84,7 @@ const Header = React.memo(() => {
         {/* Header chính */}
         <div className="header h-46 bg-gradient-to-b from-[#7fadff] to-[#0f62f9] text-white w-full">
           {/* Contact Header */}
-          <div className="container mx-auto w-[80%]">
+          <div className="container mx-auto w-[70%]">
             {/* Contact Information */}
             <div className="w-full">
               <div className="flex justify-between items-center text-base font-semibold">
@@ -90,14 +98,14 @@ const Header = React.memo(() => {
                 ) : (
                   <div className="my-1 flex items-center">
                     <a className="mx-1 hover:text-blue-800" href="/register">
-                      Đăng ký |
+                      Đăng ký <span className="text-white">|</span>
                     </a>
                     <a className="mx-1 hover:text-blue-800" href="/login  ">
-                      Đăng nhập |
+                      Đăng nhập <span className="text-white">|</span>
                     </a>
-                    <p className="mx-1 flex items-center">
+                    <p className="!m-0 flex items-center">
                       Hotline đặt hàng:
-                      <button className="flex items-center bg-blue-800 text-white px-2.5 py-1 rounded-full text-base hover:bg-white hover:text-blue-800 ml-2 cursor-pointer">
+                      <button className="flex items-center bg-blue-800 text-white px-2.5 py-1 rounded-full text-base hover:bg-white hover:!text-blue-800 ml-2 cursor-pointer">
                         <PhoneIcon className="mr-2 h-3 w-3" />
                         1900 6750
                       </button>
@@ -110,7 +118,7 @@ const Header = React.memo(() => {
             {/* Category Header */}
             <div className="flex items-center my-1 justify-between">
               {/* Logo */}
-              <a href="#" className="mr-10">
+              <a href="#" className="">
                 <img
                   className="w-[200px] align-middle border-none max-w-full h-auto"
                   src={imgLogo}
@@ -120,7 +128,7 @@ const Header = React.memo(() => {
               {/* Category */}
               <button
                 onClick={() => setIsModalOpen(!isModalOpen)}
-                className="flex items-center bg-white px-6 py-3 text-xl text-black rounded-lg font-medium cursor-pointer hover:bg-blue-800 hover:text-white mr-10"
+                className="flex items-center bg-white px-6 py-3 text-xl !text-black rounded-lg font-semibold cursor-pointer hover:bg-blue-800 hover:!text-white"
               >
                 <div className="mr-2">
                   <svg
@@ -167,27 +175,22 @@ const Header = React.memo(() => {
                     />
                   </svg>
                 </a>
-                <a
-                  className="mx-1 hover:text-blue-800"
-                  href=""
-                  onClick={() => handleClickFav()}
+
+                <Badge
+                  count={favList.items ? favList.items.length : 0}
+                  showZero={true}
+                  color="green"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-9"
+                  <a
+                    className="mx-1 hover:!text-blue-800 !text-white"
+                    href=""
+                    onClick={() => handleClickFav()}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                    />
-                  </svg>
-                </a>
-                <a className="mx-1 hover:text-blue-800" href="#">
+                    <HeartOutlined style={{ fontSize: "32px" }} />
+                  </a>
+                </Badge>
+
+                <a className="mx-1 hover:!text-blue-800" href="">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -203,42 +206,28 @@ const Header = React.memo(() => {
                     />
                   </svg>
                 </a>
-                <button
-                  className="mx-2 flex items-center bg-blue-800 text-white px-2.5 py-1 rounded-lg text-base hover:bg-white hover:text-blue-800 cursor-pointer"
-                  onClick={() => handleClickCart()}
+                <Badge
+                  count={cart.items ? cart.items.length : 0}
+                  showZero={true}
+                  color="green"
                 >
-                  Giỏ hàng
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-9"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                    />
-                  </svg>
-                </button>
+                  <CartButton />
+                </Badge>
               </div>
             </div>
-
             <Menu />
           </div>
         </div>
-      </div>
 
-      {/* Modal */}
-      <Modal
-        categories={category}
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-      />
+        {/* Modal */}
+        <Modal
+          categories={category}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+        />
+      </div>
     </>
   );
-});
+};
 
 export default Header;

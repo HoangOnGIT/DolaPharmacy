@@ -9,6 +9,7 @@ const DashboardProduct = () => {
   const [currentCategory, setCurrentCategory] = useState('');
   const [currentFilter, setCurrentFilter] = useState('');
   const [pageSize, setPageSize] = useState('');
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const [listFilter, setListFilter] = useState([
     { id: 'name_asc', name: 'Name A-Z' },
     { id: 'name_desc', name: 'Name Z-A' },
@@ -19,7 +20,7 @@ const DashboardProduct = () => {
   ]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/categories")
+    fetch(baseUrl+"/api/categories")
       .then(res => res.json())
       .then(data => {
         setCategoryData(data);

@@ -12,6 +12,7 @@ export default function UpdateProduct() {
   const [images, setImages] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const [formData, setFormData] = useState({
     name: "",
@@ -68,7 +69,7 @@ export default function UpdateProduct() {
           return;
         }
 
-        const response = await fetch(`http://localhost:3000/api/products/${id}`, {
+        const response = await fetch(baseUrl+`/api/products/${id}`, {
           headers: {
             "Authorization": `Bearer ${token}`,
           },
@@ -249,7 +250,7 @@ export default function UpdateProduct() {
     };
 
     try {
-      const response = await fetch(`http://localhost:3000/api/products/${id}`, {
+      const response = await fetch(baseUrl+`/api/products/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

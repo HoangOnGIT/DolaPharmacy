@@ -21,12 +21,12 @@ const HealthBanner = () => {
   }, [slides.length]);
 
   const goToSlide = (index) => {
-    console.log('Button clicked, switching to slide:', index); // Debug
+    console.log('Button clicked, switching to slide:', index);
     setCurrentSlide(index);
   };
 
   return (
-    <div className="relative h-100 w-full mx-auto my-10">
+    <div className="relative h-100 w-full mx-auto mb-8">
       {/* Slide Content */}
       <div className="h-full w-full overflow-hidden">
         <a href={slides[currentSlide].link} className="block h-full w-full">

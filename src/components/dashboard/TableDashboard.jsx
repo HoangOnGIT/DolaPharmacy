@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 
 const TableDashboard = ({ category, filter, choose }) => {
     const [data, setData] = useState([]);
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
     useEffect(() => {
-        fetch("http://localhost:3000/api/products")
+        fetch(baseUrl+"/api/products")
             .then(res => res.json())
             .then(data => setData(data));
     }, []);

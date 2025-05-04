@@ -12,7 +12,7 @@ export default function AddProduct() {
   ]);
   const [images, setImages] = useState([]);
   const [isUploading, setIsUploading] = useState(false); // Thêm trạng thái loading
-
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const [formData, setFormData] = useState({
     name: "",
     sku: "",
@@ -188,7 +188,7 @@ export default function AddProduct() {
     };
 
     try {
-      const response = await fetch("http://localhost:3000/api/products", {
+      const response = await fetch(baseUrl+"/api/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

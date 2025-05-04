@@ -8,13 +8,14 @@ function UserInfo({ user }) {
   const { logout } = useAuth();
 
   const navigate = useNavigate();
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     if (!user || !user.id) {
       console.error("User or user.id is undefined");
       return;
     }
-    fetch(`http://localhost:3000/api/users/${user.id}`)
+    fetch(`${BASE_URL}/api/users/${user.id}`)
       .then((res) => res.json())
       .then((data) => {
         setUserCurr(data);
@@ -29,24 +30,24 @@ function UserInfo({ user }) {
   }
 
   return (
-    <div className="flex space-x-1 justify-center items-center">
+    <div className="flex space-x-1 justify-center items-center mx-1">
       <button
-        className="hover:cursor-pointer  hover:text-blue-700"
+        className="hover:cursor-pointer hover:!text-blue-700"
         onClick={() => handleUserInfo()}
       >
-        Tài khoản
+        Tài khoản{" "}
       </button>
-      <span>|</span>
+      <span className="text-white text-sm px-1 thin-divider">|</span>
       <button
-        className="hover:cursor-pointer hover:text-blue-700"
+        className="hover:cursor-pointer hover:!text-blue-700"
         onClick={() => logout()}
       >
         Đăng xuất
       </button>
-      <span>|</span>
-      <p className="flex items-center">
+      <span className="text-white text-sm px-1 thin-divider">|</span>
+      <p className="flex items-center !m-0">
         Hotline đặt hàng:
-        <button className="flex items-center bg-blue-800 text-white px-2.5 py-1 rounded-full text-base hover:bg-white hover:text-blue-800 ml-2 cursor-pointer">
+        <button className="flex items-center bg-blue-800 !text-white px-2.5 py-1 rounded-full text-base hover:bg-white hover:!text-blue-800 ml-2 cursor-pointer">
           <PhoneIcon className="mr-2 h-3 w-3" />
           1900 6750
         </button>

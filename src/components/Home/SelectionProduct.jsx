@@ -1,116 +1,146 @@
-import React, { useEffect, useState } from 'react';
-import img1 from '../../img/Header/BannerHealth6.png';
-import img2 from '../../img/Header/BannerHealth7.png';
-import img3 from '../../img/Header/imgSelection/Baby.png';
-import img4 from '../../img/Header/imgSelection/MomAndBaby.png';
-import img5 from '../../img/Header/imgSelection/Old.png';
-import SingleProduct from '../common/SingleProduct';
+import React, { useEffect, useState } from "react";
+import img1 from "../../img/Header/BannerHealth6.png";
+import img2 from "../../img/Header/BannerHealth7.png";
+import img3 from "../../img/Header/imgSelection/Baby.png";
+import img4 from "../../img/Header/imgSelection/MomAndBaby.png";
+import img5 from "../../img/Header/imgSelection/Old.png";
+import SingleProduct from "../common/SingleProduct";
+import { Link } from "react-router-dom";
 
 const SelectionProduct = ({ name }) => {
-    const [category, setCategory] = useState([]);
-    const [active, setActive] = useState(null);
-    const [products, setProducts] = useState([]);
-    const searchMost = [
-        "Dầu cá","Omega3","Canxi","Vitamin D", "Vitamin C", "Loãng xương", "Mệt mỏi", "Mất ngủ"
-    ]
+  const [category, setCategory] = useState([]);
+  const [active, setActive] = useState(null);
+  const [products, setProducts] = useState([]);
 
-    useEffect(() => {
-        fetch('http://localhost:3000/api/categories')
-            .then(response => response.json())
-            .then(data => {
-                setCategory(data);
-                // Thiết lập active với tên của category đầu tiên sau khi dữ liệu đã được load
-                if (data && data.length > 0) {
-                    setActive(data[0].name);
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching categories:', error);
-            });
-    }, []);
+  const searchMost = [
+    "Dầu cá",
+    "Omega3",
+    "Canxi",
+    "Vitamin D",
+    "Vitamin C",
+    "Loãng xương",
+    "Mệt mỏi",
+    "Mất ngủ",
+  ];
 
-
-
-    useEffect(() => {
-        if (active) {
-            fetch('http://localhost:3000/api/products?categoryName=' + active)
-                .then(response => response.json())
-                .then(data => {
-                    setProducts(data);
-                    console.log(data)
-                })
-                .catch(error => {
-                    console.error('Error fetching products:', error);
-                });
-        } else {
-            setProducts([]);
+  useEffect(() => {
+    fetch("http://localhost:3000/api/categories")
+      .then((response) => response.json())
+      .then((data) => {
+        setCategory(data);
+        if (data && data.length > 0) {
+          setActive(data[0].name);
         }
-    }, [active]);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
 
-    const handleActive = (key) => {
-        setActive(key);
-    };
+  useEffect(() => {
+    if (active) {
+      fetch(`http://localhost:3000/api/products?categoryName=${active}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setProducts(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching products:", error);
+        });
+    } else {
+      setProducts([]);
+    }
+  }, [active]);
 
-    return (
-        <div>
-            <div><p className="font-semibold text-3xl text-blue-500 my-10">{name}</p></div>
-            <div className='flex flex-row'>
-                <div className='w-[20%] mr-6'>
-                    <div className='mb-4'>
-                        <a href="#" className="block h-full w-full">
-                            <img
-                                src={img1}
-                                alt=""
-                                className="w-full h-[565px] object-cover rounded-lg"
-                            />
-                        </a>
-                    </div>
-                    <div>
-                        <a href="#" className="block h-full w-full">
-                            <img
-                                src={img1}
-                                alt=""
-                                className="w-full h-[565px] object-cover rounded-lg"
-                            />
-                        </a>
-                    </div>
-                </div>
-                <div className='w-[80%]'>
-                    {/* Button Category */}
-                    <div className='flex'>
-                        {category.slice(0, 3).map((item, index) => (
-                            <button
-                                onClick={() => handleActive(item.name)}
-                                key={item.id}
-                                className={`mx-4 flex justify-center items-center font-semibold py-3 px-4 rounded-sm mb-4 border border-blue-500 cursor-pointer hover:bg-blue-500 group ${active === item.name ? 'bg-blue-500 text-white' : ''}`}
-                            >
-                                <img
-                                    src={img3}
-                                    alt=""
-                                    className="w-[30px] h-[30px] object-cover rounded-lg mr-2"
-                                />
-                                <p className='group-hover:text-white'>{item.name}</p>
-                            </button>
-                        ))}
-                    </div>
-                    <div className='grid grid-cols-4 gap-4'>
-                        {products.map((product, index) => (
-                            <SingleProduct key={product._id} product={product} />
-                        ))}
-                    </div>
-                    <div className='flex justify-center my-3'>
-                        <button className='hover:bg-[#003cbf] hover:text-white cursor-pointer transition-colors duration-300  px-4 py-2 border-2 border-solid border-blue-700 rounded-sm font-lg'>Xem tất cả</button>
-                    </div>
-                    <div>
-                        <p className='text-lg font-medium mb-2'>Tìm kiếm nhiều nhất:</p>
-                        {searchMost.map((item,index) => (
-                            <button className='text-white bg-blue-500 rounded-sm px-2 py-1 mr-3 hover:bg-[#5dac46] cursor-pointer transition-colors duration-300'>{item}</button>
-                        ))}
-                    </div>
-                </div>
-            </div>
+  const handleActive = (key) => {
+    setActive(key);
+  };
+
+  return (
+    <div className="my-14 px-4">
+      <Link to="/product">
+        <p className="hover:text-[#003cbf] cursor-pointer w-fit font-semibold text-3xl mb-6">
+          {name}
+        </p>
+      </Link>
+
+      <div className="grid grid-cols-5 gap-6">
+        {/* Banner bên trái */}
+        <div className="col-span-1 space-y-4">
+          <a href="#">
+            <img
+              src={img1}
+              alt=""
+              className="w-full h-[600px] object-cover rounded-lg mb-4"
+            />
+          </a>
+          <a href="#">
+            <img
+              src={img2}
+              alt=""
+              className="w-full h-[610px] object-cover rounded-lg"
+            />
+          </a>
         </div>
-    );
-}
+
+        {/* Danh sách sản phẩm */}
+        <div className="col-span-4">
+          {/* Nút danh mục */}
+          <div className="flex gap-3 mb-6">
+            {category.slice(0, 3).map((item) => (
+              <button
+                key={item.id}
+                onClick={() => handleActive(item.name)}
+                className={`flex items-center px-4 py-4 rounded-sm cursor-pointer border border-blue-500 transition-colors  hover:bg-blue-600 hover:!text-white ${
+                  active === item.name
+                    ? "bg-blue-600 !text-white"
+                    :  "bg-white text-blue-600"
+                }`}
+              >
+                <img
+                  src={img3}
+                  alt=""
+                  className="w-[24px] h-[24px] object-cover rounded-full mr-2"
+                />
+                <span>{item.name}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Lưới sản phẩm */}
+          <div className="grid grid-cols-4 gap-20">
+            {products.map((product) => (
+              <SingleProduct key={product._id} product={product} />
+            ))}
+          </div>
+
+          {/* Nút xem tất cả */}
+          <div className="flex justify-center my-6">
+            <Link to="/product">
+              <button className="bg-white border border-blue-600 text-blue-600 px-6 py-2 rounded hover:bg-blue-600 hover:!text-white transition cursor-pointer">
+                Xem tất cả
+              </button>
+            </Link>
+          </div>
+
+          {/* Tìm kiếm nhiều nhất */}
+          <div className="mt-6">
+            <p className="text-lg font-medium mb-2">Tìm kiếm nhiều nhất:</p>
+            <div className="flex flex-wrap gap-2">
+              {searchMost.map((item, index) => (
+                <button
+                  key={index}
+                  className="bg-blue-500 rounded-sm px-3 py-1 hover:bg-[#5dac46] cursor-pointer transition-colors duration-300"
+                >
+                  <span className="text-xs text-white">{item}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default SelectionProduct;

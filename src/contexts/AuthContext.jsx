@@ -1,5 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 // Create the auth context
 const AuthContext = createContext();
 
@@ -19,7 +21,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("http://localhost:3000/api/login", {
+      const response = await fetch(`${BASE_URL}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +61,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("http://localhost:3000/api/register", {
+      const response = await fetch(`${BASE_URL}/api/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,6 +94,33 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Validate token function
+  const validateToken = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return false;
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/validate-token`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        // Token is invalid or expired
+        logout();
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Token validation error:", error);
+      logout();
+      return false;
+    }
+  };
+
   // Logout function
   const logout = () => {
     setUser(null);
@@ -110,9 +139,16 @@ export const AuthProvider = ({ children }) => {
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
         setIsAuthenticated(true);
+
+        // Validate the token
+        validateToken().then((isValid) => {
+          if (!isValid) {
+            alert("Your session has expired. Please login again.");
+          }
+        });
       } catch (e) {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
+        alert("Vui lòng đăng nhập lại");
+        logout();
       }
     }
   }, []);
@@ -125,6 +161,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     register,
+    validateToken,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

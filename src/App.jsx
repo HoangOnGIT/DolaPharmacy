@@ -21,6 +21,13 @@ import AddProduct from "./components/dashboard/AddProduct";
 import DashboardProductDetail from "./components/dashboard/ProductDetail";
 import ProtectedRoute from "./contexts/AuthDashboard";
 import UpdateProduct from "./components/dashboard/UpdateProduct";
+import About from "./pages/About";
+import Payment from "./pages/Payment";
+import OrderDetail from "./pages/OrdersDetail";
+import News from "./pages/News";
+import Contact from "./pages/Contact";
+import QnA from "./pages/QnA";
+import NewsDetail from "./pages/NewsDetail";
 
 const router = createBrowserRouter([
   {
@@ -28,15 +35,26 @@ const router = createBrowserRouter([
     element: <Layout />,
     errorElement: <ErrorPage />,
     children: [
+      { index: true, element: <Home /> },
+      { path: "homepage", element: <Home /> },
       { path: "product", element: <Product /> },
+      { path: "promotion", element: <Product key={"promotion"} promotion={true} /> },
       { path: "product-detail/:id", element: <ProductDetail /> },
       { path: "cart", element: <Cart /> },
       { path: "login", element: <UserCrediential loginPage={true} /> },
       { path: "register", element: <UserCrediential loginPage={false} /> },
-      { index: true, element: <Home /> },
       { path: "video", element: <Video /> },
       { path: "profile", element: <PersonalInfomation /> },
       { path: "fav", element: <Favourite /> },
+      { path: "news", element: <News /> },
+      { path: "news/:slug", element: <NewsDetail /> },
+      { path: "about", element: <About /> },
+      { path: "payment", element: <Payment /> },
+      { path: "confirmation/:orderId", element: <OrderDetail confirm={true} /> },
+      { path: "orders/:orderId", element: <OrderDetail /> },
+      { path: "faq", element: <QnA /> },
+      { path: "contact", element: <Contact /> },
+      { path: "map", element: <Contact /> }, // Possibly meant to be a map page
     ],
   },
   {

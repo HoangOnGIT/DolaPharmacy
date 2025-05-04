@@ -7,7 +7,7 @@ const SubBanner = () => {
 
 
     return (
-        <div className="relative  w-full mx-auto my-10 flex gap-4">
+        <div className="relative  w-full mx-auto mt-10 mb-20 flex gap-4">
             {/* Slide Content */}
             <div className="h-full w-[50%] overflow-hidden">
                 <a href="#" className="block h-full w-full">

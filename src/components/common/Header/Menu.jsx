@@ -6,8 +6,9 @@ const Menu = () => {
   const location = useLocation();
   const [activeIndex, setActiveIndex] = useState(0);
 
+
   const menuItems = [
-    { title: "Trang chủ", path: "/" },
+    { title: "Trang chủ", path: "/homepage" },
     { title: "Giới thiệu", path: "/about" },
     { title: "Sản phẩm", path: "/product" },
     { title: "Sản phẩm khuyến mãi", path: "/promotion" },
@@ -19,10 +20,10 @@ const Menu = () => {
 
   const subMenus = {
     "Sản phẩm": [
-      { title: "Dược phẩm", path: "/product?category=pharmaceutical" },
-      { title: "Chăm sóc sức khỏe", path: "/product?category=healthcare" },
-      { title: "Chăm sóc cá nhân", path: "/product?category=personal-care" },
-      { title: "Sản phẩm tiện lợi", path: "/product?category=convenience" },
+      { title: "Dược phẩm", path: "/product" },
+      { title: "Chăm sóc sức khỏe", path: "/product" },
+      { title: "Chăm sóc cá nhân", path: "/product" },
+      { title: "Sản phẩm tiện lợi", path: "/product" },
     ],
     "Tin tức": [
       { title: "Tin thị trường", path: "/news/market" },
@@ -44,7 +45,7 @@ const Menu = () => {
   }, [location.pathname]);
 
   return (
-    <div className="relative">
+    <div className="relative my-4">
       <ul className="flex flex-wrap items-center gap-4 text-sm font-semibold relative z-10">
         {menuItems.map((item, index) => {
           const hasSubMenu = subMenus[item.title];
@@ -56,13 +57,19 @@ const Menu = () => {
                 relative group cursor-pointer px-4 py-3
                 transition-all duration-300 ease-in-out
                 hover:bg-white hover:text-green-600 hover:rounded-xl hover:shadow-md
-                ${activeIndex === index ? "bg-white text-green-600 rounded-xl shadow-md" : "rounded-lg"}
+                ${
+                  activeIndex === index
+                    ? "bg-white text-green-600 rounded-xl shadow-md"
+                    : "rounded-lg"
+                }
               `}
               onClick={() => setActiveIndex(index)}
             >
               <Link to={item.path} className="flex items-center text-base">
                 {item.title}
-                {hasSubMenu && <ChevronDownIcon className="w-4 h-4 text-gray-500 ml-1" />}
+                {hasSubMenu && (
+                  <ChevronDownIcon className="w-4 h-4 text-white-500 ml-1" />
+                )}
               </Link>
 
               {hasSubMenu && (
