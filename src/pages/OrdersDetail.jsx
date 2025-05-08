@@ -222,7 +222,7 @@ function OrderDetail({ confirm = false }) {
               <strong>Họ tên:</strong> {order.fullName}
             </p>
             <p>
-              <strong>Số điện thoại:</strong> {order.phoneNumber}
+              <strong>Số điện thoại:</strong> {order.phone}
             </p>
             <p>
               <strong>Địa chỉ:</strong> {order.address}, {order.district},{" "}

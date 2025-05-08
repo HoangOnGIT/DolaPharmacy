@@ -61,7 +61,7 @@ const Footer = () => {
             </button>
           </div>
           <div className="flex items-center gap-3 ml-55">
-            <p className="font-medium">Kết nối với chúng tôi:</p>
+            <p className="font-medium !mb-0">Kết nối với chúng tôi:</p>
             <a href="">
               <ChatBubbleLeftRightIcon className="w-8 h-8 text-white hover:opacity-90" />
             </a>{" "}
