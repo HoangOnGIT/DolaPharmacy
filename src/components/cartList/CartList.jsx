@@ -2,6 +2,7 @@ import React from "react";
 import { Table, Button, InputNumber, Image, Space } from "antd";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { useCart } from "../../contexts/CartContext";
+import { Link } from "react-router-dom";
 
 function CartList() {
   const { cart, updateItemQuantity, removeItemFromCart } = useCart();
@@ -10,7 +11,6 @@ function CartList() {
   const safeCartItems = (cart.items || []).map((item) => {
     return {
       ...item,
-      // Convert any potential object values to strings
       name: item.name ? String(item.name) : "Unnamed Product",
       variant:
         typeof item.variant === "object"
@@ -39,7 +39,12 @@ function CartList() {
           />
           <div className="ml-5">
             <div style={{ maxWidth: 300, fontWeight: 500, marginBottom: 4 }}>
-              {String(record.name)}
+              <Link
+                to={`/product-detail/${record.id}`}
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                {String(record.name)}
+              </Link>
             </div>
             <Button
               type="link"

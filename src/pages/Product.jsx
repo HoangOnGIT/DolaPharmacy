@@ -92,7 +92,7 @@ const Product = ({ promotion = false }) => {
     api.success({
       message: "Thêm giỏ hàng thành công",
       description: `${item.name} được thêm vào giỏ hàng thành công!`,
-      duration: 2,
+      duration: 1.5,
     });
   }
 

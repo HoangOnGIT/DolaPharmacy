@@ -18,9 +18,13 @@ function ProductSuggetionCard({ product }) {
   }
 
   return (
-    <div
-      className="flex items-center text-[14px]"
-      onClick={() => handleClick()}
+    <a
+      href={`/product-detail/${product.id}`}
+      className="flex items-center text-[14px] no-underline text-inherit cursor-pointer"
+      onClick={(e) => {
+        e.preventDefault();
+        handleClick();
+      }}
     >
       <Badge.Ribbon
         text={product.discount ? `-${product.discount.value}%` : ""}
@@ -40,12 +44,12 @@ function ProductSuggetionCard({ product }) {
               ? formatPrice(product.salePrice)
               : formatPrice(product.basePrice)}
           </span>
-          <span className="line-through text-[14px]">
+          <span className="line-through text-[11px]">
             {product.salePrice ? formatPrice(product.basePrice) : ""}
           </span>
         </div>
       </div>
-    </div>
+    </a>
   );
 }
 

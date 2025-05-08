@@ -139,6 +139,14 @@ function ProductDetail() {
       return;
     }
 
+    if (item.status === "inactive") {
+      api.warning({
+        message: "Sản phẩm không hoạt động",
+        duration: 2,
+      });
+      return;
+    }
+
     console.log(!product.variants.length == 0);
 
     if (!product.variants.length == 0) {

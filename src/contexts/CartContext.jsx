@@ -8,12 +8,14 @@ export const useCart = () => useContext(CartContext);
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const CartProvider = ({ children }) => {
-  const initialCart = {};
+  const initialCart = { items: [] };
 
   // Try to get cart from localStorage first
   const getInitialCart = () => {
     const savedCart = localStorage.getItem("cart");
-    return savedCart ? JSON.parse(savedCart) : initialCart;
+    return savedCart && JSON.parse(savedCart)?.items
+      ? JSON.parse(savedCart)
+      : initialCart;
   };
 
   const [cart, setCart] = useState(getInitialCart);
@@ -36,19 +38,27 @@ export const CartProvider = ({ children }) => {
             throw new Error("Failed to fetch cart data");
           }
           const data = await response.json();
-          setCart(data[0]);
-          // Also update localStorage when fetching from server
-          localStorage.setItem("cart", JSON.stringify(data[0]));
+
+          // If server cart exists, use it, otherwise keep using local cart
+          if (data && data[0]) {
+            setCart(data[0]);
+            localStorage.setItem("cart", JSON.stringify(data[0]));
+          }
         } catch (error) {
           console.error("Error fetching cart:", error);
-          setCart(initialCart);
-          localStorage.setItem("cart", JSON.stringify(initialCart));
+          // Don't reset cart on error, keep using current cart
         }
       };
       fetchCart();
     } else {
-      setCart(initialCart);
-      localStorage.setItem("cart", JSON.stringify(initialCart));
+      // For non-authenticated users, keep using the local cart
+      // No need to reset the cart here
+      const localCart = getInitialCart();
+
+      // Only set the cart if it's different from current cart
+      if (JSON.stringify(localCart) !== JSON.stringify(cart)) {
+        setCart(localCart);
+      }
     }
   }, [isAuthenticated, user]);
 
@@ -60,7 +70,7 @@ export const CartProvider = ({ children }) => {
     basePrice: item.basePrice,
     quantity: item.quantity || 1,
     images: item.images,
-    variant: item.variant ? item.variant : "",
+    variant: item.variants ? item.variants[0].name : "",
   });
 
   const addToCart = async (item) => {
@@ -143,24 +153,27 @@ export const CartProvider = ({ children }) => {
 
       // Update localStorage immediately
       localStorage.setItem("cart", JSON.stringify(updatedCart));
+      setCart(updatedCart);
 
-      const token = localStorage.getItem("token");
+      if (isAuthenticated) {
+        const token = localStorage.getItem("token");
 
-      const response = await fetch(`${BASE_URL}/api/carts/${cart.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(updatedCart),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to update cart on server");
+        const response = await fetch(`${BASE_URL}/api/carts/${cart.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updatedCart),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to update cart on server");
+        }
+        const serverCart = await response.json();
+        setCart(serverCart);
+        // Update localStorage with server response
+        localStorage.setItem("cart", JSON.stringify(serverCart));
       }
-      const serverCart = await response.json();
-      setCart(serverCart);
-      // Update localStorage with server response
-      localStorage.setItem("cart", JSON.stringify(serverCart));
     } catch (error) {
       console.error("Error updating cart:", error);
     }

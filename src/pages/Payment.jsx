@@ -13,6 +13,8 @@ import {
   notification,
   DatePicker,
   Checkbox,
+  Row,
+  Col,
 } from "antd";
 import {
   ArrowLeftOutlined,
@@ -291,68 +293,88 @@ function Payment() {
                   deliveryTime: "08:00 - 12:00",
                 }}
               >
-                <Form.Item
-                  name="fullName"
-                  label="Họ và tên"
-                  rules={[
-                    { required: true, message: "Vui lòng nhập họ và tên!" },
-                  ]}
-                >
-                  <Input placeholder="Họ và tên" size="large" />
-                </Form.Item>
-                <Form.Item
-                  name="phone"
-                  label="Số điện thoại"
-                  rules={[
-                    { required: true, message: "Vui lòng số điện thoại!" },
-                  ]}
-                >
-                  <Input placeholder="Số điện thoại" size="large" />
-                </Form.Item>
+                <Row gutter={16}>
+                  <Col xs={24} sm={12}>
+                    <Form.Item
+                      name="fullName"
+                      label="Họ và tên"
+                      rules={[
+                        { required: true, message: "Vui lòng nhập họ và tên!" },
+                      ]}
+                    >
+                      <Input placeholder="Họ và tên" size="large" />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={12}>
+                    <Form.Item
+                      name="phone"
+                      label="Số điện thoại"
+                      rules={[
+                        { required: true, message: "Vui lòng số điện thoại!" },
+                      ]}
+                    >
+                      <Input placeholder="Số điện thoại" size="large" />
+                    </Form.Item>
+                  </Col>
+                </Row>
+
                 <Form.Item name="email" label="Email">
                   <Input placeholder="Email (tuỳ chọn)" size="large" />
                 </Form.Item>
 
-                <Form.Item
-                  name="province"
-                  label="Tỉnh thành"
-                  rules={[
-                    { required: true, message: "Vui lòng chọn tỉnh thành!" },
-                  ]}
-                >
-                  <Select
-                    showSearch
-                    placeholder="Chọn tỉnh thành"
-                    filterOption={(input, option) =>
-                      (option?.label ?? "")
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                    }
-                    options={provinces.map((province) => {
-                      return { value: province.name, label: province.name };
-                    })}
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="district"
-                  label="Quận huyện"
-                  rules={[
-                    { required: true, message: "Vui lòng chọn quận huyện!" },
-                  ]}
-                >
-                  <Select
-                    showSearch
-                    placeholder="Chọn quận huyện"
-                    filterOption={(input, option) =>
-                      (option?.label ?? "")
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                    }
-                    options={districts.map((district) => {
-                      return { value: district.name, label: district.name };
-                    })}
-                  ></Select>
-                </Form.Item>
+                <Row gutter={16}>
+                  <Col xs={24} sm={12}>
+                    <Form.Item
+                      name="province"
+                      label="Tỉnh thành"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng chọn tỉnh thành!",
+                        },
+                      ]}
+                    >
+                      <Select
+                        showSearch
+                        placeholder="Chọn tỉnh thành"
+                        filterOption={(input, option) =>
+                          (option?.label ?? "")
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                        options={provinces.map((province) => {
+                          return { value: province.name, label: province.name };
+                        })}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={12}>
+                    <Form.Item
+                      name="district"
+                      label="Quận huyện"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng chọn quận huyện!",
+                        },
+                      ]}
+                    >
+                      <Select
+                        showSearch
+                        placeholder="Chọn quận huyện"
+                        filterOption={(input, option) =>
+                          (option?.label ?? "")
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                        options={districts.map((district) => {
+                          return { value: district.name, label: district.name };
+                        })}
+                      ></Select>
+                    </Form.Item>
+                  </Col>
+                </Row>
+
                 <Form.Item
                   name="address"
                   label="Địa chỉ chi tiết"
@@ -363,47 +385,56 @@ function Payment() {
                   <Input placeholder="Số nhà, tên đường..." size="large" />
                 </Form.Item>
 
-                <Form.Item
-                  name="deliveryDate"
-                  label="Ngày giao hàng"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng chọn ngày giao hàng!",
-                    },
-                  ]}
-                >
-                  <DatePicker
-                    style={{ width: "100%" }}
-                    format="DD/MM/YYYY"
-                    placeholder="Chọn ngày giao hàng"
-                    disabledDate={(current) => {
-                      return (
-                        current && current < new Date().setHours(0, 0, 0, 0) + 1
-                      );
-                    }}
-                  />
-                </Form.Item>
-
-                <Form.Item
-                  name="deliveryTime"
-                  label="Giờ giao hàng"
-                  rules={[
-                    { required: true, message: "Vui lòng chọn giờ giao hàng!" },
-                  ]}
-                >
-                  <Select defaultValue="8:00 - 12:00">
-                    <Select.Option value="8:00 - 12:00">
-                      08:00 - 12:00
-                    </Select.Option>
-                    <Select.Option value="14:00 - 18:00">
-                      14:00 - 18:00
-                    </Select.Option>
-                    <Select.Option value="19:00 - 21:00">
-                      19:00 - 21:00
-                    </Select.Option>
-                  </Select>
-                </Form.Item>
+                <Row gutter={16}>
+                  <Col xs={24} sm={12}>
+                    <Form.Item
+                      name="deliveryDate"
+                      label="Ngày giao hàng"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng chọn ngày giao hàng!",
+                        },
+                      ]}
+                    >
+                      <DatePicker
+                        style={{ width: "100%" }}
+                        format="DD/MM/YYYY"
+                        placeholder="Chọn ngày giao hàng"
+                        disabledDate={(current) => {
+                          return (
+                            current &&
+                            current < new Date().setHours(0, 0, 0, 0) + 1
+                          );
+                        }}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={12}>
+                    <Form.Item
+                      name="deliveryTime"
+                      label="Giờ giao hàng"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng chọn giờ giao hàng!",
+                        },
+                      ]}
+                    >
+                      <Select defaultValue="8:00 - 12:00">
+                        <Select.Option value="8:00 - 12:00">
+                          08:00 - 12:00
+                        </Select.Option>
+                        <Select.Option value="14:00 - 18:00">
+                          14:00 - 18:00
+                        </Select.Option>
+                        <Select.Option value="19:00 - 21:00">
+                          19:00 - 21:00
+                        </Select.Option>
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                </Row>
 
                 <Form.Item>
                   <Checkbox
@@ -416,13 +447,18 @@ function Payment() {
 
                 {showInvoiceForm && (
                   <>
-                    <Form.Item name="companyName" label="Tên công ty">
-                      <Input placeholder="Tên công ty" />
-                    </Form.Item>
-
-                    <Form.Item name="taxId" label="Mã số thuế">
-                      <Input placeholder="Mã số thuế" />
-                    </Form.Item>
+                    <Row gutter={16}>
+                      <Col xs={24} sm={12}>
+                        <Form.Item name="companyName" label="Tên công ty">
+                          <Input placeholder="Tên công ty" />
+                        </Form.Item>
+                      </Col>
+                      <Col xs={24} sm={12}>
+                        <Form.Item name="taxId" label="Mã số thuế">
+                          <Input placeholder="Mã số thuế" />
+                        </Form.Item>
+                      </Col>
+                    </Row>
 
                     <Form.Item name="companyAddress" label="Địa chỉ công ty">
                       <TextArea
