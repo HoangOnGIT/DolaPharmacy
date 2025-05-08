@@ -1,6 +1,5 @@
 import React from "react";
 import VideoThumbNail from "../components/video/VideoThumbNail";
-import { Link } from "react-router-dom";
 import {
   Typography,
   Row,

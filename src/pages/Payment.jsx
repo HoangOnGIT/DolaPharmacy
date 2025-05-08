@@ -287,6 +287,9 @@ function Payment() {
                 form={form}
                 onFinish={handleFinish}
                 onFinishFailed={handleFailed}
+                initialValues={{
+                  deliveryTime: "08:00 - 12:00",
+                }}
               >
                 <Form.Item
                   name="fullName"
@@ -374,6 +377,11 @@ function Payment() {
                     style={{ width: "100%" }}
                     format="DD/MM/YYYY"
                     placeholder="Chọn ngày giao hàng"
+                    disabledDate={(current) => {
+                      return (
+                        current && current < new Date().setHours(0, 0, 0, 0) + 1
+                      );
+                    }}
                   />
                 </Form.Item>
 
@@ -384,8 +392,8 @@ function Payment() {
                     { required: true, message: "Vui lòng chọn giờ giao hàng!" },
                   ]}
                 >
-                  <Select defaultValue="08:00 - 12:00">
-                    <Select.Option value="08:00 - 12:00">
+                  <Select defaultValue="8:00 - 12:00">
+                    <Select.Option value="8:00 - 12:00">
                       08:00 - 12:00
                     </Select.Option>
                     <Select.Option value="14:00 - 18:00">

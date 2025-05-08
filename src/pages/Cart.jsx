@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useCart } from "../contexts/CartContext";
-import { ShoppingOutlined } from "@ant-design/icons";
+import { LoadingOutlined, ShoppingOutlined } from "@ant-design/icons";
 import CartList from "../components/cartList/CartList";
 import { Button } from "antd";
 import { useAuth } from "../contexts/AuthContext";
@@ -8,7 +8,11 @@ import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const { cart } = useCart();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <LoadingOutlined />;
+  }
 
   const navigate = useNavigate();
 
@@ -19,7 +23,7 @@ function Cart() {
     }, 0) || 0;
 
   return (
-    <div className="container mx-auto px-4 my-8">
+    <div className="w-[80%] mx-auto px-4 my-8">
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Left column - Cart items */}
         <div className={cart.items?.length === 0 ? "w-full" : "lg:w-2/3"}>

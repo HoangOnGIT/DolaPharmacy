@@ -190,7 +190,7 @@ const Product = ({ promotion = false }) => {
 
   return (
     <div className="bg-gradient-to-br from-blue-50 via-white to-gray-100 min-h-screen py-12">
-      <div className="w-4/5 mx-auto px-4">
+      <div className="w-[70%] mx-auto px-4">
         {promotion ? (
           <Breadcrumb
             style={{ marginBottom: 28 }}
