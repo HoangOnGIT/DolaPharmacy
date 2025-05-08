@@ -11,7 +11,7 @@ const SelectionProduct = ({ name }) => {
   const [category, setCategory] = useState([]);
   const [active, setActive] = useState(null);
   const [products, setProducts] = useState([]);
-  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const searchMost = [
     "Dầu cá",
     "Omega3",
