@@ -23,9 +23,6 @@ function CatergoryCard({ catergory, onFilter }) {
           <span className="font-semibold text-gray-800 block truncate">
             {catergory.name}
           </span>
-          <span className="text-blue-500 text-sm">
-            ({catergory.totalProducts} sản phẩm)
-          </span>
         </div>
       </div>
     </Col>

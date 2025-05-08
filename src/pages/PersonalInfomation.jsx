@@ -14,6 +14,7 @@ import {
   message,
   Space,
   Select,
+  Popconfirm,
 } from "antd";
 import AddressModal from "../components/AddressModal";
 
@@ -27,6 +28,7 @@ function PersonalInfomation() {
   const [loading, setLoading] = useState(true);
   const [isAddressModalVisible, setIsAddressModalVisible] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [deletingAddress, setDeletingAddress] = useState(null);
   const navigate = useNavigate();
 
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -129,6 +131,7 @@ function PersonalInfomation() {
     setSubmitting(true);
     try {
       const newAddress = {
+        id: Date.now()+ userInfo.id,
         type: values.type || "shipping",
         isPrimary: values.isPrimary || false,
         street: values.address,
@@ -187,6 +190,62 @@ function PersonalInfomation() {
       message.error("Không thể thêm địa chỉ. Vui lòng thử lại sau.");
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  // Function to handle address deletion
+  const handleDeleteAddress = async (addressId) => {
+    setDeletingAddress(addressId);
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
+
+      // Check if it's the last primary address
+      const isPrimaryAddress = userInfo.addresses.find(addr => addr.id === addressId)?.isPrimary;
+      const primaryAddressCount = userInfo.addresses.filter(addr => addr.isPrimary).length;
+      if (isPrimaryAddress && primaryAddressCount <= 1 && userInfo.addresses.length > 1) {
+        message.warning("Không thể xóa địa chỉ chính duy nhất. Vui lòng đặt địa chỉ khác làm địa chỉ chính trước.");
+        return;
+      }
+
+      // Get current addresses
+      const currentAddresses = userInfo.addresses;
+      // Filter out the address to delete
+      const updatedAddresses = currentAddresses.filter(
+        (addr) => addr.id !== addressId
+      );
+
+      // Create updated user info
+      const updatedUserInfo = {
+        ...userInfo,
+        addresses: updatedAddresses,
+      };
+
+      // Send the updated user info to the API
+      const response = await fetch(`${BASE_URL}/api/users/${user.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedUserInfo),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete address");
+      }
+
+      const updatedUser = await response.json();
+      setUserInfo(updatedUser);
+
+      message.success("Xóa địa chỉ thành công!");
+    } catch (error) {
+      console.error("Error deleting address:", error);
+      message.error("Không thể xóa địa chỉ. Vui lòng thử lại sau.");
+    } finally {
+      setDeletingAddress(null);
     }
   };
 
@@ -344,6 +403,23 @@ function PersonalInfomation() {
                     <strong>Địa Chỉ Chính:</strong>{" "}
                     {address.isPrimary ? "Có" : "Không"}
                   </Text>
+                  <div className="flex justify-end mt-2">
+                    <Popconfirm
+                      title="Xóa địa chỉ này?"
+                      description="Bạn có chắc chắn muốn xóa địa chỉ này không?"
+                      onConfirm={() => handleDeleteAddress(address.id)}
+                      okText="Xóa"
+                      cancelText="Hủy"
+                      okButtonProps={{ danger: true }}
+                    >
+                      <Button
+                        danger
+                        loading={deletingAddress === address.id}
+                      >
+                        Xóa
+                      </Button>
+                    </Popconfirm>
+                  </div>
                 </Card>
               ))}
           </Card>
@@ -392,7 +468,7 @@ function PersonalInfomation() {
                 <Button
                   type="primary"
                   className="bg-green-600 hover:bg-green-700"
-                  onClick={() => navigate("/products")}
+                  onClick={() => navigate("/product")}
                 >
                   Mua sắm ngay
                 </Button>

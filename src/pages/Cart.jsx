@@ -2,17 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useCart } from "../contexts/CartContext";
 import { ShoppingOutlined } from "@ant-design/icons";
 import CartList from "../components/cartList/CartList";
-import { Form, Input, Button, Checkbox, Select, DatePicker } from "antd";
-import TextArea from "antd/lib/input/TextArea";
+import { Button } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const { cart } = useCart();
-
-  // Debug cart contents properly
-  console.log("Cart content:", JSON.stringify(cart, null, 2));
-
   const { isAuthenticated } = useAuth();
 
   const navigate = useNavigate();
@@ -22,8 +17,6 @@ function Cart() {
       if (!localStorage.getItem("token")) navigate("/login");
     }
   }, [isAuthenticated]);
-
-  const [showInvoiceForm, setShowInvoiceForm] = useState(false);
 
   const total =
     cart.items?.reduce((acc, item) => {
@@ -80,61 +73,9 @@ function Cart() {
           <div className="lg:w-1/3">
             <h2 className="text-xl font-medium mb-4">Thông tin đơn hàng</h2>
             <div className="bg-white rounded-lg shadow p-6">
-              <Form layout="vertical">
-                <Form.Item label="Chọn ngày giao hàng">
-                  <DatePicker
-                    style={{ width: "100%" }}
-                    format="DD/MM/YYYY"
-                    placeholder="Chọn ngày giao hàng"
-                  />
-                </Form.Item>
-
-                <Form.Item label="Chọn giờ giao hàng">
-                  <Select defaultValue="19:00 - 21:00">
-                    <Select.Option value="08:00 - 12:00">
-                      08:00 - 12:00
-                    </Select.Option>
-                    <Select.Option value="14:00 - 18:00">
-                      14:00 - 18:00
-                    </Select.Option>
-                    <Select.Option value="19:00 - 21:00">
-                      19:00 - 21:00
-                    </Select.Option>
-                  </Select>
-                </Form.Item>
-
-                <Form.Item>
-                  <Checkbox
-                    checked={showInvoiceForm}
-                    onChange={(e) => setShowInvoiceForm(e.target.checked)}
-                  >
-                    Xuất hóa đơn công ty
-                  </Checkbox>
-                </Form.Item>
-
-                {showInvoiceForm && (
-                  <>
-                    <Form.Item label="Tên công ty">
-                      <Input placeholder="Tên công ty" />
-                    </Form.Item>
-
-                    <Form.Item label="Mã số thuế">
-                      <Input placeholder="Mã số thuế" />
-                    </Form.Item>
-
-                    <Form.Item label="Địa chỉ công ty">
-                      <TextArea
-                        rows={4}
-                        placeholder="Nhập địa chỉ công ty (bao gồm Phường/Xã, Quận/Huyện, Tỉnh/Thành phố nếu có)"
-                      />
-                    </Form.Item>
-
-                    <Form.Item label="Email nhận hóa đơn">
-                      <Input placeholder="Email nhận hóa đơn" />
-                    </Form.Item>
-                  </>
-                )}
-              </Form>
+              <p className="text-gray-600">
+                Thông tin giao hàng và xuất hóa đơn sẽ được cung cấp trong bước thanh toán
+              </p>
             </div>
           </div>
         )}
