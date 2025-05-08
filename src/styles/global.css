@@ -82,3 +82,18 @@ html, body {
   scrollbar-width: thin; /* Có thể là auto, thin, or none */
   scrollbar-color: #5dac46 #f1f1f1; /* color thumb track */
 }
+
+.active-category {
+  color: white;
+}
+
+.active-category::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: #00b8d4; /* Màu xanh dương */
+  border-radius: 0.25rem 0 0 0.25rem;
+}

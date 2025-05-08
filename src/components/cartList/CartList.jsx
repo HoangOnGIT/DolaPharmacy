@@ -15,7 +15,7 @@ function CartList() {
       variant:
         typeof item.variant === "object"
           ? JSON.stringify(item.variant)
-          : item.variant || "Hiện tại sản phẩm chưa có phân loại",
+          : item.variant || "Không phân loại",
     };
   });
 

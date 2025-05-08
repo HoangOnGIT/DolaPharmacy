@@ -1,102 +1,155 @@
-import React, { useEffect, useState, useMemo  } from 'react';
+"use client"
+
+import { useEffect, useState, useMemo } from "react"
+import { FaTimes, FaChevronRight } from "react-icons/fa"
+import { AiOutlineLoading3Quarters } from "react-icons/ai"
+import { Link } from "react-router-dom"
+
 const Modal = ({ categories, isModalOpen, setIsModalOpen }) => {
-    const [listProduct, setListProduct] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState(null);
-    const baseUrl = import.meta.env.VITE_API_BASE_URL;
+    const [listProduct, setListProduct] = useState([])
+    const [selectedCategory, setSelectedCategory] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
+    const baseUrl = import.meta.env.VITE_API_BASE_URL
 
     useEffect(() => {
-        fetch(baseUrl+"/api/products")
-            .then(response => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    setListProduct(data);
-                }
-            });
-    }, []);
-    
+        const fetchProducts = async () => {
+            setLoading(true)
+            setError(null)
+            try {
+                const response = await fetch(`${baseUrl}/api/products`)
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+                const data = await response.json()
+                setListProduct(data)
+            } catch (e) {
+                setError(e.message)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchProducts()
+    }, [baseUrl])
 
     useEffect(() => {
         if (isModalOpen && categories.length > 0 && !selectedCategory) {
-            setSelectedCategory(categories[0]);
+            setSelectedCategory(categories[0])
         }
-    }, [isModalOpen, categories, selectedCategory]);
-    
+    }, [isModalOpen, categories, selectedCategory])
 
-    const handleOpen = (category) => {
-        setSelectedCategory(category);
-    };
+    const handleOpen = (category) => setSelectedCategory(category)
 
     const filteredProducts = useMemo(() => {
-        if (!selectedCategory) return [];
-        return listProduct.filter(product => product.categoryName === selectedCategory.name);
-      }, [listProduct, selectedCategory]);
-      
+        if (!selectedCategory) return []
+        return listProduct
+            .filter(
+                (product) =>
+                    product.categoryName &&
+                    selectedCategory.name &&
+                    product.categoryName.trim().toLowerCase() === selectedCategory.name.trim().toLowerCase()
+            )
+            .slice(0, 8) // Limit to 8 products per category
+    }, [listProduct, selectedCategory])
 
-    // 🛑 Không mở thì không render
-    if (!isModalOpen) return null;
+    if (!isModalOpen) return null
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/30 backdrop-blur-sm">
-            <div className="bg-white rounded-lg shadow-lg p-4 w-[1000px] h-[600px] overflow-hidden">
-                <div className="flex h-full">
-                    {/* Sidebar */}
-                    <div className="w-1/3 border-r pr-4 overflow-y-auto">
-                        <ul>
-                            <li>
-                                <button onClick={() => setIsModalOpen(false)} className='cursor-pointer text-red-500 hover:opacity-70'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                    </svg>
-                                </button>
-                            </li>
-                            {categories.map(item => (
-                                <li
-                                    key={item.id}
-                                    onClick={() => handleOpen(item)}
-                                    className={`bg-[#1b74e7] py-2 px-4 mx-2 my-3 cursor-pointer rounded-lg font-medium ${selectedCategory?.id === item.id ? "bg-[#5dac46]" : "hover:bg-[#5dac46] hover:bg-opacity-50"}`}
-                                >
-                                    <p className='text-white flex justify-between items-center'>
-                                        {item.name}
-                                        <div className='h-4 w-4 flex justify-center items-center'>
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                            </svg>
-                                        </div>
-                                    </p>
-                                </li>
-                            ))}
-                        </ul>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm transition-all duration-300">
+            <div className="bg-white rounded-xl shadow-2xl w-[90%] max-w-[1000px] h-[80vh] max-h-[600px] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                <div className="flex flex-col h-full">
+                    {/* Header */}
+                    <div className="flex items-center justify-between p-4 bg-gradient-to-r from-sky-500 to-teal-500 text-white">
+                        <h2 className="text-lg font-semibold">Chọn sản phẩm</h2>
+                        <button
+                            onClick={() => setIsModalOpen(false)}
+                            className="rounded-full p-1 hover:bg-white/20 transition-colors cursor-pointer"
+                            aria-label="Đóng"
+                        >
+                            <FaTimes className="w-5 h-5" />
+                        </button>
                     </div>
 
-                    {/* Product list */}
-                    <div className="w-2/3 pl-4 overflow-y-auto">
-                        <div className="grid grid-cols-4 gap-4 pr-2">
-                            {filteredProducts.length > 0 ? (
-                                filteredProducts.map(product => (
-                                    <a href="#" key={product.id}>
-                                        <div className="h-32 w-full flex flex-col items-center justify-between border rounded-lg p-2 hover:shadow-[0_4px_10px_rgba(59,130,246,0.5)] transition-shadow duration-300">
-                                            <img
-                                                src={product.image || "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/08/anh-con-meo-cute.jpg"}
-                                                alt={product.name}
-                                                className="w-16 h-16 object-cover rounded"
+                    {/* Content */}
+                    <div className="flex flex-1 h-full overflow-hidden">
+                        {/* Sidebar */}
+                        <div className="w-1/3 border-r overflow-y-auto bg-white">
+                            <div className="py-2">
+                                {categories.map((item) => (
+                                    <button
+                                        key={item.id}
+                                        onClick={() => handleOpen(item)}
+                                        className={`w-full text-left py-3 px-4 my-1 transition-all  duration-200 cursor-pointer rounded-r-lg ${selectedCategory?.id === item.id
+                                            ? "bg-teal-500 text-white !text-white"
+                                            : "bg-white hover:bg-sky-100 text-gray-700 "
+                                            }`}
+                                    >
+                                        <div className="flex justify-between items-center">
+                                            <span>{item.name}</span>
+                                            <FaChevronRight
+                                                className={`w-4 h-4 transition-colors ${selectedCategory?.id === item.id ? "text-white" : "text-gray-400"
+                                                    }`}
                                             />
-                                            <p className="text-xs text-center mt-2 break-words line-clamp-2">
-                                                {product.name}
-                                            </p>
                                         </div>
-                                    </a>
-                                ))
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Product list */}
+                        <div className="w-2/3 overflow-y-auto p-4">
+                            {loading ? (
+                                <div className="flex flex-col items-center justify-center h-full">
+                                    <AiOutlineLoading3Quarters className="w-8 h-8 text-sky-500 animate-spin mb-2" />
+                                    <p className="text-gray-500">Đang tải sản phẩm...</p>
+                                </div>
+                            ) : error ? (
+                                <div className="flex flex-col items-center justify-center h-full text-center p-4">
+                                    <div className="bg-red-50 text-red-500 p-4 rounded-lg">
+                                        <p className="font-medium mb-1">Lỗi khi tải sản phẩm</p>
+                                        <p className="text-sm">{error}</p>
+                                    </div>
+                                </div>
                             ) : (
-                                <p className="col-span-4 text-center text-gray-500">
-                                    Không có sản phẩm trong danh mục này
-                                </p>
+                                <>
+                                    <h3 className="text-md font-medium mb-4 text-sky-600">{selectedCategory?.name || "Sản phẩm"}</h3>
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                                        {filteredProducts.length > 0 ? (
+                                            filteredProducts.map((product) => (
+                                                <a href="#" key={product.id} className="group">
+                                                    <div className="flex flex-col items-center justify-between border rounded-lg p-3 h-full bg-white hover:shadow-lg hover:border-sky-400 transition-all duration-200">
+                                                        <Link to={`product-detail/${product.id}`}>
+                                                            <div className="relative w-full pb-[100%] mb-2 overflow-hidden rounded-md bg-gray-100">
+                                                                <img
+                                                                    src={
+                                                                        product.images && product.images[0]?.url
+                                                                            ? product.images[0].url
+                                                                            : "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/08/anh-con-meo-cute.jpg"
+                                                                    }
+                                                                    alt={product.name}
+                                                                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                                />
+                                                            </div>
+                                                            <p className="text-xs text-center w-full break-words line-clamp-2 text-gray-800 group-hover:text-teal-600 transition-colors ">
+                                                                {product.name}
+                                                            </p>
+                                                        </Link>
+                                                    </div>
+                                                </a>
+                                            ))
+                                        ) : (
+                                            <div className="col-span-full flex items-center justify-center h-40 bg-sky-50 rounded-lg">
+                                                <p className="text-gray-500 text-center">Không có sản phẩm trong danh mục này</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </>
                             )}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default Modal;
+export default Modal
