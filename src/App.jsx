@@ -22,7 +22,7 @@ import DashboardProductDetail from "./components/dashboard/ProductDetail";
 import ProtectedRoute from "./contexts/AuthDashboard";
 import UpdateProduct from "./components/dashboard/UpdateProduct";
 import Payment from "./pages/Payment";
-import News from "./components/Home/News";
+import News from "./pages/News";
 import NewsDetail from "./pages/NewsDetail";
 import About from "./pages/About";
 import OrderDetail from "./pages/OrdersDetail";

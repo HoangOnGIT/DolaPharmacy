@@ -10,8 +10,19 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const CartProvider = ({ children }) => {
   const initialCart = {};
 
-  const [cart, setCart] = useState(initialCart);
+  // Try to get cart from localStorage first
+  const getInitialCart = () => {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : initialCart;
+  };
+
+  const [cart, setCart] = useState(getInitialCart);
   const { isAuthenticated, user } = useAuth();
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -26,14 +37,18 @@ export const CartProvider = ({ children }) => {
           }
           const data = await response.json();
           setCart(data[0]);
+          // Also update localStorage when fetching from server
+          localStorage.setItem("cart", JSON.stringify(data[0]));
         } catch (error) {
           console.error("Error fetching cart:", error);
           setCart(initialCart);
+          localStorage.setItem("cart", JSON.stringify(initialCart));
         }
       };
       fetchCart();
     } else {
       setCart(initialCart);
+      localStorage.setItem("cart", JSON.stringify(initialCart));
     }
   }, [isAuthenticated, user]);
 
@@ -50,10 +65,10 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = async (item) => {
     try {
-      if (!isAuthenticated || !user) {
-        console.error("User must be logged in to add items to the cart.");
-        return;
-      }
+      // if (!isAuthenticated || !user) {
+      //   console.error("User must be logged in to add items to the cart.");
+      //   return;
+      // }
 
       const sanitizedItem = sanitizeItem(item);
       const currentItems = cart.items ? [...cart.items] : [];
@@ -73,21 +88,29 @@ export const CartProvider = ({ children }) => {
         updatedAt: new Date(),
       };
 
-      const token = localStorage.getItem("token");
+      // Update localStorage immediately
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      setCart(updatedCart);
 
-      const response = await fetch(`${BASE_URL}/api/carts/${cart.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(updatedCart),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to update cart on server");
+      if (isAuthenticated) {
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(`${BASE_URL}/api/carts/${cart.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updatedCart),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to update cart on server");
+        }
+        const serverCart = await response.json();
+        setCart(serverCart);
+        // Update localStorage with server response
+        localStorage.setItem("cart", JSON.stringify(serverCart));
       }
-      const serverCart = await response.json();
-      setCart(serverCart);
     } catch (error) {
       console.error("Error updating cart:", error);
     }
@@ -95,10 +118,10 @@ export const CartProvider = ({ children }) => {
 
   const addToCartWithDetail = async (item) => {
     try {
-      if (!isAuthenticated || !user) {
-        console.error("User must be logged in to add items to the cart.");
-        return;
-      }
+      // if (!isAuthenticated || !user) {
+      //   console.error("User must be logged in to add items to the cart.");
+      //   return;
+      // }
 
       const sanitizedItem = sanitizeItem(item);
       const currentItems = cart.items ? [...cart.items] : [];
@@ -118,6 +141,9 @@ export const CartProvider = ({ children }) => {
         updatedAt: new Date(),
       };
 
+      // Update localStorage immediately
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+
       const token = localStorage.getItem("token");
 
       const response = await fetch(`${BASE_URL}/api/carts/${cart.id}`, {
@@ -133,16 +159,18 @@ export const CartProvider = ({ children }) => {
       }
       const serverCart = await response.json();
       setCart(serverCart);
+      // Update localStorage with server response
+      localStorage.setItem("cart", JSON.stringify(serverCart));
     } catch (error) {
       console.error("Error updating cart:", error);
     }
   };
 
   const updateItemQuantity = (itemId, newQuantity) => {
-    if (!isAuthenticated || !user) {
-      console.error("User must be logged in to update item quantity.");
-      return;
-    }
+    // if (!isAuthenticated || !user) {
+    //   console.error("User must be logged in to update item quantity.");
+    //   return;
+    // }
 
     if (newQuantity < 1) {
       removeItemFromCart(itemId);
@@ -160,71 +188,84 @@ export const CartProvider = ({ children }) => {
     };
 
     setCart({ ...cart, items: updatedItems });
+    // Update localStorage immediately
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
 
-    const token = localStorage.getItem("token");
+    if (isAuthenticated) {
+      const token = localStorage.getItem("token");
 
-    fetch(`${BASE_URL}/api/carts/${cart.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(updatedCart),
-    })
-      .then((response) => response.json())
-      .then((serverCart) => {
-        setCart(serverCart);
+      fetch(`${BASE_URL}/api/carts/${cart.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedCart),
       })
-      .catch((error) => {
-        console.error("Error updating cart:", error);
-        setCart(updatedCart);
-      });
+        .then((response) => response.json())
+        .then((serverCart) => {
+          setCart(serverCart);
+          // Update localStorage with server response
+          localStorage.setItem("cart", JSON.stringify(serverCart));
+        })
+        .catch((error) => {
+          console.error("Error updating cart:", error);
+          setCart(updatedCart);
+        });
+    }
   };
 
   const removeItemFromCart = (itemId) => {
-    if (!isAuthenticated || !user) {
-      console.error("User must be logged in to remove items from the cart.");
-      return;
-    }
+    // if (!isAuthenticated || !user) {
+    //   console.error("User must be logged in to remove items from the cart.");
+    //   return;
+    // }
 
     const updatedItems = cart.items.filter((item) => item.id !== itemId);
     const updatedCart = { ...cart, items: updatedItems };
-    const token = localStorage.getItem("token");
 
-    fetch(`${BASE_URL}/api/carts/${cart.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(updatedCart),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to remove item from server");
-        }
-        return response.json();
+    // Update localStorage immediately
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    setCart(updatedCart);
+
+    if (isAuthenticated) {
+      const token = localStorage.getItem("token");
+
+      fetch(`${BASE_URL}/api/carts/${cart.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedCart),
       })
-      .then(() => {
-        setCart(updatedCart);
-      })
-      .catch((error) => {
-        console.error("Error removing item from cart:", error);
-      });
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to remove item from server");
+          }
+          return response.json();
+        })
+        .then((serverCart) => {
+          setCart(updatedCart);
+          // Update localStorage with server response
+          localStorage.setItem("cart", JSON.stringify(serverCart));
+        })
+        .catch((error) => {
+          console.error("Error removing item from cart:", error);
+        });
+    }
   };
 
   const emptyCart = async (item) => {
     try {
-      if (!isAuthenticated || !user) {
-        console.error("User must be logged in to add items to the cart.");
-        return;
-      }
-
       const updatedCart = {
         ...cart,
         items: [],
         updatedAt: new Date(),
       };
+
+      // Update localStorage immediately
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
 
       const token = localStorage.getItem("token");
 
@@ -241,6 +282,8 @@ export const CartProvider = ({ children }) => {
       }
       const serverCart = await response.json();
       setCart(serverCart);
+      // Update localStorage with server response
+      localStorage.setItem("cart", JSON.stringify(serverCart));
     } catch (error) {
       console.error("Error updating cart:", error);
     }

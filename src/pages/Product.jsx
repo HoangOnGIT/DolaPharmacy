@@ -188,8 +188,6 @@ const Product = ({ promotion = false }) => {
     setSearchParams(params); // This updates the URL query parameters
   }, [filter]);
 
-  console.log("BASE URL:", import.meta.env.VITE_API_BASE_URL);
-
   return (
     <div className="bg-gradient-to-br from-blue-50 via-white to-gray-100 min-h-screen py-12">
       <div className="w-4/5 mx-auto px-4">

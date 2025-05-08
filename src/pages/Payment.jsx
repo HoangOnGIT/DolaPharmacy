@@ -69,27 +69,31 @@ function Payment() {
     }
 
     if (currUser) {
-
-      const primaryShippingAddress = currUser.addresses?.find(addr => addr.type === 'shipping' && addr.isPrimary) ||
-        currUser.addresses?.find(addr => addr.type === 'shipping') ||
+      const primaryShippingAddress =
+        currUser.addresses?.find(
+          (addr) => addr.type === "shipping" && addr.isPrimary
+        ) ||
+        currUser.addresses?.find((addr) => addr.type === "shipping") ||
         currUser.addresses?.[0];
 
-      const fullName = `${currUser.firstName || ''} ${currUser.lastName || ''}`.trim();
+      const fullName = `${currUser.firstName || ""} ${
+        currUser.lastName || ""
+      }`.trim();
 
       form.setFieldsValue({
         fullName: fullName,
         phone: primaryShippingAddress?.phone,
-        email: currUser.email || '',
-        province: primaryShippingAddress?.city || '',
-        district: primaryShippingAddress?.state || '',
-        address: primaryShippingAddress?.street || '',
+        email: currUser.email || "",
+        province: primaryShippingAddress?.city || "",
+        district: primaryShippingAddress?.state || "",
+        address: primaryShippingAddress?.street || "",
       });
 
       api.success({
         message: "Thông tin đã được điền",
         description: "Thông tin cá nhân của bạn đã được điền vào form.",
         duration: 2,
-      });  
+      });
     }
   };
 
@@ -120,7 +124,7 @@ function Payment() {
     const order = {
       ...values,
       items: cart.items,
-      userId: user.id,
+      userId: user ? user.id : "Khách vãng lai",
       paymentMethod: paymentMethod,
       status: "pending",
       total: total, // Include the total amount
@@ -200,11 +204,7 @@ function Payment() {
                   Thông tin nhận hàng
                 </Title>
                 {user && (
-                  <Button
-                    type="primary"
-                    onClick={fillUserInfo}
-                    ghost
-                  >
+                  <Button type="primary" onClick={fillUserInfo} ghost>
                     Sử dụng thông tin của tôi
                   </Button>
                 )}
@@ -231,10 +231,7 @@ function Payment() {
                     { required: true, message: "Vui lòng số điện thoại!" },
                   ]}
                 >
-                  <Input
-                    placeholder="Số điện thoại"
-                    size="large"
-                  />
+                  <Input placeholder="Số điện thoại" size="large" />
                 </Form.Item>
                 <Form.Item name="email" label="Email">
                   <Input placeholder="Email (tuỳ chọn)" size="large" />
@@ -294,7 +291,10 @@ function Payment() {
                   name="deliveryDate"
                   label="Ngày giao hàng"
                   rules={[
-                    { required: true, message: "Vui lòng chọn ngày giao hàng!" },
+                    {
+                      required: true,
+                      message: "Vui lòng chọn ngày giao hàng!",
+                    },
                   ]}
                 >
                   <DatePicker
@@ -391,8 +391,9 @@ function Payment() {
             </Radio.Group>
           </Card>
           <Card>
-            <Title level={4}>{`Đơn hàng (${cart.items ? cart.items.length : 0
-              } sản phẩm)`}</Title>
+            <Title level={4}>{`Đơn hàng (${
+              cart.items ? cart.items.length : 0
+            } sản phẩm)`}</Title>
             <div className="mt-4">
               {cart.items &&
                 cart.items.map((cartItem) => (

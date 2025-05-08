@@ -12,12 +12,6 @@ function Cart() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      if (!localStorage.getItem("token")) navigate("/login");
-    }
-  }, [isAuthenticated]);
-
   const total =
     cart.items?.reduce((acc, item) => {
       const price = item.salePrice || item.basePrice;
@@ -74,7 +68,8 @@ function Cart() {
             <h2 className="text-xl font-medium mb-4">Thông tin đơn hàng</h2>
             <div className="bg-white rounded-lg shadow p-6">
               <p className="text-gray-600">
-                Thông tin giao hàng và xuất hóa đơn sẽ được cung cấp trong bước thanh toán
+                Thông tin giao hàng và xuất hóa đơn sẽ được cung cấp trong bước
+                thanh toán
               </p>
             </div>
           </div>

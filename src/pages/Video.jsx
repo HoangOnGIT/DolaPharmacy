@@ -141,7 +141,7 @@ function Video() {
             }
             headStyle={{ backgroundColor: "#1890ff", color: "white" }}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {healthVideos.map((video, index) => (
                 <div key={index} style={{ marginBottom: 20 }}>
                   <VideoThumbNail urlObj={video} />
