@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Login function (using real API authentication)
+  // Login function
   const login = async (username, password) => {
     try {
       setLoading(true);

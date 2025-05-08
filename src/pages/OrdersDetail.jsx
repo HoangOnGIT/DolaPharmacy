@@ -52,9 +52,9 @@ function OrderDetail({ confirm = false }) {
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
-    if (typeof dateString === 'string' && !dateString.includes('T')) 
+    if (typeof dateString === "string" && !dateString.includes("T"))
       return dateString;
-    
+
     return new Date(dateString).toLocaleDateString("vi-VN", {
       year: "numeric",
       month: "long",
@@ -230,7 +230,8 @@ function OrderDetail({ confirm = false }) {
             </p>
             {order.deliveryDate && (
               <p>
-                <strong>Ngày giao hàng:</strong> {formatDate(order.deliveryDate)}
+                <strong>Ngày giao hàng:</strong>{" "}
+                {formatDate(order.deliveryDate)}
               </p>
             )}
             {order.deliveryTime && (
@@ -343,7 +344,7 @@ function OrderDetail({ confirm = false }) {
               <strong>Email:</strong> {order.email}
             </p>
             <p>
-              <strong>Số điện thoại:</strong> {order.phoneNumber}
+              <strong>Số điện thoại:</strong> {order.phone}
             </p>
           </div>
           <div>

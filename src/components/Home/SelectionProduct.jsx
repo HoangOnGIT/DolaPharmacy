@@ -94,7 +94,7 @@ const SelectionProduct = ({ name }) => {
                 className={`flex items-center px-4 py-4 rounded-sm cursor-pointer border border-blue-500 transition-colors  hover:bg-blue-600 hover:!text-white ${
                   active === item.name
                     ? "bg-blue-600 !text-white"
-                    :  "bg-white text-blue-600"
+                    : "bg-white text-blue-600"
                 }`}
               >
                 <img
@@ -110,7 +110,7 @@ const SelectionProduct = ({ name }) => {
           {/* Lưới sản phẩm */}
           <div className="grid grid-cols-4 gap-20">
             {products.map((product) => (
-              <SingleProduct key={product._id} product={product} />
+              <SingleProduct key={product.id} product={product} />
             ))}
           </div>
 

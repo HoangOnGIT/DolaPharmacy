@@ -33,7 +33,7 @@ const Header = () => {
   const { cart } = useCart();
   const { favList } = useFav();
   useEffect(() => {
-    fetch(baseUrl+"/api/categories")
+    fetch(baseUrl + "/api/categories")
       .then((response) => response.json())
       .then((data) => {
         if (data.length > 0) {
@@ -68,8 +68,6 @@ const Header = () => {
   }
 
   const { user, isAuthenticated, loading, error, login, logout } = useAuth();
-
-  console.log(favList);
 
   return (
     <>

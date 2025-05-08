@@ -28,13 +28,6 @@ import About from "./pages/About";
 import OrderDetail from "./pages/OrdersDetail";
 import QnA from "./pages/QnA";
 import Contact from "./pages/Contact";
-import About from "./pages/About";
-import Payment from "./pages/Payment";
-import OrderDetail from "./pages/OrdersDetail";
-import News from "./pages/News";
-import Contact from "./pages/Contact";
-import QnA from "./pages/QnA";
-import NewsDetail from "./pages/NewsDetail";
 
 const router = createBrowserRouter([
   {

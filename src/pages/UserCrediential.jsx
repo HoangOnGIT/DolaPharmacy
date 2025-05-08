@@ -182,7 +182,7 @@ function UserCrediential({ loginPage }) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`w-full py-2 text-white rounded-md transition-colors ${
+                  className={`w-full py-2 !text-white rounded-md transition-colors ${
                     loading
                       ? "bg-blue-400 cursor-not-allowed"
                       : "bg-blue-600 hover:bg-blue-700"
@@ -412,7 +412,7 @@ function UserCrediential({ loginPage }) {
                 )}
                 <button
                   type="submit"
-                  className="w-full py-2 !text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
+                  className="w-full py-2 !!text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
                   onClick={() => handleRegister()}
                 >
                   Đăng ký
