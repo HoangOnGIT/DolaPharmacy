@@ -32,19 +32,19 @@ function UserInfo({ user }) {
   return (
     <div className="flex space-x-1 justify-center items-center mx-1">
       <button
-        className="hover:cursor-pointer  hover:!text-blue-700"
+        className="hover:cursor-pointer hover:!text-blue-700"
         onClick={() => handleUserInfo()}
       >
         Tài khoản{" "}
       </button>
-      <span> | </span>
+      <span className="text-white text-sm px-1 thin-divider">|</span>
       <button
         className="hover:cursor-pointer hover:!text-blue-700"
         onClick={() => logout()}
       >
         Đăng xuất
       </button>
-      <span> | </span>
+      <span className="text-white text-sm px-1 thin-divider">|</span>
       <p className="flex items-center !m-0">
         Hotline đặt hàng:
         <button className="flex items-center bg-blue-800 !text-white px-2.5 py-1 rounded-full text-base hover:bg-white hover:!text-blue-800 ml-2 cursor-pointer">

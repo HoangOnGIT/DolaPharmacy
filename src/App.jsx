@@ -28,6 +28,13 @@ import About from "./pages/About";
 import OrderDetail from "./pages/OrdersDetail";
 import QnA from "./pages/QnA";
 import Contact from "./pages/Contact";
+import About from "./pages/About";
+import Payment from "./pages/Payment";
+import OrderDetail from "./pages/OrdersDetail";
+import News from "./pages/News";
+import Contact from "./pages/Contact";
+import QnA from "./pages/QnA";
+import NewsDetail from "./pages/NewsDetail";
 
 const router = createBrowserRouter([
   {
@@ -70,6 +77,7 @@ const router = createBrowserRouter([
         element: <UserCrediential loginPage={false} />,
         errorElement: <ErrorPage />,
       },
+      { index: true, element: <Home /> },
       { path: "homepage", element: <Home /> },
       { path: "news", element: <News /> },
       {
@@ -116,6 +124,30 @@ const router = createBrowserRouter([
       { path: "contact", element: <Contact /> },
       // { path: "favourite", element: <Contact /> },
       { path: "map", element: <Contact /> },
+      { path: "product", element: <Product /> },
+      {
+        path: "promotion",
+        element: <Product key={"promotion"} promotion={true} />,
+      },
+      { path: "product-detail/:id", element: <ProductDetail /> },
+      { path: "cart", element: <Cart /> },
+      { path: "login", element: <UserCrediential loginPage={true} /> },
+      { path: "register", element: <UserCrediential loginPage={false} /> },
+      { path: "video", element: <Video /> },
+      { path: "profile", element: <PersonalInfomation /> },
+      { path: "fav", element: <Favourite /> },
+      { path: "news", element: <News /> },
+      { path: "news/:slug", element: <NewsDetail /> },
+      { path: "about", element: <About /> },
+      { path: "payment", element: <Payment /> },
+      {
+        path: "confirmation/:orderId",
+        element: <OrderDetail confirm={true} />,
+      },
+      { path: "orders/:orderId", element: <OrderDetail /> },
+      { path: "faq", element: <QnA /> },
+      { path: "contact", element: <Contact /> },
+      { path: "map", element: <Contact /> }, // Possibly meant to be a map page
     ],
   },
   {

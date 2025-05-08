@@ -45,13 +45,13 @@ const Footer = () => {
     <div className="w-full ">
       <footer className="bg-white text-dark font-sans">
         {/* Top Footer */}
-        <div className="flex justify-around w-full bg-blue-600 text-white py-2">
+        <div className="flex justify-around w-full bg-blue-600 text-white py-2 px-15">
           <div className="">
             <input
               dir="ltr"
               type="email"
               placeholder="Nhập email để nhận thông tin khuyến mãi"
-              className="rounded-s-lg px-4 py-2 bg-white text-black w-90 text-base"
+              className="rounded-s-lg px-4 py-2 bg-white !text-black w-90 text-base"
             />
             <button
               dir="rtl"

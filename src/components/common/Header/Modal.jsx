@@ -2,9 +2,10 @@ import React, { useEffect, useState, useMemo  } from 'react';
 const Modal = ({ categories, isModalOpen, setIsModalOpen }) => {
     const [listProduct, setListProduct] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
     useEffect(() => {
-        fetch("http://localhost:3000/api/products")
+        fetch(baseUrl+"/api/products")
             .then(response => response.json())
             .then(data => {
                 if (data.length > 0) {

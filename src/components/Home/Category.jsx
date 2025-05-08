@@ -14,6 +14,7 @@ import img1a from "../../img/Header/imgDiscount/image1.png";
 import img2a from "../../img/Header/imgDiscount/image2.png";
 import img3a from "../../img/Header/imgDiscount/image3.png";
 import img4a from "../../img/Header/imgDiscount/image4.png";
+import { Link } from "react-router-dom";
 
 const Category = () => {
   const categories = [
@@ -58,10 +59,10 @@ const Category = () => {
 
   const [categoryIndex, setCategoryIndex] = useState(0);
   const [discountIndex, setDiscountIndex] = useState(0);
-  const itemsPerPage = 8; // Số danh mục hiển thị mỗi lần
-  const discountItemsPerPage = 4; // Số thẻ giảm giá hiển thị mỗi lần
+  const [copiedStates, setCopiedStates] = useState({}); // Track copied state for each discount
+  const itemsPerPage = 8;
+  const discountItemsPerPage = 4;
 
-  // Điều hướng danh mục
   const handleCategoryNext = () => {
     if (categoryIndex + itemsPerPage < categories.length) {
       setCategoryIndex(categoryIndex + 1);
@@ -74,7 +75,6 @@ const Category = () => {
     }
   };
 
-  // Điều hướng thẻ giảm giá
   const handleDiscountNext = () => {
     if (discountIndex + discountItemsPerPage < discount.length) {
       setDiscountIndex(discountIndex + 1);
@@ -89,23 +89,29 @@ const Category = () => {
 
   const handleCopy = (code) => {
     navigator.clipboard.writeText(code);
+    setCopiedStates((prev) => ({ ...prev, [code]: true }));
+    setTimeout(() => {
+      setCopiedStates((prev) => ({ ...prev, [code]: false }));
+    }, 2000); // Revert to "Sao chép" after 2 seconds
   };
 
   return (
     <>
       {/* Category Section */}
       <div className="py-4">
-        <div className="font-semibold text-3xl text-blue-900 mb-10">
-          <p>Danh mục nổi bật</p>
+        <div className="mb-10">
+          <Link to="product">
+            <p className="hover:text-[#003cbf] cursor-pointer w-[300px] font-semibold text-3xl ">
+              Danh mục nổi bật
+            </p>
+          </Link>
         </div>
         <div className="relative w-full">
           <div className="overflow-hidden">
             <div
               className="flex flex-row items-center transition-transform duration-500 ease-in-out"
               style={{
-                transform: `translateX(-${
-                  categoryIndex * (100 / itemsPerPage)
-                }%)`,
+                transform: `translateX(-${categoryIndex * (100 / itemsPerPage)}%)`,
               }}
             >
               {categories.map((category, index) => (
@@ -133,8 +139,7 @@ const Category = () => {
               <button
                 dir="ltr"
                 onClick={handleCategoryPrev}
-                className="group hover:bg-blue-500 transition-colors cursor-pointer
-                                rounded-full shadow-md bg-gray-200 py-4 px-1 rounded-s-lg"
+                className="group hover:bg-blue-500 transition-colors cursor-pointer rounded-full shadow-md bg-gray-200 py-4 px-1 rounded-s-lg"
               >
                 <svg
                   className="w-6 h-6 text-gray-600 group-hover:text-white"
@@ -158,8 +163,7 @@ const Category = () => {
               <button
                 dir="rtl"
                 onClick={handleCategoryNext}
-                className="group hover:bg-blue-500 transition-colors cursor-pointer
-                                p-2 rounded-full shadow-md bg-gray-200 py-4 px-1 rounded-s-lg"
+                className="group hover:bg-blue-500 transition-colors cursor-pointer p-2 rounded-full shadow-md bg-gray-200 py-4 px-1 rounded-s-lg"
               >
                 <svg
                   className="w-6 h-6 text-gray-600 group-hover:text-white"
@@ -183,17 +187,12 @@ const Category = () => {
 
       {/* Discount Section */}
       <div className="py-4">
-        <div className="font-semibold text-3xl text-blue-900 mb-10">
-          <p>Khuyến mãi</p>
-        </div>
         <div className="relative w-full">
           <div className="overflow-hidden">
             <div
               className="flex flex-row transition-transform duration-500 ease-in-out"
               style={{
-                transform: `translateX(-${
-                  discountIndex * (100 / discountItemsPerPage)
-                }%)`,
+                transform: `translateX(-${discountIndex * (100 / discountItemsPerPage)}%)`,
               }}
             >
               {discount.map((item, index) => (
@@ -203,7 +202,6 @@ const Category = () => {
                   style={{ width: `${100 / discountItemsPerPage}%` }}
                 >
                   <div className="relative flex items-center justify-between border-2 border-blue-500 rounded-lg p-3 bg-white shadow-md mx-1 coupon-notch">
-                    {/* Phần hình ảnh và thông tin */}
                     <div className="flex items-center space-x-3">
                       <img
                         src={item.img}
@@ -220,14 +218,18 @@ const Category = () => {
                         </p>
                       </div>
                     </div>
-                    {/* Nút sao chép */}
                     <button
                       onClick={() => handleCopy(item.name)}
-                      className="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 transition-colors  cursor-pointer"
+                      className={`px-3 py-1 rounded-lg text-white transition-colors cursor-pointer ${
+                        copiedStates[item.name]
+                          ? "bg-green-600"
+                          : "bg-blue-500 hover:bg-green-600"
+                      }`}
                     >
-                      <span className="text-white text-xs">Sao chép</span>
+                      <span className="text-white text-xs">
+                        {copiedStates[item.name] ? "Đã lưu" : "Sao chép"}
+                      </span>
                     </button>
-                    {/* Nút thông tin (i) */}
                     <button className="absolute top-2 right-2 text-blue-500 cursor-pointer">
                       <InformationCircleIcon className="w-4 h-4" />
                     </button>
@@ -239,12 +241,12 @@ const Category = () => {
           {discountIndex > 0 && (
             <div className="absolute top-1/2 transform -translate-y-1/2 left-0">
               <button
-                dỉr="ltr"
+                dir="ltr"
                 onClick={handleDiscountPrev}
-                className="p-2 rounded-full shadow-md bg-gray-200 py-4 px-1 rounded-s-lg group hover:bg-blue-500"
+                className="group hover:bg-blue-500 transition-colors cursor-pointer p-2 rounded-full shadow-md bg-gray-200 py-4 px-1 rounded-s-lg"
               >
                 <svg
-                  className="w-6 h-6 text-gray-600 group-hover:text-white"
+                  className="w-6 h-6 group-hover:text-white text-[#0f62f9]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -260,29 +262,30 @@ const Category = () => {
               </button>
             </div>
           )}
-          {/* {discountIndex + discountItemsPerPage < discount.length && (
-                        <div className="absolute top-1/2 transform -translate-y-1/2 right-0">
-                            <button dir="rtl"
-                                onClick={handleDiscountNext}
-                                className="p-2 rounded-full shadow-md bg-gray-200 py-4 px-1 rounded-s-lg group hover:bg-blue-500"
-                            >
-                                <svg
-                                    className="w-6 h-6 text-gray-600 group-hover:text-white"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M9 5l7 7-7 7"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    )} */}
+          {discountIndex + discountItemsPerPage < discount.length && (
+            <div className="absolute top-1/2 transform -translate-y-1/2 right-0">
+              <button
+                dir="rtl"
+                onClick={handleDiscountNext}
+                className="group hover:bg-blue-500 transition-colors cursor-pointer p-2 rounded-full shadow-md bg-gray-200 py-4 px-1 rounded-s-lg "
+              >
+                <svg
+                  className="w-6 h-6  group-hover:text-white  !text-[#0f62f9]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </>

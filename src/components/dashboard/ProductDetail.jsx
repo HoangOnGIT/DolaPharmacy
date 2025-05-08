@@ -9,11 +9,12 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [isEditingImage, setIsEditingImage] = useState(false);
   const navigate = useNavigate();
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/products/${id}`);
+        const response = await fetch(baseUrl+`/api/products/${id}`);
         if (!response.ok) throw new Error("Không tìm thấy sản phẩm");
         const data = await response.json();
         setProduct(data);
