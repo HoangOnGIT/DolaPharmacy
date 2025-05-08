@@ -19,6 +19,7 @@ import {
   BankOutlined,
   DollarOutlined,
 } from "@ant-design/icons";
+import emailjs from "@emailjs/browser";
 
 import imgLogo from "../img/Header/Logo.png";
 import { useCart } from "../contexts/CartContext";
@@ -160,6 +161,78 @@ function Payment() {
         description: "Cảm ơn bạn đã đặt hàng tại DolaPharmacy.",
         duration: 3,
       });
+
+      const templateId = "template_c5pwx77";
+      const serviceId = "service_ztlc7ux";
+      const publicKey = import.meta.env.VITE_PUBLIC_MAIL_KEY;
+
+      // Format the individual items properly for Handlebars template
+      const formattedItems = cart.items.map((item) => {
+        // Ensure the image URL is valid
+        const imageUrl = item.images[0].url
+          ? item.images[0].url
+          : "https://res.cloudinary.com/dbmtxumro/image/upload/v1746693032/placeholder_image.png";
+
+        // Ensure price is valid
+        const price = parseFloat(item.salePrice || item.basePrice || 0);
+
+        return {
+          name: item.name || "Sản phẩm",
+          units: item.quantity || 1,
+          image_url: imageUrl,
+          price: new Intl.NumberFormat("vi-VN", {
+            minimumFractionDigits: 2,
+          }).format(price),
+        };
+      });
+
+      const shipping = 0;
+      const tax = 0; // Define tax variable to avoid reference error
+
+      const emailData = {
+        to_email: values.email || "",
+        order_id: serverContent.id || "N/A",
+        email: values.email || "",
+        orders: formattedItems,
+        // Add user shipping information
+        fullName: values.fullName || "",
+        phone: values.phone || "",
+        province: values.province || "",
+        district: values.district || "",
+        address: values.address || "",
+        deliveryDate: values.deliveryDate
+          ? values.deliveryDate.format("DD/MM/YYYY")
+          : "",
+        deliveryTime: values.deliveryTime || "",
+        // Cost information
+        cost: {
+          shipping: new Intl.NumberFormat("vi-VN", {
+            maximumFractionDigits: 0,
+          }).format(shipping),
+          tax: new Intl.NumberFormat("vi-VN", {
+            maximumFractionDigits: 0,
+          }).format(tax),
+          total: new Intl.NumberFormat("vi-VN", {
+            maximumFractionDigits: 0,
+          }).format(total),
+        },
+      };
+
+      console.log("Email data being sent:", JSON.stringify(emailData, null, 2));
+
+      // Send email
+      if (values.email) {
+        try {
+          await emailjs.send(serviceId, templateId, emailData, publicKey);
+          api.success({
+            message: "Email đã gửi",
+            description: "Thông tin đơn hàng đã được gửi qua email của bạn!",
+            duration: 3,
+          });
+        } catch (emailError) {
+          console.error("Failed to send order confirmation email:", emailError);
+        }
+      }
 
       emptyCart();
 
