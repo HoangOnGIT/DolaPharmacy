@@ -7,8 +7,10 @@ const Products = ({ name }) => {
   const [productIndex, setProductIndex] = useState(0);
   const itemsPerPage = 5;
 
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
-    fetch("http://localhost:3000/api/products")
+    fetch(`${BASE_URL}/api/products`)
       .then((response) => response.json())
       .then((data) => setProducts(data))
       .catch((error) => console.error("Error fetching products:", error));
