@@ -47,7 +47,7 @@ const ProductCard = ({
 
       {loading ? (
         <div className="w-full">
-          <div className="flex items-center justify-center bg-gray-100 h-[200px]">
+          <div className="flex items-center justify-center h-[200px]">
             <Skeleton.Image active style={{ width: 150, height: 150 }} />
           </div>
           <div className="px-3 py-2">

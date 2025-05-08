@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, use } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import imgBanner from "../../../img/Header/Banner.png";
 import imgLogo from "../../../img/Header/Logo.png";
 import "./Header.css";
@@ -22,7 +22,8 @@ const Header = () => {
     "Rất nhiều ưu đãi và chương trình khuyến mãi đang chờ đợi bạn",
   ];
 
-  const [category, setCategory] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
   const [currentText, setCurrentText] = useState(textList[0]);
   const [showEffect, setShowEffect] = useState(false);
   const indexRef = useRef(0);
@@ -32,12 +33,23 @@ const Header = () => {
 
   const { cart } = useCart();
   const { favList } = useFav();
+
   useEffect(() => {
-    fetch(baseUrl + "/api/categories")
+    fetch(`${baseUrl}/api/products`)
       .then((response) => response.json())
       .then((data) => {
         if (data.length > 0) {
-          setCategory(data);
+          setProducts(data);
+        }
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch(`${baseUrl}/api/categories`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.length > 0) {
+          setCategories(data);
         }
       });
   }, []);
@@ -100,7 +112,7 @@ const Header = () => {
                     <a className="mx-1 hover:text-blue-800" href="/register">
                       Đăng ký <span className="text-white">|</span>
                     </a>
-                    <a className="mx-1 hover:text-blue-800" href="/login  ">
+                    <a className="mx-1 hover:text-blue-800" href="/login">
                       Đăng nhập <span className="text-white">|</span>
                     </a>
                     <p className="!m-0 flex items-center">
@@ -147,7 +159,7 @@ const Header = () => {
                 Danh mục
               </button>
               {/* Search */}
-              <Search categories={category} />
+              <Search products={products} />
 
               <div className="flex items-center">
                 <a
@@ -221,7 +233,7 @@ const Header = () => {
 
         {/* Modal */}
         <Modal
-          categories={category}
+          categories={categories}
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}
         />
