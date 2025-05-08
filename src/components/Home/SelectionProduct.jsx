@@ -11,7 +11,7 @@ const SelectionProduct = ({ name }) => {
   const [category, setCategory] = useState([]);
   const [active, setActive] = useState(null);
   const [products, setProducts] = useState([]);
-
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
   const searchMost = [
     "Dầu cá",
     "Omega3",
@@ -24,7 +24,7 @@ const SelectionProduct = ({ name }) => {
   ];
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/categories")
+    fetch(`${BASE_URL}/api/categories`)
       .then((response) => response.json())
       .then((data) => {
         setCategory(data);
@@ -39,7 +39,7 @@ const SelectionProduct = ({ name }) => {
 
   useEffect(() => {
     if (active) {
-      fetch(`http://localhost:3000/api/products?categoryName=${active}`)
+      fetch(`${BASE_URL}/api/products?categoryName=${active}`)
         .then((response) => response.json())
         .then((data) => {
           setProducts(data);

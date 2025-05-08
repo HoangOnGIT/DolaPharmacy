@@ -80,7 +80,7 @@ function ProductDetail() {
         priceRange: product.priceRange,
       });
 
-      fetch(`http://localhost:3000/api/products?${pricingParam}`)
+      fetch(`${BASE_URL}/api/products?${pricingParam}`)
         .then((res) => res.json())
         .then((data) => setSamePricing(data));
     }
