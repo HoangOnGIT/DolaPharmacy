@@ -28,11 +28,12 @@ const Header = () => {
   const indexRef = useRef(0);
   const memoizedText = useMemo(() => currentText, [currentText]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const { cart } = useCart();
   const { favList } = useFav();
   useEffect(() => {
-    fetch("http://localhost:3000/api/categories")
+    fetch(baseUrl + "/api/categories")
       .then((response) => response.json())
       .then((data) => {
         if (data.length > 0) {
@@ -83,7 +84,7 @@ const Header = () => {
         {/* Header chính */}
         <div className="header h-46 bg-gradient-to-b from-[#7fadff] to-[#0f62f9] text-white w-full">
           {/* Contact Header */}
-          <div className="container mx-auto w-[80%]">
+          <div className="container mx-auto w-[70%]">
             {/* Contact Information */}
             <div className="w-full">
               <div className="flex justify-between items-center text-base font-semibold">
@@ -117,7 +118,7 @@ const Header = () => {
             {/* Category Header */}
             <div className="flex items-center my-1 justify-between">
               {/* Logo */}
-              <a href="#" className="mr-10">
+              <a href="#" className="">
                 <img
                   className="w-[200px] align-middle border-none max-w-full h-auto"
                   src={imgLogo}
@@ -127,7 +128,7 @@ const Header = () => {
               {/* Category */}
               <button
                 onClick={() => setIsModalOpen(!isModalOpen)}
-                className="flex items-center bg-white px-6 py-3 text-xl !text-black rounded-lg font-medium cursor-pointer hover:bg-blue-800 hover:!text-white mr-10"
+                className="flex items-center bg-white px-6 py-3 text-xl !text-black rounded-lg font-semibold cursor-pointer hover:bg-blue-800 hover:!text-white"
               >
                 <div className="mr-2">
                   <svg

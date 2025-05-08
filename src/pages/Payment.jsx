@@ -11,6 +11,8 @@ import {
   Card,
   Space,
   notification,
+  DatePicker,
+  Checkbox,
 } from "antd";
 import {
   ArrowLeftOutlined,
@@ -28,9 +30,11 @@ const { Title, Text, Paragraph } = Typography;
 const { TextArea } = Input;
 
 function Payment() {
+  const [currUser, setCurrUser] = useState({});
   const [paymentMethod, setPaymentMethod] = useState("transfer");
   const [provinces, setProvices] = useState([]);
   const [districts, setDistricts] = useState([]);
+  const [showInvoiceForm, setShowInvoiceForm] = useState(false);
   const { cart, emptyCart } = useCart();
   const { user } = useAuth();
   const [form] = Form.useForm();
@@ -43,6 +47,55 @@ function Payment() {
     }, 0) || 0;
 
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  useEffect(() => {
+    if (user) {
+      fetch(`${BASE_URL}/api/users/${user.id}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setCurrUser(data);
+        });
+    }
+  }, [user]);
+
+  const fillUserInfo = () => {
+    if (currUser?.addresses?.length === 0) {
+      api.warning({
+        message: "Vui long nhập địa chỉ",
+        description: "Bạn chưa có địa chỉ nào trong tài khoản của mình.",
+        duration: 2,
+      });
+      return;
+    }
+
+    if (currUser) {
+      const primaryShippingAddress =
+        currUser.addresses?.find(
+          (addr) => addr.type === "shipping" && addr.isPrimary
+        ) ||
+        currUser.addresses?.find((addr) => addr.type === "shipping") ||
+        currUser.addresses?.[0];
+
+      const fullName = `${currUser.firstName || ""} ${
+        currUser.lastName || ""
+      }`.trim();
+
+      form.setFieldsValue({
+        fullName: fullName,
+        phone: primaryShippingAddress?.phone,
+        email: currUser.email || "",
+        province: primaryShippingAddress?.city || "",
+        district: primaryShippingAddress?.state || "",
+        address: primaryShippingAddress?.street || "",
+      });
+
+      api.success({
+        message: "Thông tin đã được điền",
+        description: "Thông tin cá nhân của bạn đã được điền vào form.",
+        duration: 2,
+      });
+    }
+  };
 
   useEffect(() => {
     fetch("https://provinces.open-api.vn/api/p")
@@ -71,7 +124,7 @@ function Payment() {
     const order = {
       ...values,
       items: cart.items,
-      userId: user.id,
+      userId: user ? user.id : "Khách vãng lai",
       paymentMethod: paymentMethod,
       status: "pending",
       total: total, // Include the total amount
@@ -146,9 +199,16 @@ function Payment() {
         <div className="flex-grow">
           <div className="mb-8">
             <Card className="mb-6">
-              <Title level={4} className="mb-4">
-                Thông tin nhận hàng
-              </Title>
+              <div className="flex justify-between items-center mb-4">
+                <Title level={4} style={{ margin: 0 }}>
+                  Thông tin nhận hàng
+                </Title>
+                {user && (
+                  <Button type="primary" onClick={fillUserInfo} ghost>
+                    Sử dụng thông tin của tôi
+                  </Button>
+                )}
+              </div>
               <Form
                 layout="vertical"
                 form={form}
@@ -165,19 +225,13 @@ function Payment() {
                   <Input placeholder="Họ và tên" size="large" />
                 </Form.Item>
                 <Form.Item
-                  name="phoneNumber"
+                  name="phone"
                   label="Số điện thoại"
                   rules={[
                     { required: true, message: "Vui lòng số điện thoại!" },
                   ]}
                 >
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="Số điện thoại"
-                      size="large"
-                      className="flex-1"
-                    />
-                  </div>
+                  <Input placeholder="Số điện thoại" size="large" />
                 </Form.Item>
                 <Form.Item name="email" label="Email">
                   <Input placeholder="Email (tuỳ chọn)" size="large" />
@@ -232,6 +286,76 @@ function Payment() {
                 >
                   <Input placeholder="Số nhà, tên đường..." size="large" />
                 </Form.Item>
+
+                <Form.Item
+                  name="deliveryDate"
+                  label="Ngày giao hàng"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Vui lòng chọn ngày giao hàng!",
+                    },
+                  ]}
+                >
+                  <DatePicker
+                    style={{ width: "100%" }}
+                    format="DD/MM/YYYY"
+                    placeholder="Chọn ngày giao hàng"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  name="deliveryTime"
+                  label="Giờ giao hàng"
+                  rules={[
+                    { required: true, message: "Vui lòng chọn giờ giao hàng!" },
+                  ]}
+                >
+                  <Select defaultValue="08:00 - 12:00">
+                    <Select.Option value="08:00 - 12:00">
+                      08:00 - 12:00
+                    </Select.Option>
+                    <Select.Option value="14:00 - 18:00">
+                      14:00 - 18:00
+                    </Select.Option>
+                    <Select.Option value="19:00 - 21:00">
+                      19:00 - 21:00
+                    </Select.Option>
+                  </Select>
+                </Form.Item>
+
+                <Form.Item>
+                  <Checkbox
+                    checked={showInvoiceForm}
+                    onChange={(e) => setShowInvoiceForm(e.target.checked)}
+                  >
+                    Xuất hóa đơn công ty
+                  </Checkbox>
+                </Form.Item>
+
+                {showInvoiceForm && (
+                  <>
+                    <Form.Item name="companyName" label="Tên công ty">
+                      <Input placeholder="Tên công ty" />
+                    </Form.Item>
+
+                    <Form.Item name="taxId" label="Mã số thuế">
+                      <Input placeholder="Mã số thuế" />
+                    </Form.Item>
+
+                    <Form.Item name="companyAddress" label="Địa chỉ công ty">
+                      <TextArea
+                        rows={4}
+                        placeholder="Nhập địa chỉ công ty (bao gồm Phường/Xã, Quận/Huyện, Tỉnh/Thành phố nếu có)"
+                      />
+                    </Form.Item>
+
+                    <Form.Item name="invoiceEmail" label="Email nhận hóa đơn">
+                      <Input placeholder="Email nhận hóa đơn" />
+                    </Form.Item>
+                  </>
+                )}
+
                 <Form.Item name="notes" label="Ghi chú">
                   <TextArea placeholder="Ghi chú (tùy chọn)" rows={4} />
                 </Form.Item>
@@ -240,7 +364,7 @@ function Payment() {
           </div>
         </div>
 
-        <div className="md:w-1/3">
+        <div className="md:w-1/3 md:sticky md:top-6 self-start mb-8">
           <Card style={{ marginBottom: "20px" }}>
             <Title level={4} className="mb-4">
               Thanh toán
@@ -279,7 +403,7 @@ function Payment() {
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span>Tạm tính</span>
-                <span>{new Intl.NumberFormat("vi-VN").format(total)}₫ </span>
+                <span>{new Intl.NumberFormat("vi-VN").format(total)} ₫ </span>
               </div>
               <div className="flex justify-between">
                 <span>Phí vận chuyển</span>
@@ -289,7 +413,7 @@ function Payment() {
               <div className="flex justify-between font-bold">
                 <span>Tổng cộng</span>
                 <span className="font-bold text-green-500">
-                  {new Intl.NumberFormat("vi-VN").format(total)}
+                  {new Intl.NumberFormat("vi-VN").format(total)} ₫
                 </span>
               </div>
             </div>

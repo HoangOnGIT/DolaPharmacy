@@ -6,6 +6,7 @@ const Menu = () => {
   const location = useLocation();
   const [activeIndex, setActiveIndex] = useState(0);
 
+
   const menuItems = [
     { title: "Trang chủ", path: "/homepage" },
     { title: "Giới thiệu", path: "/about" },
@@ -44,7 +45,7 @@ const Menu = () => {
   }, [location.pathname]);
 
   return (
-    <div className="relative">
+    <div className="relative my-4">
       <ul className="flex flex-wrap items-center gap-4 text-sm font-semibold relative z-10">
         {menuItems.map((item, index) => {
           const hasSubMenu = subMenus[item.title];

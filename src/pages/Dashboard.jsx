@@ -15,7 +15,7 @@ const Dashboard = () => {
 				<BuyerProfilePieChart />
 			</div>
 			<div className="flex flex-row gap-4 w-full">
-				<TableDashboard />
+				<TableDashboard choose={0}/>
 				<PopularProduct />
 			</div>
 		</div>

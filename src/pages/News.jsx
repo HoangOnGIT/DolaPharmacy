@@ -139,7 +139,7 @@ export default function News() {
         <Col xs={24} lg={16}>
           <Row gutter={[16, 16]}>
             {newsData.map((news) => (
-              <Col xs={24} md={12} key={news.id}>
+              <Col xs={24} sm={12} md={8} key={news.id}>
                 <Card
                   hoverable
                   className="h-full"

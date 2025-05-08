@@ -83,7 +83,12 @@ const Product = ({ promotion = false }) => {
       return;
     }
 
-    addToCart(item);
+    if (item.variant) {
+      addToCart(item);
+    } else {
+      addToCart(item);
+    }
+
     api.success({
       message: "Thêm giỏ hàng thành công",
       description: `${item.name} được thêm vào giỏ hàng thành công!`,
@@ -182,8 +187,6 @@ const Product = ({ promotion = false }) => {
     const params = queryString.stringify(filter);
     setSearchParams(params); // This updates the URL query parameters
   }, [filter]);
-
-  console.log("BASE URL:", import.meta.env.VITE_API_BASE_URL);
 
   return (
     <div className="bg-gradient-to-br from-blue-50 via-white to-gray-100 min-h-screen py-12">

@@ -18,7 +18,7 @@ const Home = () => {
       style={{ width: "100%" }}
       className="flex items-center justify-center my-10"
     >
-      <div className="w-[80%]">
+      <div className="w-[70%]">
         <HealthBanner />
         <Category />
         <Products name="Khuyến mãi hấp dẫn" />

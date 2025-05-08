@@ -50,13 +50,15 @@ function OrderDetail({ confirm = false }) {
     }).format(amount);
   };
 
-  const formatDate = (timestamp) => {
-    return new Date(timestamp).toLocaleDateString("vi-VN", {
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    if (typeof dateString === "string" && !dateString.includes("T"))
+      return dateString;
+
+    return new Date(dateString).toLocaleDateString("vi-VN", {
       year: "numeric",
       month: "long",
       day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
     });
   };
 
@@ -226,6 +228,17 @@ function OrderDetail({ confirm = false }) {
               <strong>Địa chỉ:</strong> {order.address}, {order.district},{" "}
               {order.province}
             </p>
+            {order.deliveryDate && (
+              <p>
+                <strong>Ngày giao hàng:</strong>{" "}
+                {formatDate(order.deliveryDate)}
+              </p>
+            )}
+            {order.deliveryTime && (
+              <p>
+                <strong>Giờ giao hàng:</strong> {order.deliveryTime}
+              </p>
+            )}
             <p>
               <strong>Phương thức thanh toán:</strong>{" "}
               {getPaymentMethodText(order.paymentMethod)}
@@ -237,6 +250,27 @@ function OrderDetail({ confirm = false }) {
               </span>
             </p>
           </div>
+          {order.companyName && (
+            <div className="text-left p-4 border-t border-gray-200 mt-4">
+              <Title level={5}>Thông tin xuất hóa đơn</Title>
+              <p>
+                <strong>Tên công ty:</strong> {order.companyName}
+              </p>
+              <p>
+                <strong>Mã số thuế:</strong> {order.taxId}
+              </p>
+              {order.companyAddress && (
+                <p>
+                  <strong>Địa chỉ công ty:</strong> {order.companyAddress}
+                </p>
+              )}
+              {order.invoiceEmail && (
+                <p>
+                  <strong>Email nhận hóa đơn:</strong> {order.invoiceEmail}
+                </p>
+              )}
+            </div>
+          )}
           <Text type="secondary" className="mt-4 block">
             Nếu có bất kỳ thắc mắc nào, vui lòng liên hệ với chúng tôi qua số
             hotline: <Text strong>1800 1800</Text>
@@ -280,6 +314,16 @@ function OrderDetail({ confirm = false }) {
           <Descriptions.Item label="Ngày đặt hàng">
             {formatDate(order.createdAt)}
           </Descriptions.Item>
+          {order.deliveryDate && (
+            <Descriptions.Item label="Ngày giao hàng">
+              {formatDate(order.deliveryDate)}
+            </Descriptions.Item>
+          )}
+          {order.deliveryTime && (
+            <Descriptions.Item label="Giờ giao hàng">
+              {order.deliveryTime}
+            </Descriptions.Item>
+          )}
           <Descriptions.Item label="Phương thức thanh toán">
             {getPaymentMethodText(order.paymentMethod)}
           </Descriptions.Item>
@@ -300,7 +344,7 @@ function OrderDetail({ confirm = false }) {
               <strong>Email:</strong> {order.email}
             </p>
             <p>
-              <strong>Số điện thoại:</strong> {order.phoneNumber}
+              <strong>Số điện thoại:</strong> {order.phone}
             </p>
           </div>
           <div>
@@ -315,6 +359,34 @@ function OrderDetail({ confirm = false }) {
             </p>
           </div>
         </div>
+
+        {order.companyName && (
+          <>
+            <Divider orientation="left">Thông tin xuất hóa đơn</Divider>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              <div>
+                <p>
+                  <strong>Tên công ty:</strong> {order.companyName}
+                </p>
+                <p>
+                  <strong>Mã số thuế:</strong> {order.taxId}
+                </p>
+              </div>
+              <div>
+                {order.companyAddress && (
+                  <p>
+                    <strong>Địa chỉ công ty:</strong> {order.companyAddress}
+                  </p>
+                )}
+                {order.invoiceEmail && (
+                  <p>
+                    <strong>Email nhận hóa đơn:</strong> {order.invoiceEmail}
+                  </p>
+                )}
+              </div>
+            </div>
+          </>
+        )}
 
         <Divider orientation="left">Sản phẩm đã đặt</Divider>
         <Table

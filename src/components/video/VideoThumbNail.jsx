@@ -13,7 +13,7 @@ function VideoThumbNail({ urlObj }) {
   function handleCancel() {
     setIsModalOpen(false);
   }
-  console.log(urlObj.url);
+
   return (
     <>
       <div>
@@ -51,8 +51,10 @@ function VideoThumbNail({ urlObj }) {
         centered
         destroyOnClose={true}
         className="video-modal"
-        bodyStyle={{ padding: 0, height: "auto" }}
-        maskStyle={{ backgroundColor: "rgba(0, 0, 0, 0.75)" }}
+        styles={{
+          body: { padding: 0, height: "auto" },
+          mask: { backgroundColor: "rgba(0, 0, 0, 0.75)" },
+        }}
       >
         <div
           className="video-player-container w-full rounded-lg overflow-hidden"

@@ -4,6 +4,7 @@ import img1 from "../../img/Header/imgDataOthers/image1.png"
 import img2 from "../../img/Header/imgDataOthers/image2.png"
 import img3 from "../../img/Header/imgDataOthers/image3.png"
 import img4 from "../../img/Header/imgDataOthers/image4.png"
+import { Link } from 'react-router-dom';
 
 
 const Others = () => {
@@ -87,10 +88,13 @@ const Others = () => {
         <>
             <div className="py-4">
                 <div className="flex justify-between items-center my-10">
-                    <div><p className="font-semibold text-3xl text-blue-500">Sản phẩm xu hướng</p></div>
-                    <button className="hover:bg-[#003cbf] cursor-pointer transition-colors duration-300 px-4 py-2 bg-blue-500 text-white rounded-sm font-lg">
-                        Xem tất cả
-                    </button>
+                    <div>
+                        <Link to="product">
+                            <p className="hover:text-[#003cbf] cursor-pointer w-[300px] font-semibold text-3xl ">
+                                Sản phẩm nổi bật
+                            </p>
+                        </Link>
+                    </div>
                 </div>
                 <div className="relative w-full">
                     <div className="overflow-hidden">
@@ -175,7 +179,13 @@ const Others = () => {
             </div>
             {/* Phần video */}
             <div>
-                <div><p className="font-semibold text-3xl text-blue-500 my-10">Video</p></div>
+                <div>
+                    <Link to="product">
+                        <p className="hover:text-[#003cbf] cursor-pointer w-[300px] font-semibold text-3xl ">
+                            Video
+                        </p>
+                    </Link>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {healthVideos.map((video, index) => (
                         <VideoThumbNail urlObj={video} key={index} />

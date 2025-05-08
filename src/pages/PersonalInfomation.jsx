@@ -11,7 +11,12 @@ import {
   Empty,
   Tabs,
   Divider,
+  message,
+  Space,
+  Select,
+  Popconfirm,
 } from "antd";
+import AddressModal from "../components/AddressModal";
 
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
@@ -21,6 +26,9 @@ function PersonalInfomation() {
   const [userInfo, setUserInfo] = useState();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isAddressModalVisible, setIsAddressModalVisible] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [deletingAddress, setDeletingAddress] = useState(null);
   const navigate = useNavigate();
 
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -118,6 +126,129 @@ function PersonalInfomation() {
     }
   };
 
+  // Function to handle adding a new address
+  const handleAddAddress = async (values) => {
+    setSubmitting(true);
+    try {
+      const newAddress = {
+        id: Date.now()+ userInfo.id,
+        type: values.type || "shipping",
+        isPrimary: values.isPrimary || false,
+        street: values.address,
+        city: values.province,
+        state: values.district,
+        country: "Việt Nam",
+        phone: values.phoneNumber,
+      };
+
+      // Create a copy of user info and add the new address
+      let updatedUserInfo;
+
+      if (userInfo.addresses) {
+        updatedUserInfo = {
+          ...userInfo,
+          addresses: [...userInfo.addresses, newAddress],
+        };
+      } else {
+        updatedUserInfo = {
+          ...userInfo,
+          addresses: [newAddress],
+        };
+      }
+
+      // Update primary address if needed
+      if (values.isPrimary) {
+        updatedUserInfo.addresses = updatedUserInfo.addresses.map((addr) => ({
+          ...addr,
+          isPrimary: addr.id === newAddress.id,
+        }));
+      }
+
+      const token = localStorage.getItem("token");
+
+      // Send the updated user info to the API
+      const response = await fetch(`${BASE_URL}/api/users/${user.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedUserInfo),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update address");
+      }
+
+      const updatedUser = await response.json();
+      setUserInfo(updatedUser);
+
+      message.success("Thêm địa chỉ thành công!");
+      setIsAddressModalVisible(false);
+    } catch (error) {
+      console.error("Error adding address:", error);
+      message.error("Không thể thêm địa chỉ. Vui lòng thử lại sau.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Function to handle address deletion
+  const handleDeleteAddress = async (addressId) => {
+    setDeletingAddress(addressId);
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
+
+      // Check if it's the last primary address
+      const isPrimaryAddress = userInfo.addresses.find(addr => addr.id === addressId)?.isPrimary;
+      const primaryAddressCount = userInfo.addresses.filter(addr => addr.isPrimary).length;
+      if (isPrimaryAddress && primaryAddressCount <= 1 && userInfo.addresses.length > 1) {
+        message.warning("Không thể xóa địa chỉ chính duy nhất. Vui lòng đặt địa chỉ khác làm địa chỉ chính trước.");
+        return;
+      }
+
+      // Get current addresses
+      const currentAddresses = userInfo.addresses;
+      // Filter out the address to delete
+      const updatedAddresses = currentAddresses.filter(
+        (addr) => addr.id !== addressId
+      );
+
+      // Create updated user info
+      const updatedUserInfo = {
+        ...userInfo,
+        addresses: updatedAddresses,
+      };
+
+      // Send the updated user info to the API
+      const response = await fetch(`${BASE_URL}/api/users/${user.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedUserInfo),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete address");
+      }
+
+      const updatedUser = await response.json();
+      setUserInfo(updatedUser);
+
+      message.success("Xóa địa chỉ thành công!");
+    } catch (error) {
+      console.error("Error deleting address:", error);
+      message.error("Không thể xóa địa chỉ. Vui lòng thử lại sau.");
+    } finally {
+      setDeletingAddress(null);
+    }
+  };
+
   // Define columns for the orders table
   const orderColumns = [
     {
@@ -187,16 +318,20 @@ function PersonalInfomation() {
   }
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <Title level={2} className="text-center mb-6">
+    <div className="!p-6 bg-gray-100 min-h-screen">
+      <Title level={2} className="text-center !mx-6">
         Thông Tin Cá Nhân
       </Title>
 
       <Tabs
         defaultActiveKey="info"
-        className="bg-white shadow-md rounded-lg p-4 mb-6"
+        className="bg-white shadow-md rounded-lg p-4 !mb-6"
       >
-        <TabPane tab="Thông tin cá nhân" key="info">
+        <TabPane
+          tab="Thông tin cá nhân"
+          key="info"
+          style={{ marginLeft: "30px" }}
+        >
           <Card className="mb-6 shadow-md border-0">
             <Title level={4}>Thông Tin Cơ Bản</Title>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -230,36 +365,63 @@ function PersonalInfomation() {
             </div>
           </Card>
           <Card className="mb-6 shadow-md border-0">
-            <Title level={4}>Địa Chỉ</Title>
-            {userInfo.addresses.map((address) => (
-              <Card
-                key={address.id}
-                className="mb-4 shadow-sm border border-gray-200"
+            <div className="flex justify-between items-center mb-4">
+              <Title level={4}>Địa Chỉ</Title>
+              <Button
+                type="primary"
+                className="bg-green-600 hover:bg-green-700"
+                onClick={() => setIsAddressModalVisible(true)}
               >
-                <Text>
-                  <strong>Loại:</strong> {address.type}
-                </Text>
-                <br />
-                <Text>
-                  <strong>Họ và Tên:</strong> {address.firstName}{" "}
-                  {address.lastName}
-                </Text>
-                <br />
-                <Text>
-                  <strong>Địa Chỉ:</strong> {address.street}, {address.city},{" "}
-                  {address.state}, {address.postalCode}, {address.country}
-                </Text>
-                <br />
-                <Text>
-                  <strong>Số Điện Thoại:</strong> {address.phone}
-                </Text>
-                <br />
-                <Text>
-                  <strong>Địa Chỉ Chính:</strong>{" "}
-                  {address.isPrimary ? "Có" : "Không"}
-                </Text>
-              </Card>
-            ))}
+                Thêm địa chỉ
+              </Button>
+            </div>
+            {userInfo.addresses &&
+              userInfo.addresses.map((address) => (
+                <Card
+                  key={address.id}
+                  className="mb-4 shadow-sm border border-gray-200"
+                >
+                  <Text>
+                    <strong>Loại:</strong> {address.type}
+                  </Text>
+                  <br />
+                  <Text>
+                    <strong>Họ và Tên:</strong> {address.firstName}{" "}
+                    {address.lastName}
+                  </Text>
+                  <br />
+                  <Text>
+                    <strong>Địa Chỉ:</strong> {address.street}, {address.city},{" "}
+                    {address.state}, {address.postalCode}, {address.country}
+                  </Text>
+                  <br />
+                  <Text>
+                    <strong>Số Điện Thoại:</strong> {address.phone}
+                  </Text>
+                  <br />
+                  <Text>
+                    <strong>Địa Chỉ Chính:</strong>{" "}
+                    {address.isPrimary ? "Có" : "Không"}
+                  </Text>
+                  <div className="flex justify-end mt-2">
+                    <Popconfirm
+                      title="Xóa địa chỉ này?"
+                      description="Bạn có chắc chắn muốn xóa địa chỉ này không?"
+                      onConfirm={() => handleDeleteAddress(address.id)}
+                      okText="Xóa"
+                      cancelText="Hủy"
+                      okButtonProps={{ danger: true }}
+                    >
+                      <Button
+                        danger
+                        loading={deletingAddress === address.id}
+                      >
+                        Xóa
+                      </Button>
+                    </Popconfirm>
+                  </div>
+                </Card>
+              ))}
           </Card>
           <Card className="shadow-md border-0">
             <Title level={4}>Thông Tin Khác</Title>
@@ -306,7 +468,7 @@ function PersonalInfomation() {
                 <Button
                   type="primary"
                   className="bg-green-600 hover:bg-green-700"
-                  onClick={() => navigate("/products")}
+                  onClick={() => navigate("/product")}
                 >
                   Mua sắm ngay
                 </Button>
@@ -315,6 +477,14 @@ function PersonalInfomation() {
           </Card>
         </TabPane>
       </Tabs>
+
+      {/* Use the AddressModal component */}
+      <AddressModal
+        visible={isAddressModalVisible}
+        onCancel={() => setIsAddressModalVisible(false)}
+        onAddAddress={handleAddAddress}
+        submitting={submitting}
+      />
     </div>
   );
 }

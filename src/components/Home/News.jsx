@@ -8,6 +8,7 @@ import img6 from "../../img/Header/imgNews/image6.png";
 import img7 from "../../img/Header/imgNews/image7.png";
 import img8 from "../../img/Header/imgNews/image8.png";
 import img9 from "../../img/Header/imgNews/image9.png";
+import { Link } from 'react-router-dom';
 
 const News = () => {
     const content = [
@@ -64,7 +65,13 @@ const News = () => {
     return (
         <div className='flex my-10'>
             <div className='w-[67%]'>
-                <div><p className="font-semibold text-3xl text-blue-900 mb-4">Góc dinh dưỡng</p></div>
+                <div>
+                    <Link to="product">
+                        <p className="hover:text-[#003cbf] cursor-pointer w-[300px] font-semibold text-3xl ">
+                            Góc dinh dưỡng
+                        </p>
+                    </Link>
+                </div>
                 <div className='flex'>
                     <div className='w-[50%]'>
                         <div>
@@ -119,11 +126,17 @@ const News = () => {
                     </div>
                 </div>
                 <div className='flex justify-center'>
-                    <button className='hover:bg-[#003cbf] hover:text-white cursor-pointer transition-colors duration-300  px-4 py-2 border-2 border-solid border-blue-700 rounded-sm font-lg'>Xem tất cả</button>
+                    <button className='hover:bg-[#003cbf] hover:!text-white cursor-pointer transition-colors duration-300  px-4 py-2 border-2 border-solid border-blue-700 rounded-sm font-lg'>Xem tất cả</button>
                 </div>
             </div>
             <div className='w-[32%]'>
-                <div><p className="font-semibold text-3xl text-blue-900 mb-4 ml-6">Góc khỏe đẹp</p></div>
+                <div>
+                    <Link to="product">
+                        <p className="hover:text-[#003cbf] cursor-pointer w-[300px] font-semibold text-3xl ">
+                            Góc khỏe đẹp
+                        </p>
+                    </Link>
+                </div>
                 <div className='w-[100%] ml-8'>
                     {content.slice(4, 8).map((item, index) => (
                         <div key={index} className='flex mb-8'>
@@ -154,7 +167,7 @@ const News = () => {
                     ))}
                 </div>
                 <div className='flex justify-center'>
-                    <button className='hover:bg-[#003cbf] hover:text-white cursor-pointer transition-colors duration-300  px-4 py-2 border-2 border-solid border-blue-700 rounded-sm font-lg'>Xem tất cả</button>
+                    <button className='hover:bg-[#003cbf] hover:!text-white cursor-pointer transition-colors duration-300  px-4 py-2 border-2 border-solid border-blue-700 rounded-sm font-lg'>Xem tất cả</button>
                 </div>
             </div>
         </div>

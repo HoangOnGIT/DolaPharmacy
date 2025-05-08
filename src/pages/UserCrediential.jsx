@@ -32,7 +32,13 @@ function UserCrediential({ loginPage }) {
       alert(result.error || "Login failed");
     } else {
       alert("Login successful!");
-      navigate("/");
+      // Chuyển hướng đến /dashboard nếu là admin, hoặc /homepage nếu không
+      const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+      if (storedUser.role === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/homepage");
+      }
     }
   };
 
