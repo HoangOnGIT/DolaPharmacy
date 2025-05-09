@@ -3,10 +3,7 @@ import { HeartIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 
 const SingleProduct = ({ product }) => {
   const hasDiscount = product.discount && product.discount.value > 0;
-  const discountedPrice = hasDiscount
-    ? product.discountedPrice
-    : product.basePrice;
-
+  const discountedPrice = product.salePrice;
   return (
     <div className="bg-white rounded-lg shadow-md w-70 flex-shrink-0 p-4 flex flex-col items-center text-center relative cursor-pointer group">
       {/* Discount Badge */}
