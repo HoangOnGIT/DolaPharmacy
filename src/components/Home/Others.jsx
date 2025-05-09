@@ -5,6 +5,7 @@ import img2 from "../../img/Header/imgDataOthers/image2.png";
 import img3 from "../../img/Header/imgDataOthers/image3.png";
 import img4 from "../../img/Header/imgDataOthers/image4.png";
 import { Link } from "react-router-dom";
+import queryString from "query-string";
 
 const Others = () => {
   const [dataCategory, setDataCategory] = useState([]);
@@ -105,27 +106,38 @@ const Others = () => {
                 }%)`,
               }}
             >
-              {dataCategory.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex-shrink-0 flex flex-col items-center justify-center"
-                  style={{ width: `${100 / itemsPerPage}%`, minWidth: "120px" }}
-                >
-                  <a href="#" className="flex flex-col items-center">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-16 h-16 object-contain transition-transform duration-300 ease-in-out transform hover:scale-90"
-                    />
-                    <p
-                      className="text-sm text-gray-700 mt-2 text-center leading-tight px-2"
-                      style={{ minHeight: "2.5rem", maxWidth: "100px" }}
+              {dataCategory.map((catergory) => {
+                const categoryName = catergory.name;
+                return (
+                  <div
+                    key={catergory.id}
+                    className="flex-shrink-0 flex flex-col items-center justify-center"
+                    style={{
+                      width: `${100 / itemsPerPage}%`,
+                      minWidth: "120px",
+                    }}
+                  >
+                    <a
+                      href={`/product?${queryString.stringify({
+                        categoryName: categoryName,
+                      })}`}
+                      className="flex flex-col items-center"
                     >
-                      {item.name}
-                    </p>
-                  </a>
-                </div>
-              ))}
+                      <img
+                        src={catergory.image}
+                        alt={catergory.name}
+                        className="w-16 h-16 object-contain transition-transform duration-300 ease-in-out transform hover:scale-90"
+                      />
+                      <p
+                        className="text-sm text-gray-700 mt-2 text-center leading-tight px-2"
+                        style={{ minHeight: "2.5rem", maxWidth: "100px" }}
+                      >
+                        {catergory.name}
+                      </p>
+                    </a>
+                  </div>
+                );
+              })}
             </div>
           </div>
           {categoryIndex > 0 && (

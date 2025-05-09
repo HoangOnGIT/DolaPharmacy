@@ -72,28 +72,32 @@ const Category = () => {
       desc: "Giảm 10.000đ giá trị đơn hàng",
       expiry: "1/1/2024",
       img: img1a,
-      details: "Áp dụng cho tất cả đơn hàng từ 100.000đ. Mỗi tài khoản chỉ được sử dụng 1 lần. Không áp dụng đồng thời với các khuyến mãi khác.",
+      details:
+        "Áp dụng cho tất cả đơn hàng từ 100.000đ. Mỗi tài khoản chỉ được sử dụng 1 lần. Không áp dụng đồng thời với các khuyến mãi khác.",
     },
     {
       name: "FREESHIP",
       desc: "Miễn phí vận chuyển",
       expiry: "Không thời hạn",
       img: img2a,
-      details: "Áp dụng cho tất cả đơn hàng từ 200.000đ. Miễn phí vận chuyển tối đa 30.000đ. Áp dụng cho tất cả phương thức vận chuyển.",
+      details:
+        "Áp dụng cho tất cả đơn hàng từ 200.000đ. Miễn phí vận chuyển tối đa 30.000đ. Áp dụng cho tất cả phương thức vận chuyển.",
     },
     {
       name: "DOLA20",
       desc: "Giảm 20.000đ giá trị đơn hàng",
       expiry: "1/1/2024",
       img: img3a,
-      details: "Áp dụng cho tất cả đơn hàng từ 150.000đ. Mỗi tài khoản chỉ được sử dụng 1 lần. Không áp dụng đồng thời với các khuyến mãi khác.",
+      details:
+        "Áp dụng cho tất cả đơn hàng từ 150.000đ. Mỗi tài khoản chỉ được sử dụng 1 lần. Không áp dụng đồng thời với các khuyến mãi khác.",
     },
     {
       name: "DOLA50K",
       desc: "Giảm 50.000đ giá trị đơn hàng",
       expiry: "1/1/2024",
       img: img4a,
-      details: "Áp dụng cho tất cả đơn hàng từ 300.000đ. Mỗi tài khoản chỉ được sử dụng 1 lần. Không áp dụng đồng thời với các khuyến mãi khác.",
+      details:
+        "Áp dụng cho tất cả đơn hàng từ 300.000đ. Mỗi tài khoản chỉ được sử dụng 1 lần. Không áp dụng đồng thời với các khuyến mãi khác.",
     },
   ];
 
@@ -183,7 +187,7 @@ const Category = () => {
                     <p className="text-base text-gray-700 mt-3 text-center">
                       {category.name}
                     </p>
-                  </Link>
+                  </a>
                 </div>
               ))}
             </div>
@@ -286,7 +290,7 @@ const Category = () => {
                         {copiedStates[item.name] ? "Đã lưu" : "Sao chép"}
                       </span>
                     </button>
-                    <button 
+                    <button
                       className="absolute top-2 right-2 text-blue-500 cursor-pointer"
                       onClick={() => openModal(item)}
                     >
@@ -352,32 +356,44 @@ const Category = () => {
       {modalInfo && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full relative shadow-lg">
-            <button 
+            <button
               onClick={closeModal}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 cursor-pointer"
             >
               <XMarkIcon className="w-6 h-6" />
             </button>
-            
+
             <div className="flex items-center mb-4">
-              <img src={modalInfo.img} alt="Discount icon" className="w-12 h-12 mr-4" />
+              <img
+                src={modalInfo.img}
+                alt="Discount icon"
+                className="w-12 h-12 mr-4"
+              />
               <div>
-                <h3 className="text-xl font-bold text-blue-600">{modalInfo.name}</h3>
+                <h3 className="text-xl font-bold text-blue-600">
+                  {modalInfo.name}
+                </h3>
                 <p className="text-sm text-gray-600">{modalInfo.desc}</p>
               </div>
             </div>
-            
+
             <div className="mb-4">
               <div className="flex justify-between mb-2">
-                <span className="text-sm font-medium text-gray-600">Hạn sử dụng:</span>
-                <span className="text-sm text-gray-800">{modalInfo.expiry}</span>
+                <span className="text-sm font-medium text-gray-600">
+                  Hạn sử dụng:
+                </span>
+                <span className="text-sm text-gray-800">
+                  {modalInfo.expiry}
+                </span>
               </div>
               <div className="h-px bg-gray-200 my-2"></div>
-              <h4 className="text-md font-semibold mb-2 text-gray-800">Điều kiện áp dụng:</h4>
+              <h4 className="text-md font-semibold mb-2 text-gray-800">
+                Điều kiện áp dụng:
+              </h4>
               <p className="text-sm text-gray-600">{modalInfo.details}</p>
             </div>
-            
-            <button 
+
+            <button
               onClick={() => {
                 handleCopy(modalInfo.name);
                 closeModal();
