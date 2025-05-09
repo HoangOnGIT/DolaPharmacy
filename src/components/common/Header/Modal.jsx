@@ -117,7 +117,10 @@ const Modal = ({ categories, isModalOpen, setIsModalOpen }) => {
                                             filteredProducts.map((product) => (
                                                 <a href="#" key={product.id} className="group">
                                                     <div className="flex flex-col items-center justify-between border rounded-lg p-3 h-full bg-white hover:shadow-lg hover:border-sky-400 transition-all duration-200">
-                                                        <Link to={`product-detail/${product.id}`}>
+                                                        <Link 
+                                                            to={`product-detail/${product.id}`}
+                                                            onClick={() => setIsModalOpen(false)}
+                                                        >
                                                             <div className="relative w-full pb-[100%] mb-2 overflow-hidden rounded-md bg-gray-100">
                                                                 <img
                                                                     src={

@@ -9,7 +9,7 @@ import img7 from "../../img/Header/imgCategory/image7.png";
 import img8 from "../../img/Header/imgCategory/image8.png";
 import img9 from "../../img/Header/imgCategory/image9.png";
 import img10 from "../../img/Header/imgCategory/image10.png";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { InformationCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import img1a from "../../img/Header/imgDiscount/image1.png";
 import img2a from "../../img/Header/imgDiscount/image2.png";
 import img3a from "../../img/Header/imgDiscount/image3.png";
@@ -72,30 +72,35 @@ const Category = () => {
       desc: "Giảm 10.000đ giá trị đơn hàng",
       expiry: "1/1/2024",
       img: img1a,
+      details: "Áp dụng cho tất cả đơn hàng từ 100.000đ. Mỗi tài khoản chỉ được sử dụng 1 lần. Không áp dụng đồng thời với các khuyến mãi khác.",
     },
     {
       name: "FREESHIP",
       desc: "Miễn phí vận chuyển",
       expiry: "Không thời hạn",
       img: img2a,
+      details: "Áp dụng cho tất cả đơn hàng từ 200.000đ. Miễn phí vận chuyển tối đa 30.000đ. Áp dụng cho tất cả phương thức vận chuyển.",
     },
     {
       name: "DOLA20",
       desc: "Giảm 20.000đ giá trị đơn hàng",
       expiry: "1/1/2024",
       img: img3a,
+      details: "Áp dụng cho tất cả đơn hàng từ 150.000đ. Mỗi tài khoản chỉ được sử dụng 1 lần. Không áp dụng đồng thời với các khuyến mãi khác.",
     },
     {
       name: "DOLA50K",
       desc: "Giảm 50.000đ giá trị đơn hàng",
       expiry: "1/1/2024",
       img: img4a,
+      details: "Áp dụng cho tất cả đơn hàng từ 300.000đ. Mỗi tài khoản chỉ được sử dụng 1 lần. Không áp dụng đồng thời với các khuyến mãi khác.",
     },
   ];
 
   const [categoryIndex, setCategoryIndex] = useState(0);
   const [discountIndex, setDiscountIndex] = useState(0);
-  const [copiedStates, setCopiedStates] = useState({}); // Track copied state for each discount
+  const [copiedStates, setCopiedStates] = useState({});
+  const [modalInfo, setModalInfo] = useState(null);
   const itemsPerPage = 8;
   const discountItemsPerPage = 4;
 
@@ -129,6 +134,14 @@ const Category = () => {
     setTimeout(() => {
       setCopiedStates((prev) => ({ ...prev, [code]: false }));
     }, 2000); // Revert to "Sao chép" after 2 seconds
+  };
+
+  const openModal = (discountItem) => {
+    setModalInfo(discountItem);
+  };
+
+  const closeModal = () => {
+    setModalInfo(null);
   };
 
   return (
@@ -170,7 +183,7 @@ const Category = () => {
                     <p className="text-base text-gray-700 mt-3 text-center">
                       {category.name}
                     </p>
-                  </a>
+                  </Link>
                 </div>
               ))}
             </div>
@@ -273,7 +286,10 @@ const Category = () => {
                         {copiedStates[item.name] ? "Đã lưu" : "Sao chép"}
                       </span>
                     </button>
-                    <button className="absolute top-2 right-2 text-blue-500 cursor-pointer">
+                    <button 
+                      className="absolute top-2 right-2 text-blue-500 cursor-pointer"
+                      onClick={() => openModal(item)}
+                    >
                       <InformationCircleIcon className="w-4 h-4" />
                     </button>
                   </div>
@@ -310,10 +326,10 @@ const Category = () => {
               <button
                 dir="rtl"
                 onClick={handleDiscountNext}
-                className="group hover:bg-blue-500 transition-colors cursor-pointer p-2 rounded-full shadow-md bg-gray-200 py-4 px-1 rounded-s-lg "
+                className="group hover:bg-blue-500 transition-colors cursor-pointer p-2 rounded-full shadow-md bg-gray-200 py-4 px-1 rounded-s-lg"
               >
                 <svg
-                  className="w-6 h-6  group-hover:text-white  !text-[#0f62f9]"
+                  className="w-6 h-6 group-hover:text-white !text-[#0f62f9]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -331,6 +347,48 @@ const Category = () => {
           )}
         </div>
       </div>
+
+      {/* Modal */}
+      {modalInfo && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full relative shadow-lg">
+            <button 
+              onClick={closeModal}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 cursor-pointer"
+            >
+              <XMarkIcon className="w-6 h-6" />
+            </button>
+            
+            <div className="flex items-center mb-4">
+              <img src={modalInfo.img} alt="Discount icon" className="w-12 h-12 mr-4" />
+              <div>
+                <h3 className="text-xl font-bold text-blue-600">{modalInfo.name}</h3>
+                <p className="text-sm text-gray-600">{modalInfo.desc}</p>
+              </div>
+            </div>
+            
+            <div className="mb-4">
+              <div className="flex justify-between mb-2">
+                <span className="text-sm font-medium text-gray-600">Hạn sử dụng:</span>
+                <span className="text-sm text-gray-800">{modalInfo.expiry}</span>
+              </div>
+              <div className="h-px bg-gray-200 my-2"></div>
+              <h4 className="text-md font-semibold mb-2 text-gray-800">Điều kiện áp dụng:</h4>
+              <p className="text-sm text-gray-600">{modalInfo.details}</p>
+            </div>
+            
+            <button 
+              onClick={() => {
+                handleCopy(modalInfo.name);
+                closeModal();
+              }}
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg transition-colors duration-300 cursor-pointer"
+            >
+              Sử dụng ngay
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };

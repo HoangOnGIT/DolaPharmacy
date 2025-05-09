@@ -72,7 +72,6 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       { index: true, element: <Home /> },
-      { path: "homepage", element: <Home /> },
       { path: "news", element: <News /> },
       {
         path: "news/:slug",
