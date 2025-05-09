@@ -42,6 +42,7 @@ function ProductDescription({
           }`}
         >
           <div
+            className="h-fit"
             dangerouslySetInnerHTML={{
               __html:
                 product.description + product.description + product.description,

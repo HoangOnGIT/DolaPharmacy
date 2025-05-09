@@ -193,7 +193,7 @@ export default function Contact() {
         </Col>
 
         <Col xs={24} lg={12}>
-          <Card bodyStyle={{ padding: 0, height: 600 }}>
+          <Card bodyStyle={{ padding: 0, height: 700, width: 700 }}>
             <MapContainer
               center={storePosition}
               zoom={15}
