@@ -29,6 +29,10 @@ import OrderDetail from "./pages/OrdersDetail";
 import QnA from "./pages/QnA";
 import Contact from "./pages/Contact";
 import ScrollToTop from "../src/components/common/ScrollToTop";
+import DashboardOrder from "./components/dashboard/DashboardOrder";
+import DashboardCustomer from "./components/dashboard/DashboardCustomer"; 
+import DashboardDocument from "./components/dashboard/DashboardDocument"; 
+import DashboardAnnoucement from "./components/dashboard/DashboardAnnoucement";
 
 const router = createBrowserRouter([
   {
@@ -156,6 +160,12 @@ const router = createBrowserRouter([
           { path: "product/add", element: <AddProduct /> },
           { path: "product/update/:id", element: <UpdateProduct /> },
           { path: "product/:id", element: <DashboardProductDetail /> },
+          { path: "order", element: <DashboardOrder /> },
+          { path: "customer", element: <DashboardCustomer /> },
+          { path: "document", element: <DashboardDocument /> },
+          { path: "announcement", element: <DashboardAnnoucement /> },
+          { path: "setting", element: <DashboardAnnoucement /> },
+          { path: "support", element: <DashboardAnnoucement /> },
         ],
       },
     ],

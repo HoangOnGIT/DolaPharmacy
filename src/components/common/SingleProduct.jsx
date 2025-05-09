@@ -1,10 +1,11 @@
-import React from "react";
-import { HeartIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
+import React, { useEffect, useState } from "react";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import AddToCart from "../product/AddToCart";
 import useNotification from "antd/es/notification/useNotification";
 import { useCart } from "../../contexts/CartContext";
 import { useFav } from "../../contexts/FavouriteContext";
+import { useAuth } from "../../contexts/AuthContext"; // Import useAuth
 import { HeartFilled, HeartOutlined } from "@ant-design/icons";
 
 const SingleProduct = ({ product }) => {
@@ -16,29 +17,53 @@ const SingleProduct = ({ product }) => {
   const [api, context] = useNotification();
   const { favList, toggleFavourite } = useFav();
   const { addToCart } = useCart();
+  const { isAuthenticated } = useAuth(); // Get authentication status
+  const [isCurrentlyFavourited, setIsCurrentlyFavourited] = useState(false);
 
-  let isFavourited = false;
-  if (
-    favList.items &&
-    favList.items.find((favItem) => favItem.id === product.id)
-  ) {
-    isFavourited = true;
-  }
+  useEffect(() => {
+    setIsCurrentlyFavourited(
+      favList.items && favList.items.some((favItem) => favItem.id === product.id)
+    );
+  }, [favList, product.id]);
 
-  function handleToggleFav(e) {
+  const handleToggleFav = (e) => {
     e.stopPropagation();
     if (!product || !product.name) {
-      console.error("Invalid item passed to handleAddToCart:", item);
+      console.error("Invalid item passed to handleToggleFav:", product);
       return;
     }
-    toggleFavourite(product);
-  }
+
+    if (isAuthenticated) {
+      toggleFavourite(product);
+      setIsCurrentlyFavourited(!isCurrentlyFavourited);
+      if (!isCurrentlyFavourited) {
+        api.success({
+          message: "Đã thêm vào yêu thích!",
+          description: `${product.name} đã được thêm vào danh mục yêu thích của bạn.`,
+          duration: 1.5,
+        });
+      } else {
+        api.info({
+          message: "Đã xóa khỏi yêu thích!",
+          description: `${product.name} đã được xóa khỏi danh mục yêu thích của bạn.`,
+          duration: 1.5,
+        });
+      }
+    } else {
+      api.warning({
+        message: "Vui lòng đăng nhập!",
+        description: "Bạn cần đăng nhập để thêm sản phẩm vào danh mục yêu thích.",
+        duration: 2,
+      });
+      // Removed the navigation to the login page here
+    }
+  };
 
   function handleClick() {
     nav(`/product-detail/${product.id}`);
   }
 
-  function handleAddToCart(item) {
+  function handleAddToCartItem(item) {
     if (!item || !item.name) {
       alert("Không thể thêm vào giỏ hàng!");
       return;
@@ -73,7 +98,11 @@ const SingleProduct = ({ product }) => {
         className="absolute top-2 right-2 text-red-500 cursor-pointer z-10"
         onClick={(e) => handleToggleFav(e)}
       >
-        {isFavourited ? <HeartFilled /> : <HeartOutlined />}
+        {isCurrentlyFavourited ? (
+          <HeartFilled className="text-red-500" />
+        ) : (
+          <HeartOutlined className="hover:text-red-500 transition-colors duration-300" />
+        )}
       </div>
       {/* Product Image with Zoom Effect */}
       <div className="relative w-48 h-55 mb-4 mt-6 overflow-hidden rounded-lg">
@@ -113,14 +142,7 @@ const SingleProduct = ({ product }) => {
         Đã bán {product.stock.total}
       </p>
       {/* Buy Button */}
-      {/* <button className="cursor-pointer bg-blue-500 hover:bg-[#5dac46] transition-colors duration-300 text-white font-bold py-2 px-4 rounded-lg flex items-center focus:outline-none justify-center">
-        <ShoppingCartIcon
-          className="h-5 w-5 inline-block mr-2"
-          style={{ color: "white" }}
-        />
-        <span className="text-white">Thêm</span>
-      </button> */}
-      <AddToCart item={product} handleAddToCart={handleAddToCart} />
+      <AddToCart item={product} handleAddToCart={handleAddToCartItem} />
     </div>
   );
 };
