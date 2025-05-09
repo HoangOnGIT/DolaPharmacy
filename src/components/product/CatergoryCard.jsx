@@ -11,6 +11,7 @@ function CatergoryCard({ catergory, onFilter }) {
             return { ...prev, category: catergory.id };
           })
         }
+        title={catergory.name}
       >
         <div className="flex justify-center items-center">
           <img
@@ -19,8 +20,11 @@ function CatergoryCard({ catergory, onFilter }) {
             className="w-16 h-16 object-contain"
           />
         </div>
-        <div className="text-center">
-          <span className="font-semibold text-gray-800 block truncate">
+        <div className="text-center w-full">
+          <span
+            className="font-semibold text-gray-800 block truncate text-sm max-w-full overflow-hidden whitespace-nowrap"
+            title={catergory.name}
+          >
             {catergory.name}
           </span>
         </div>

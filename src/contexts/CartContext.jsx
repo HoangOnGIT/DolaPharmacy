@@ -8,12 +8,14 @@ export const useCart = () => useContext(CartContext);
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const CartProvider = ({ children }) => {
-  const initialCart = {};
+  const initialCart = { items: [] };
 
   // Try to get cart from localStorage first
   const getInitialCart = () => {
     const savedCart = localStorage.getItem("cart");
-    return savedCart ? JSON.parse(savedCart) : initialCart;
+    return savedCart && JSON.parse(savedCart)?.items
+      ? JSON.parse(savedCart)
+      : initialCart;
   };
 
   const [cart, setCart] = useState(getInitialCart);
@@ -36,19 +38,27 @@ export const CartProvider = ({ children }) => {
             throw new Error("Failed to fetch cart data");
           }
           const data = await response.json();
-          setCart(data[0]);
-          // Also update localStorage when fetching from server
-          localStorage.setItem("cart", JSON.stringify(data[0]));
+
+          // If server cart exists, use it, otherwise keep using local cart
+          if (data && data[0]) {
+            setCart(data[0]);
+            localStorage.setItem("cart", JSON.stringify(data[0]));
+          }
         } catch (error) {
           console.error("Error fetching cart:", error);
-          setCart(initialCart);
-          localStorage.setItem("cart", JSON.stringify(initialCart));
+          // Don't reset cart on error, keep using current cart
         }
       };
       fetchCart();
     } else {
-      setCart(initialCart);
-      localStorage.setItem("cart", JSON.stringify(initialCart));
+      // For non-authenticated users, keep using the local cart
+      // No need to reset the cart here
+      const localCart = getInitialCart();
+
+      // Only set the cart if it's different from current cart
+      if (JSON.stringify(localCart) !== JSON.stringify(cart)) {
+        setCart(localCart);
+      }
     }
   }, [isAuthenticated, user]);
 
@@ -60,7 +70,7 @@ export const CartProvider = ({ children }) => {
     basePrice: item.basePrice,
     quantity: item.quantity || 1,
     images: item.images,
-    variant: item.variant ? item.variant : "",
+    variant: item.variant ? item.variant : { name: "Không phân loại" },
   });
 
   const addToCart = async (item) => {
@@ -73,7 +83,11 @@ export const CartProvider = ({ children }) => {
       const sanitizedItem = sanitizeItem(item);
       const currentItems = cart.items ? [...cart.items] : [];
       const existingItemIndex = currentItems.findIndex(
-        (cartItem) => cartItem.productId === sanitizedItem.productId
+        (cartItem) =>
+          cartItem.id === sanitizedItem.id &&
+          (sanitizedItem.variant.name !== "Không phân loại"
+            ? sanitizedItem.variant.id === cartItem.variant.id
+            : true)
       );
 
       if (existingItemIndex >= 0) {
@@ -125,8 +139,13 @@ export const CartProvider = ({ children }) => {
 
       const sanitizedItem = sanitizeItem(item);
       const currentItems = cart.items ? [...cart.items] : [];
+
       const existingItemIndex = currentItems.findIndex(
-        (cartItem) => cartItem.productId === sanitizedItem.productId
+        (cartItem) =>
+          cartItem.id === sanitizedItem.id &&
+          (sanitizedItem.variant.name !== "Không phân loại"
+            ? sanitizedItem.variant.id === cartItem.variant.id
+            : true)
       );
 
       if (existingItemIndex >= 0) {
@@ -143,43 +162,62 @@ export const CartProvider = ({ children }) => {
 
       // Update localStorage immediately
       localStorage.setItem("cart", JSON.stringify(updatedCart));
+      setCart(updatedCart);
 
-      const token = localStorage.getItem("token");
+      if (isAuthenticated) {
+        const token = localStorage.getItem("token");
 
-      const response = await fetch(`${BASE_URL}/api/carts/${cart.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(updatedCart),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to update cart on server");
+        const response = await fetch(`${BASE_URL}/api/carts/${cart.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updatedCart),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to update cart on server");
+        }
+        const serverCart = await response.json();
+        setCart(serverCart);
+        // Update localStorage with server response
+        localStorage.setItem("cart", JSON.stringify(serverCart));
       }
-      const serverCart = await response.json();
-      setCart(serverCart);
-      // Update localStorage with server response
-      localStorage.setItem("cart", JSON.stringify(serverCart));
     } catch (error) {
       console.error("Error updating cart:", error);
     }
   };
 
-  const updateItemQuantity = (itemId, newQuantity) => {
+  const updateItemQuantity = (itemNew, newQuantity) => {
     // if (!isAuthenticated || !user) {
     //   console.error("User must be logged in to update item quantity.");
     //   return;
     // }
 
     if (newQuantity < 1) {
-      removeItemFromCart(itemId);
+      removeItemFromCart(itemNew);
       return;
     }
 
-    const updatedItems = cart.items.map((item) =>
-      item.id === itemId ? { ...item, quantity: newQuantity } : item
-    );
+    const updatedItems = cart.items.map((item) => {
+      // Check if item has the same product ID
+      if (item.id === itemNew.id) {
+        // If both items have variants, check if the variant IDs match
+        if (item.variant && itemNew.variant) {
+          if (item.variant.id === itemNew.variant.id) {
+            return { ...item, quantity: newQuantity };
+          }
+        }
+        // If neither has a variant or the item has "Không phân loại" variant
+        else if (
+          (!item.variant && !itemNew.variant) ||
+          (item.variant && item.variant.name === "Không phân loại")
+        ) {
+          return { ...item, quantity: newQuantity };
+        }
+      }
+      return item;
+    });
 
     const updatedCart = {
       ...cart,
@@ -187,7 +225,7 @@ export const CartProvider = ({ children }) => {
       updatedAt: new Date(),
     };
 
-    setCart({ ...cart, items: updatedItems });
+    setCart(updatedCart);
     // Update localStorage immediately
     localStorage.setItem("cart", JSON.stringify(updatedCart));
 
@@ -215,20 +253,42 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const removeItemFromCart = (itemId) => {
+  const removeItemFromCart = (item) => {
     // if (!isAuthenticated || !user) {
     //   console.error("User must be logged in to remove items from the cart.");
     //   return;
     // }
 
-    const updatedItems = cart.items.filter((item) => item.id !== itemId);
-    const updatedCart = { ...cart, items: updatedItems };
+    // Handle both cases: when item is an ID or when it's a full item object
+    const isItemObject = typeof item === "object";
+    const itemId = isItemObject ? item.id : item;
+
+    const updatedItems = cart.items.filter((cartItem) => {
+      // Different product ID - keep the item
+      if (cartItem.id !== item.id) return true;
+
+      // Same product ID - check variants
+      if (item.variant && item.variant.id) {
+        // Item has a variant with ID - only remove if variant IDs match
+        return !(cartItem.variant && cartItem.variant.id === item.variant.id);
+      } else if (item.variant && item.variant.name === "Không phân loại") {
+        // For default variant, remove items with matching ID and default variant
+        return !(
+          cartItem.variant && cartItem.variant.name === "Không phân loại"
+        );
+      } else {
+        // No variant in the item to remove - remove any item with matching ID without variant
+        return cartItem.variant !== undefined && cartItem.variant !== null;
+      }
+    });
+
+    const updatedCart = { ...cart, items: updatedItems, updatedAt: new Date() };
 
     // Update localStorage immediately
     localStorage.setItem("cart", JSON.stringify(updatedCart));
     setCart(updatedCart);
 
-    if (isAuthenticated) {
+    if (isAuthenticated && cart.id) {
       const token = localStorage.getItem("token");
 
       fetch(`${BASE_URL}/api/carts/${cart.id}`, {
@@ -246,7 +306,7 @@ export const CartProvider = ({ children }) => {
           return response.json();
         })
         .then((serverCart) => {
-          setCart(updatedCart);
+          setCart(serverCart);
           // Update localStorage with server response
           localStorage.setItem("cart", JSON.stringify(serverCart));
         })
@@ -266,24 +326,27 @@ export const CartProvider = ({ children }) => {
 
       // Update localStorage immediately
       localStorage.setItem("cart", JSON.stringify(updatedCart));
+      setCart(updatedCart);
 
-      const token = localStorage.getItem("token");
+      if (isAuthenticated) {
+        const token = localStorage.getItem("token");
 
-      const response = await fetch(`${BASE_URL}/api/carts/${cart.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(updatedCart),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to update cart on server");
+        const response = await fetch(`${BASE_URL}/api/carts/${cart.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updatedCart),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to update cart on server");
+        }
+        const serverCart = await response.json();
+        setCart(serverCart);
+        // Update localStorage with server response
+        localStorage.setItem("cart", JSON.stringify(serverCart));
       }
-      const serverCart = await response.json();
-      setCart(serverCart);
-      // Update localStorage with server response
-      localStorage.setItem("cart", JSON.stringify(serverCart));
     } catch (error) {
       console.error("Error updating cart:", error);
     }

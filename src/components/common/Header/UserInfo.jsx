@@ -7,6 +7,8 @@ function UserInfo({ user }) {
   const [userCurr, setUserCurr] = useState({});
   const { logout } = useAuth();
 
+  const nav = useNavigate();
+
   const navigate = useNavigate();
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -29,6 +31,11 @@ function UserInfo({ user }) {
     navigate("/profile");
   }
 
+  function handleLogout() {
+    logout();
+    nav("/");
+  }
+
   return (
     <div className="flex space-x-1 justify-center items-center mx-1">
       <button
@@ -40,7 +47,7 @@ function UserInfo({ user }) {
       <span className="text-white text-sm px-1 thin-divider">|</span>
       <button
         className="hover:cursor-pointer hover:!text-blue-700"
-        onClick={() => logout()}
+        onClick={() => handleLogout()}
       >
         Đăng xuất
       </button>

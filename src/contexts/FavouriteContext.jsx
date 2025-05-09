@@ -18,9 +18,6 @@ const FavProvider = ({ children }) => {
     if (isAuthenticated && user) {
       const userId = { userId: user.id };
 
-      console.log(
-        `${BASE_URL}/api/favourites?${queryString.stringify(userId)}`
-      );
       const fetchCart = async () => {
         try {
           const response = await fetch(
@@ -38,6 +35,8 @@ const FavProvider = ({ children }) => {
         }
       };
       fetchCart();
+    } else {
+      setFavList({});
     }
   }, [isAuthenticated, user]);
 

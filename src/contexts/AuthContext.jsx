@@ -15,6 +15,8 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  console.log(user);
+
   // Login function
   const login = async (username, password) => {
     try {
@@ -127,6 +129,7 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("cart");
   };
 
   // Check for existing session on component mount

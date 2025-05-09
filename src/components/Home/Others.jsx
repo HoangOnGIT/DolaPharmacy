@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import VideoThumbNail from "../../components/video/VideoThumbNail";
+import VideoThumbNail from "../video/VideoThumbNail";
 import img1 from "../../img/Header/imgDataOthers/image1.png";
 import img2 from "../../img/Header/imgDataOthers/image2.png";
 import img3 from "../../img/Header/imgDataOthers/image3.png";

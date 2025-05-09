@@ -2,6 +2,7 @@ import React from "react";
 import { Table, Button, InputNumber, Image, Space } from "antd";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { useCart } from "../../contexts/CartContext";
+import { Link } from "react-router-dom";
 
 function CartList() {
   const { cart, updateItemQuantity, removeItemFromCart } = useCart();
@@ -10,12 +11,8 @@ function CartList() {
   const safeCartItems = (cart.items || []).map((item) => {
     return {
       ...item,
-      // Convert any potential object values to strings
       name: item.name ? String(item.name) : "Unnamed Product",
-      variant:
-        typeof item.variant === "object"
-          ? JSON.stringify(item.variant)
-          : item.variant || "Không phân loại",
+      variant: item.variant || { name: "Không phân loại" },
     };
   });
 
@@ -39,13 +36,18 @@ function CartList() {
           />
           <div className="ml-5">
             <div style={{ maxWidth: 300, fontWeight: 500, marginBottom: 4 }}>
-              {String(record.name)}
+              <Link
+                to={`/product-detail/${record.id}`}
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                {String(record.name)}
+              </Link>
             </div>
             <Button
               type="link"
               danger
               style={{ padding: 0, fontSize: "12px" }}
-              onClick={() => removeItemFromCart(record.id)}
+              onClick={() => removeItemFromCart(record)}
             >
               Xóa
             </Button>
@@ -60,7 +62,7 @@ function CartList() {
       render: (_, record) => {
         console.log(record.variant.name);
 
-        return <span>{record.variant ? record.variant : "Mặc định"}</span>;
+        return <span>{record.variant ? record.variant.name : "Mặc định"}</span>;
       },
     },
     {
@@ -87,7 +89,7 @@ function CartList() {
         <Space>
           <Button
             icon={<MinusOutlined />}
-            onClick={() => updateItemQuantity(record.id, record.quantity - 1)}
+            onClick={() => updateItemQuantity(record, record.quantity - 1)}
             style={{
               background: "#e0e0e0",
               borderColor: "#e0e0e0",
@@ -103,7 +105,7 @@ function CartList() {
           />
           <Button
             icon={<PlusOutlined />}
-            onClick={() => updateItemQuantity(record.id, record.quantity + 1)}
+            onClick={() => updateItemQuantity(record, record.quantity + 1)}
             style={{
               background: "#2a6fdb",
               borderColor: "#2a6fdb",
@@ -137,7 +139,7 @@ function CartList() {
         dataSource={safeCartItems}
         columns={columns}
         pagination={false}
-        rowKey="id"
+        rowKey="variant.id"
         style={{ borderRadius: "8px", overflow: "hidden" }}
         className="cart-items-table"
       />
