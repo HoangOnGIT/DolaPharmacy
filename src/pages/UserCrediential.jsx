@@ -13,16 +13,17 @@ import {
 } from "@ant-design/icons";
 
 function UserCrediential({ loginPage }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [activeTab, setActiveTab] = useState(loginPage ? "login" : "register");
   const { login, register, error, loading } = useAuth();
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [registerForm] = Form.useForm();
+  const nav = useNavigate();
+  const { user, isAuthenticated } = useAuth();
+
+  if (isAuthenticated && user.role.toLowerCase() !== "admin") {
+    nav("/");
+  }
 
   // Add a state to handle animation
   const [isAnimating, setIsAnimating] = useState(false);

@@ -52,8 +52,10 @@ const ProductCard = ({
       </div>
 
       <div className="absolute top-2 left-2 z-10">
-        {product.discount && product.discount.value && (
+        {product.discount && product.discount.value ? (
           <BadgeDiscount discount={`${product.discount.value}%`} />
+        ) : (
+          ""
         )}
       </div>
 

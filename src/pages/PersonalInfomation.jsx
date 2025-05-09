@@ -1,24 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
-import {
-  Card,
-  Typography,
-  Spin,
-  Table,
-  Tag,
-  Button,
-  Empty,
-  Tabs,
-  Divider,
-  message,
-  Space,
-  Select,
-  Popconfirm,
-} from "antd";
-import AddressModal from "../components/AddressModal";
+import { Card, Typography, Spin, Tabs, Row, Col, message } from "antd";
+import { UserOutlined, ShoppingOutlined } from "@ant-design/icons";
+import AddressModal from "../components/PersonalInfo/AddressModal";
 
-const { Title, Text } = Typography;
+// Import our new components
+import ProfileCard from "../components/PersonalInfo/ProfileCard";
+import BasicInfoCard from "../components/PersonalInfo/BasicInfoCard";
+import AddressList from "../components/PersonalInfo/AddressList";
+import OtherInfoCard from "../components/PersonalInfo/OtherInfoCard";
+import OrderHistory from "../components/PersonalInfo/OrderHistory";
+
+const { Title } = Typography;
 const { TabPane } = Tabs;
 
 function PersonalInfomation() {
@@ -29,8 +22,6 @@ function PersonalInfomation() {
   const [isAddressModalVisible, setIsAddressModalVisible] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [deletingAddress, setDeletingAddress] = useState(null);
-  const navigate = useNavigate();
-
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
@@ -54,6 +45,8 @@ function PersonalInfomation() {
         });
 
       // Fetch user orders
+      console.log(`${BASE_URL}/api/orders?userId=${user.id}`);
+
       fetch(`${BASE_URL}/api/orders?userId=${user.id}`)
         .then((response) => {
           if (!response.ok) {
@@ -75,63 +68,12 @@ function PersonalInfomation() {
     }
   }, [isAuthenticated, user, logout]);
 
-  // Format currency
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(amount);
-  };
-
-  // Format date
-  const formatDate = (timestamp) => {
-    return new Date(timestamp).toLocaleDateString("vi-VN", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  // Order status tag color mapping
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "pending":
-        return "orange";
-      case "processing":
-        return "blue";
-      case "completed":
-        return "green";
-      case "cancelled":
-        return "red";
-      default:
-        return "default";
-    }
-  };
-
-  // Status text mapping
-  const getStatusText = (status) => {
-    switch (status) {
-      case "pending":
-        return "Chờ xử lý";
-      case "processing":
-        return "Đang xử lý";
-      case "completed":
-        return "Hoàn thành";
-      case "cancelled":
-        return "Đã hủy";
-      default:
-        return status;
-    }
-  };
-
   // Function to handle adding a new address
   const handleAddAddress = async (values) => {
     setSubmitting(true);
     try {
       const newAddress = {
-        id: Date.now()+ userInfo.id,
+        id: Date.now() + userInfo.id,
         type: values.type || "shipping",
         isPrimary: values.isPrimary || false,
         street: values.address,
@@ -203,10 +145,20 @@ function PersonalInfomation() {
       }
 
       // Check if it's the last primary address
-      const isPrimaryAddress = userInfo.addresses.find(addr => addr.id === addressId)?.isPrimary;
-      const primaryAddressCount = userInfo.addresses.filter(addr => addr.isPrimary).length;
-      if (isPrimaryAddress && primaryAddressCount <= 1 && userInfo.addresses.length > 1) {
-        message.warning("Không thể xóa địa chỉ chính duy nhất. Vui lòng đặt địa chỉ khác làm địa chỉ chính trước.");
+      const isPrimaryAddress = userInfo.addresses.find(
+        (addr) => addr.id === addressId
+      )?.isPrimary;
+      const primaryAddressCount = userInfo.addresses.filter(
+        (addr) => addr.isPrimary
+      ).length;
+      if (
+        isPrimaryAddress &&
+        primaryAddressCount <= 1 &&
+        userInfo.addresses.length > 1
+      ) {
+        message.warning(
+          "Không thể xóa địa chỉ chính duy nhất. Vui lòng đặt địa chỉ khác làm địa chỉ chính trước."
+        );
         return;
       }
 
@@ -249,66 +201,6 @@ function PersonalInfomation() {
     }
   };
 
-  // Define columns for the orders table
-  const orderColumns = [
-    {
-      title: "Mã đơn hàng",
-      dataIndex: "id",
-      key: "id",
-      render: (id) => <Text copyable>{id}</Text>,
-    },
-    {
-      title: "Ngày đặt",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (date) => formatDate(date),
-      sorter: (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-      defaultSortOrder: "descend",
-    },
-    {
-      title: "Tổng tiền",
-      dataIndex: "total",
-      key: "total",
-      render: (total) => (
-        <Text strong className="text-red-600">
-          {formatCurrency(total)}
-        </Text>
-      ),
-      sorter: (a, b) => a.total - b.total,
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      render: (status) => (
-        <Tag color={getStatusColor(status)} className="py-1 px-2">
-          {getStatusText(status)}
-        </Tag>
-      ),
-      filters: [
-        { text: "Chờ xử lý", value: "pending" },
-        { text: "Đang xử lý", value: "processing" },
-        { text: "Hoàn thành", value: "completed" },
-        { text: "Đã hủy", value: "cancelled" },
-      ],
-      onFilter: (value, record) => record.status === value,
-    },
-    {
-      title: "Hành động",
-      key: "action",
-      render: (_, record) => (
-        <Button
-          type="primary"
-          size="small"
-          className="bg-blue-500"
-          onClick={() => navigate(`/orders/${record.id}`)}
-        >
-          Xem chi tiết
-        </Button>
-      ),
-    },
-  ];
-
   if (!userInfo) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -318,165 +210,59 @@ function PersonalInfomation() {
   }
 
   return (
-    <div className="!p-6 bg-gray-100 min-h-screen">
-      <Title level={2} className="text-center !mx-6">
-        Thông Tin Cá Nhân
-      </Title>
+    <div className="p-4 md:p-8 bg-gray-50 min-h-screen">
+      <Card className="mb-6 shadow-md border-0 rounded-xl overflow-hidden">
+        <Title level={2} className="text-center mb-6 text-blue-700">
+          Thông Tin Cá Nhân
+        </Title>
 
-      <Tabs
-        defaultActiveKey="info"
-        className="bg-white shadow-md rounded-lg p-4 !mb-6"
-      >
-        <TabPane
-          tab="Thông tin cá nhân"
-          key="info"
-          style={{ marginLeft: "30px" }}
+        <Tabs
+          defaultActiveKey="info"
+          className="bg-white rounded-lg"
+          type="card"
+          tabBarStyle={{ marginBottom: "1rem", fontWeight: "bold" }}
         >
-          <Card className="mb-6 shadow-md border-0">
-            <Title level={4}>Thông Tin Cơ Bản</Title>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Text>
-                <strong>ID:</strong> {userInfo.id}
-              </Text>
-              <Text>
-                <strong>Email:</strong> {userInfo.email}
-              </Text>
-              <Text>
-                <strong>Họ và Tên:</strong> {userInfo.firstName}{" "}
-                {userInfo.lastName}
-              </Text>
-              <Text>
-                <strong>Số Điện Thoại:</strong> {userInfo.phone}
-              </Text>
-              <Text>
-                <strong>Ngày Sinh:</strong> {userInfo.dateOfBirth}
-              </Text>
-              <Text>
-                <strong>Vai Trò:</strong> {userInfo.role}
-              </Text>
-              <Text>
-                <strong>Trạng Thái Xác Minh:</strong>{" "}
-                {userInfo.verificationStatus}
-              </Text>
-              <Text>
-                <strong>Lần Đăng Nhập Cuối:</strong>{" "}
-                {new Date(userInfo.lastLogin).toLocaleString()}
-              </Text>
-            </div>
-          </Card>
-          <Card className="mb-6 shadow-md border-0">
-            <div className="flex justify-between items-center mb-4">
-              <Title level={4}>Địa Chỉ</Title>
-              <Button
-                type="primary"
-                className="bg-green-600 hover:bg-green-700"
-                onClick={() => setIsAddressModalVisible(true)}
-              >
-                Thêm địa chỉ
-              </Button>
-            </div>
-            {userInfo.addresses &&
-              userInfo.addresses.map((address) => (
-                <Card
-                  key={address.id}
-                  className="mb-4 shadow-sm border border-gray-200"
-                >
-                  <Text>
-                    <strong>Loại:</strong> {address.type}
-                  </Text>
-                  <br />
-                  <Text>
-                    <strong>Họ và Tên:</strong> {address.firstName}{" "}
-                    {address.lastName}
-                  </Text>
-                  <br />
-                  <Text>
-                    <strong>Địa Chỉ:</strong> {address.street}, {address.city},{" "}
-                    {address.state}, {address.postalCode}, {address.country}
-                  </Text>
-                  <br />
-                  <Text>
-                    <strong>Số Điện Thoại:</strong> {address.phone}
-                  </Text>
-                  <br />
-                  <Text>
-                    <strong>Địa Chỉ Chính:</strong>{" "}
-                    {address.isPrimary ? "Có" : "Không"}
-                  </Text>
-                  <div className="flex justify-end mt-2">
-                    <Popconfirm
-                      title="Xóa địa chỉ này?"
-                      description="Bạn có chắc chắn muốn xóa địa chỉ này không?"
-                      onConfirm={() => handleDeleteAddress(address.id)}
-                      okText="Xóa"
-                      cancelText="Hủy"
-                      okButtonProps={{ danger: true }}
-                    >
-                      <Button
-                        danger
-                        loading={deletingAddress === address.id}
-                      >
-                        Xóa
-                      </Button>
-                    </Popconfirm>
-                  </div>
-                </Card>
-              ))}
-          </Card>
-          <Card className="shadow-md border-0">
-            <Title level={4}>Thông Tin Khác</Title>
-            <Text>
-              <strong>Ngày Tạo:</strong>{" "}
-              {new Date(userInfo.createdAt).toLocaleString()}
-            </Text>
-            <br />
-            <Text>
-              <strong>Ngày Cập Nhật:</strong>{" "}
-              {new Date(userInfo.updatedAt).toLocaleString()}
-            </Text>
-          </Card>
-        </TabPane>
+          <TabPane
+            tab={
+              <span className="flex items-center gap-2">
+                <UserOutlined />
+                Thông tin cá nhân
+              </span>
+            }
+            key="info"
+          >
+            <Row gutter={[16, 16]}>
+              <Col xs={24} md={24} lg={8}>
+                <ProfileCard userInfo={userInfo} />
+              </Col>
+              <Col xs={24} md={24} lg={16}>
+                <BasicInfoCard userInfo={userInfo} />
+              </Col>
+            </Row>
 
-        <TabPane tab="Lịch sử đơn hàng" key="orders">
-          <Card className="shadow-md border-0">
-            <Title level={4} className="mb-4">
-              Đơn Hàng Của Tôi
-            </Title>
+            <AddressList
+              addresses={userInfo.addresses}
+              onAddAddress={() => setIsAddressModalVisible(true)}
+              onDeleteAddress={handleDeleteAddress}
+              deletingAddress={deletingAddress}
+            />
 
-            {loading ? (
-              <div className="flex justify-center my-12">
-                <Spin size="large" />
-              </div>
-            ) : orders.length > 0 ? (
-              <Table
-                dataSource={orders}
-                columns={orderColumns}
-                rowKey="id"
-                pagination={{
-                  pageSize: 5,
-                  showSizeChanger: true,
-                  pageSizeOptions: ["5", "10", "20"],
-                }}
-                className="shadow-sm"
-              />
-            ) : (
-              <Empty
-                description="Bạn chưa có đơn hàng nào"
-                className="my-8"
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-              >
-                <Button
-                  type="primary"
-                  className="bg-green-600 hover:bg-green-700"
-                  onClick={() => navigate("/product")}
-                >
-                  Mua sắm ngay
-                </Button>
-              </Empty>
-            )}
-          </Card>
-        </TabPane>
-      </Tabs>
+            <OtherInfoCard userInfo={userInfo} />
+          </TabPane>
+
+          <TabPane
+            tab={
+              <span className="flex items-center gap-2">
+                <ShoppingOutlined />
+                Lịch sử đơn hàng
+              </span>
+            }
+            key="orders"
+          >
+            <OrderHistory orders={orders} loading={loading} />
+          </TabPane>
+        </Tabs>
+      </Card>
 
       {/* Use the AddressModal component */}
       <AddressModal

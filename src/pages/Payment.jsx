@@ -28,6 +28,7 @@ import { useCart } from "../contexts/CartContext";
 import PaymentProduct from "../components/product/PaymentProduct";
 import { Await, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import PaymentProductsList from "../components/product/PaymentProductList";
 
 const { Title, Text, Paragraph } = Typography;
 const { TextArea } = Input;
@@ -42,6 +43,7 @@ function Payment() {
   const { user } = useAuth();
   const [form] = Form.useForm();
   const [api, contextHolder] = notification.useNotification();
+  const [loading, setLoading] = useState();
   const navigate = useNavigate();
   const total =
     cart?.items?.reduce((acc, item) => {
@@ -60,6 +62,26 @@ function Payment() {
         });
     }
   }, [user]);
+
+  useEffect(() => {
+    fetch("https://provinces.open-api.vn/api/p")
+      .then((response) => response.json())
+      .then((data) => {
+        setProvices(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch("https://provinces.open-api.vn/api/d")
+      .then((response) => response.json())
+      .then((data) => {
+        setDistricts(data);
+      });
+  }, []);
+
+  function handleSubmit() {
+    form.submit();
+  }
 
   const fillUserInfo = () => {
     if (currUser?.addresses?.length === 0) {
@@ -100,27 +122,8 @@ function Payment() {
     }
   };
 
-  useEffect(() => {
-    fetch("https://provinces.open-api.vn/api/p")
-      .then((response) => response.json())
-      .then((data) => {
-        setProvices(data);
-      });
-  }, []);
-
-  useEffect(() => {
-    fetch("https://provinces.open-api.vn/api/d")
-      .then((response) => response.json())
-      .then((data) => {
-        setDistricts(data);
-      });
-  }, []);
-
-  function handleSubmit() {
-    form.submit();
-  }
-
   async function handleFinish() {
+    setLoading(true);
     const values = form.getFieldsValue();
 
     // Use validated values from form.onFinish parameter
@@ -133,14 +136,11 @@ function Payment() {
       total: total, // Include the total amount
     };
 
-    const token = localStorage.getItem("token");
-
     try {
       const response = await fetch(`${BASE_URL}/api/orders`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(order),
       });
@@ -153,16 +153,11 @@ function Payment() {
           description: `Đã có lỗi xảy ra. Vui lòng thử lại sau!`,
           duration: 2,
         });
+        setLoading(false);
         return;
       }
 
       const serverContent = await response.json();
-
-      api.success({
-        message: "Đặt hàng thành công!",
-        description: "Cảm ơn bạn đã đặt hàng tại DolaPharmacy.",
-        duration: 3,
-      });
 
       const templateId = "template_c5pwx77";
       const serviceId = "service_ztlc7ux";
@@ -185,6 +180,7 @@ function Payment() {
           price: new Intl.NumberFormat("vi-VN", {
             minimumFractionDigits: 2,
           }).format(price),
+          variant: item.variant,
         };
       });
 
@@ -226,11 +222,9 @@ function Payment() {
       if (values.email) {
         try {
           await emailjs.send(serviceId, templateId, emailData, publicKey);
-          api.success({
-            message: "Email đã gửi",
-            description: "Thông tin đơn hàng đã được gửi qua email của bạn!",
-            duration: 3,
-          });
+          alert(
+            `Thông tin đơn hàng đã được gửi tới địa chỉ email: ${emailData.to_email}`
+          );
         } catch (emailError) {
           console.error("Failed to send order confirmation email:", emailError);
         }
@@ -247,6 +241,8 @@ function Payment() {
         description: "Không thể kết nối đến máy chủ. Vui lòng thử lại sau.",
         duration: 3,
       });
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -512,10 +508,7 @@ function Payment() {
               cart.items ? cart.items.length : 0
             } sản phẩm)`}</Title>
             <div className="mt-4">
-              {cart.items &&
-                cart.items.map((cartItem) => (
-                  <PaymentProduct product={cartItem} key={cartItem.id} />
-                ))}
+              {cart.items && <PaymentProductsList products={cart.items} />}
             </div>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
@@ -544,7 +537,12 @@ function Payment() {
               >
                 Quay về giỏ hàng
               </Button>
-              <Button type="primary" size="large" onClick={handleSubmit}>
+              <Button
+                type="primary"
+                size="large"
+                onClick={handleSubmit}
+                loading={loading}
+              >
                 ĐẶT HÀNG
               </Button>
             </div>

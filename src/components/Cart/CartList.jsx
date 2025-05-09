@@ -12,10 +12,7 @@ function CartList() {
     return {
       ...item,
       name: item.name ? String(item.name) : "Unnamed Product",
-      variant:
-        typeof item.variant === "object"
-          ? JSON.stringify(item.variant)
-          : item.variant || "Không phân loại",
+      variant: item.variant || { name: "Không phân loại" },
     };
   });
 
@@ -50,7 +47,7 @@ function CartList() {
               type="link"
               danger
               style={{ padding: 0, fontSize: "12px" }}
-              onClick={() => removeItemFromCart(record.id)}
+              onClick={() => removeItemFromCart(record)}
             >
               Xóa
             </Button>
@@ -65,7 +62,7 @@ function CartList() {
       render: (_, record) => {
         console.log(record.variant.name);
 
-        return <span>{record.variant ? record.variant : "Mặc định"}</span>;
+        return <span>{record.variant ? record.variant.name : "Mặc định"}</span>;
       },
     },
     {
@@ -92,7 +89,7 @@ function CartList() {
         <Space>
           <Button
             icon={<MinusOutlined />}
-            onClick={() => updateItemQuantity(record.id, record.quantity - 1)}
+            onClick={() => updateItemQuantity(record, record.quantity - 1)}
             style={{
               background: "#e0e0e0",
               borderColor: "#e0e0e0",
@@ -108,7 +105,7 @@ function CartList() {
           />
           <Button
             icon={<PlusOutlined />}
-            onClick={() => updateItemQuantity(record.id, record.quantity + 1)}
+            onClick={() => updateItemQuantity(record, record.quantity + 1)}
             style={{
               background: "#2a6fdb",
               borderColor: "#2a6fdb",
@@ -142,7 +139,7 @@ function CartList() {
         dataSource={safeCartItems}
         columns={columns}
         pagination={false}
-        rowKey="id"
+        rowKey="variant.id"
         style={{ borderRadius: "8px", overflow: "hidden" }}
         className="cart-items-table"
       />

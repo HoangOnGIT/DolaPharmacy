@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useCart } from "../contexts/CartContext";
 import { LoadingOutlined, ShoppingOutlined } from "@ant-design/icons";
-import CartList from "../components/cartList/CartList";
+import CartList from "../components/Cart/CartList";
 import { Button } from "antd";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";

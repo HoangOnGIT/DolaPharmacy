@@ -21,11 +21,23 @@ function FilterContent({ filterObj, onChange, filtering }) {
         <span>{filterObj.title}</span>
       </div>
       <div className="max-h-50 px-3 py-1 overflow-y-auto custom-scrollbar text-[13px] ">
-        <Form>
+        <Form className="!flex !justify-center !w-fit">
           <ul className="list-none space-y-1.5">
             {filterObj.options && (
               <Checkbox.Group
-                options={filterObj.options}
+                options={filterObj.options.map((option) =>
+                  typeof option === "string"
+                    ? {
+                        label: <span className="font-semibold">{option}</span>,
+                        value: option,
+                      }
+                    : {
+                        ...option,
+                        label: (
+                          <span className="font-semibold">{option.label}</span>
+                        ),
+                      }
+                )}
                 value={selectedValues}
                 onChange={(e) => handleChange(e)}
               />

@@ -113,7 +113,7 @@ function OrderDetail({ confirm = false }) {
               {record.name}
             </Text>
             <Text type="secondary" className="block">
-              Phân loại: {record.variant}
+              Phân loại: {record.variant.name}
             </Text>
           </div>
         </div>
@@ -190,14 +190,18 @@ function OrderDetail({ confirm = false }) {
     }
   };
 
+  console.log(order);
+
   if (confirm) {
     return (
       <div className="max-w-4xl mx-auto p-4 mb-10">
-        <Card className="shadow-md text-center">
+        <Card className="shadow-lg rounded-lg overflow-hidden border border-gray-100">
           <Result
             status="success"
             title="Đặt hàng thành công!"
-            subTitle={`Mã đơn hàng: ${order.id}. Cảm ơn bạn đã mua sắm tại Dola Pharmacy!`}
+            subTitle={`Mã đơn hàng: ${
+              order?.id || ""
+            }. Cảm ơn bạn đã mua sắm tại Dola Pharmacy!`}
             extra={[
               <Button
                 type="primary"
@@ -209,72 +213,114 @@ function OrderDetail({ confirm = false }) {
               </Button>,
               <Button
                 key="details"
-                onClick={() => navigate(`/orders/${orderId}`)}
+                onClick={() => {
+                  navigate(`/orders/${order?.id}`);
+                }}
+                className="min-w-[200px]"
               >
                 Xem chi tiết đơn hàng
               </Button>,
             ]}
           />
-          <Divider />
-          <div className="text-left p-4">
-            <Title level={5}>Thông tin đơn hàng</Title>
-            <p>
-              <strong>Họ tên:</strong> {order.fullName}
-            </p>
-            <p>
-              <strong>Số điện thoại:</strong> {order.phone}
-            </p>
-            <p>
-              <strong>Địa chỉ:</strong> {order.address}, {order.district},{" "}
-              {order.province}
-            </p>
+          <Divider className="my-6 bg-gray-200" />
+
+          <Descriptions
+            title={
+              <span className="text-lg font-medium text-green-800">
+                Thông tin đơn hàng
+              </span>
+            }
+            bordered
+            column={{ xs: 1, sm: 2 }}
+            className="mb-6"
+            labelStyle={{ fontWeight: 600, backgroundColor: "#f5f9f7" }}
+            contentStyle={{ backgroundColor: "#ffffff" }}
+            size="middle"
+          >
+            <Descriptions.Item label="Mã đơn hàng" span={1}>
+              <Text copyable>{order.id}</Text>
+            </Descriptions.Item>
+            <Descriptions.Item label="Họ tên">
+              {order.fullName}
+            </Descriptions.Item>
+            <Descriptions.Item label="Số điện thoại">
+              {order.phone}
+            </Descriptions.Item>
+            <Descriptions.Item label="Địa chỉ">
+              {order.address}, {order.district}, {order.province}
+            </Descriptions.Item>
             {order.deliveryDate && (
-              <p>
-                <strong>Ngày giao hàng:</strong>{" "}
+              <Descriptions.Item label="Ngày giao hàng">
                 {formatDate(order.deliveryDate)}
-              </p>
+              </Descriptions.Item>
             )}
             {order.deliveryTime && (
-              <p>
-                <strong>Giờ giao hàng:</strong> {order.deliveryTime}
-              </p>
+              <Descriptions.Item label="Giờ giao hàng">
+                {order.deliveryTime}
+              </Descriptions.Item>
             )}
-            <p>
-              <strong>Phương thức thanh toán:</strong>{" "}
+            <Descriptions.Item label="Phương thức thanh toán">
               {getPaymentMethodText(order.paymentMethod)}
-            </p>
-            <p>
-              <strong>Tổng tiền:</strong>{" "}
-              <span className="text-red-600 font-bold">
+            </Descriptions.Item>
+            <Descriptions.Item label="Tổng tiền">
+              <Text className="text-red-600 font-bold text-lg">
                 {formatCurrency(order.total)}
-              </span>
-            </p>
-          </div>
+              </Text>
+            </Descriptions.Item>
+          </Descriptions>
+
           {order.companyName && (
-            <div className="text-left p-4 border-t border-gray-200 mt-4">
-              <Title level={5}>Thông tin xuất hóa đơn</Title>
-              <p>
-                <strong>Tên công ty:</strong> {order.companyName}
-              </p>
-              <p>
-                <strong>Mã số thuế:</strong> {order.taxId}
-              </p>
-              {order.companyAddress && (
-                <p>
-                  <strong>Địa chỉ công ty:</strong> {order.companyAddress}
-                </p>
-              )}
-              {order.invoiceEmail && (
-                <p>
-                  <strong>Email nhận hóa đơn:</strong> {order.invoiceEmail}
-                </p>
-              )}
-            </div>
+            <>
+              <Divider
+                orientation="left"
+                orientationMargin="0"
+                className="font-medium text-green-800 mb-4"
+              >
+                <span className="bg-green-50 px-4 py-1 rounded-lg">
+                  Thông tin xuất hóa đơn
+                </span>
+              </Divider>
+
+              <Descriptions
+                bordered
+                column={{ xs: 1, sm: 2 }}
+                className="mb-6"
+                labelStyle={{ fontWeight: 600, backgroundColor: "#f5f9f7" }}
+                contentStyle={{ backgroundColor: "#ffffff" }}
+                size="middle"
+              >
+                <Descriptions.Item label="Tên công ty">
+                  {order.companyName}
+                </Descriptions.Item>
+                <Descriptions.Item label="Mã số thuế">
+                  {order.taxId}
+                </Descriptions.Item>
+                {order.companyAddress && (
+                  <Descriptions.Item label="Địa chỉ công ty">
+                    {order.companyAddress}
+                  </Descriptions.Item>
+                )}
+                {order.invoiceEmail && (
+                  <Descriptions.Item label="Email nhận hóa đơn">
+                    {order.invoiceEmail}
+                  </Descriptions.Item>
+                )}
+              </Descriptions>
+            </>
           )}
-          <Text type="secondary" className="mt-4 block">
-            Nếu có bất kỳ thắc mắc nào, vui lòng liên hệ với chúng tôi qua số
-            hotline: <Text strong>1800 1800</Text>
-          </Text>
+
+          <div className="flex flex-col items-center justify-center mt-6 bg-gray-50 py-6 px-4 rounded-lg">
+            <Text type="secondary" className="mb-4 text-center">
+              Nếu có bất kỳ thắc mắc nào, vui lòng liên hệ với chúng tôi qua số
+              hotline:{" "}
+              <Text strong className="text-green-700">
+                1800 1800
+              </Text>
+            </Text>
+            <Text className="text-green-600 font-medium text-center">
+              Dola Pharmacy - Chăm sóc sức khỏe tận tâm
+            </Text>
+          </div>
         </Card>
       </div>
     );
@@ -282,35 +328,47 @@ function OrderDetail({ confirm = false }) {
 
   return (
     <div className="max-w-4xl mx-auto p-4 mb-10">
-      <Card className="shadow-md">
+      <Card className="shadow-lg rounded-lg overflow-hidden border border-gray-100">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
           <div>
-            <Title level={3} className="m-0 text-green-700">
+            <Title level={3} className="m-0 text-green-700 font-semibold">
               Chi tiết đơn hàng
             </Title>
-            <Text className="text-gray-500">
+            <Text className="text-gray-500 mt-1 block">
               Cảm ơn bạn đã mua sắm tại Dola Pharmacy
             </Text>
           </div>
           <div className="mt-4 md:mt-0">
             <Tag
               color={getStatusColor(order.status)}
-              className="py-1 px-3 text-base"
+              className="py-1.5 px-4 text-base rounded-full font-medium shadow-sm"
             >
               {getStatusText(order.status)}
             </Tag>
           </div>
         </div>
 
-        <Divider className="my-6" />
+        <Divider className="my-6 bg-gray-200" />
 
         <Descriptions
-          title="Thông tin đơn hàng"
+          title={
+            <span className="text-lg font-medium text-green-800">
+              Thông tin đơn hàng
+            </span>
+          }
           bordered
           column={{ xs: 1, sm: 2 }}
           className="mb-8"
+          labelStyle={{
+            fontWeight: 600,
+            backgroundColor: "#f5f9f7",
+          }}
+          contentStyle={{ backgroundColor: "#ffffff" }}
+          size="middle"
         >
-          <Descriptions.Item label="Mã đơn hàng">{order.id}</Descriptions.Item>
+          <Descriptions.Item label="Mã đơn hàng" span={1}>
+            <Text copyable>{order.id}</Text>
+          </Descriptions.Item>
           <Descriptions.Item label="Ngày đặt hàng">
             {formatDate(order.createdAt)}
           </Descriptions.Item>
@@ -328,59 +386,86 @@ function OrderDetail({ confirm = false }) {
             {getPaymentMethodText(order.paymentMethod)}
           </Descriptions.Item>
           <Descriptions.Item label="Tổng tiền">
-            <Text className="text-red-600 font-bold">
+            <Text className="text-red-600 font-bold text-lg">
               {formatCurrency(order.total)}
             </Text>
           </Descriptions.Item>
         </Descriptions>
 
-        <Divider orientation="left">Thông tin người nhận</Divider>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div>
-            <p>
-              <strong>Họ tên:</strong> {order.fullName}
+        <Divider
+          orientation="left"
+          orientationMargin="0"
+          className="font-medium text-green-800 mb-4"
+        >
+          <span className="bg-green-50 px-4 py-1 rounded-lg">
+            Thông tin người nhận
+          </span>
+        </Divider>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 bg-gray-50 p-4 rounded-lg">
+          <div className="bg-white p-4 rounded-md shadow-sm">
+            <p className="mb-3">
+              <strong className="text-green-700">Họ tên:</strong>{" "}
+              {order.fullName}
             </p>
-            <p>
-              <strong>Email:</strong> {order.email}
+            <p className="mb-3">
+              <strong className="text-green-700">Email:</strong> {order.email}
             </p>
-            <p>
-              <strong>Số điện thoại:</strong> {order.phone}
+            <p className="mb-0">
+              <strong className="text-green-700">Số điện thoại:</strong>{" "}
+              {order.phone}
             </p>
           </div>
-          <div>
-            <p>
-              <strong>Địa chỉ:</strong> {order.address}
+          <div className="bg-white p-4 rounded-md shadow-sm">
+            <p className="mb-3">
+              <strong className="text-green-700">Địa chỉ:</strong>{" "}
+              {order.address}
             </p>
-            <p>
-              <strong>Quận/Huyện:</strong> {order.district}
+            <p className="mb-3">
+              <strong className="text-green-700">Quận/Huyện:</strong>{" "}
+              {order.district}
             </p>
-            <p>
-              <strong>Tỉnh/Thành phố:</strong> {order.province}
+            <p className="mb-0">
+              <strong className="text-green-700">Tỉnh/Thành phố:</strong>{" "}
+              {order.province}
             </p>
           </div>
         </div>
 
         {order.companyName && (
           <>
-            <Divider orientation="left">Thông tin xuất hóa đơn</Divider>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-              <div>
-                <p>
-                  <strong>Tên công ty:</strong> {order.companyName}
+            <Divider
+              orientation="left"
+              orientationMargin="0"
+              className="font-medium text-green-800 mb-4"
+            >
+              <span className="bg-green-50 px-4 py-1 rounded-lg">
+                Thông tin xuất hóa đơn
+              </span>
+            </Divider>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 bg-gray-50 p-4 rounded-lg">
+              <div className="bg-white p-4 rounded-md shadow-sm">
+                <p className="mb-3">
+                  <strong className="text-green-700">Tên công ty:</strong>{" "}
+                  {order.companyName}
                 </p>
-                <p>
-                  <strong>Mã số thuế:</strong> {order.taxId}
+                <p className="mb-0">
+                  <strong className="text-green-700">Mã số thuế:</strong>{" "}
+                  {order.taxId}
                 </p>
               </div>
-              <div>
+              <div className="bg-white p-4 rounded-md shadow-sm">
                 {order.companyAddress && (
-                  <p>
-                    <strong>Địa chỉ công ty:</strong> {order.companyAddress}
+                  <p className="mb-3">
+                    <strong className="text-green-700">Địa chỉ công ty:</strong>{" "}
+                    {order.companyAddress}
                   </p>
                 )}
                 {order.invoiceEmail && (
-                  <p>
-                    <strong>Email nhận hóa đơn:</strong> {order.invoiceEmail}
+                  <p className="mb-0">
+                    <strong className="text-green-700">
+                      Email nhận hóa đơn:
+                    </strong>{" "}
+                    {order.invoiceEmail}
                   </p>
                 )}
               </div>
@@ -388,45 +473,68 @@ function OrderDetail({ confirm = false }) {
           </>
         )}
 
-        <Divider orientation="left">Sản phẩm đã đặt</Divider>
-        <Table
-          dataSource={order.items}
-          columns={columns}
-          rowKey="id"
-          pagination={false}
-          className="mb-8"
-          summary={() => (
-            <Table.Summary>
-              <Table.Summary.Row>
-                <Table.Summary.Cell colSpan={3} className="text-right">
-                  <Text strong>Tổng thanh toán:</Text>
-                </Table.Summary.Cell>
-                <Table.Summary.Cell className="text-right">
-                  <Text strong className="text-xl text-red-600">
-                    {formatCurrency(order.total)}
-                  </Text>
-                </Table.Summary.Cell>
-              </Table.Summary.Row>
-            </Table.Summary>
-          )}
-        />
+        <Divider
+          orientation="left"
+          orientationMargin="0"
+          className="font-medium text-green-800 mb-4"
+        >
+          <span className="bg-green-50 px-4 py-1 rounded-lg">
+            Sản phẩm đã đặt
+          </span>
+        </Divider>
+        {order.items && Array.isArray(order.items) ? (
+          <Table
+            dataSource={order.items}
+            columns={columns}
+            rowKey="id"
+            pagination={false}
+            className="mb-8"
+            rowClassName="hover:bg-gray-50"
+            bordered
+            summary={() => (
+              <Table.Summary>
+                <Table.Summary.Row className="bg-green-50">
+                  <Table.Summary.Cell colSpan={3} className="text-right">
+                    <Text strong className="text-lg">
+                      Tổng thanh toán:
+                    </Text>
+                  </Table.Summary.Cell>
+                  <Table.Summary.Cell className="text-right">
+                    <Text strong className="text-xl text-red-600">
+                      {formatCurrency(order.total || 0)}
+                    </Text>
+                  </Table.Summary.Cell>
+                </Table.Summary.Row>
+              </Table.Summary>
+            )}
+          />
+        ) : (
+          <Alert
+            message="Thông tin sản phẩm không khả dụng"
+            description="Không thể hiển thị danh sách sản phẩm trong đơn hàng."
+            type="warning"
+          />
+        )}
 
-        <div className="flex flex-col items-center justify-center mt-8">
+        <div className="flex flex-col items-center justify-center mt-8 bg-gray-50 py-6 px-4 rounded-lg">
           <Text type="secondary" className="mb-4 text-center">
             Nếu có bất kỳ thắc mắc nào, vui lòng liên hệ với chúng tôi qua số
-            hotline: <Text strong>1800 1800</Text>
+            hotline:{" "}
+            <Text strong className="text-green-700">
+              1800 1800
+            </Text>
           </Text>
-          <Text className="text-green-600 text-center mb-6">
+          <Text className="text-green-600 font-medium text-center mb-6">
             Dola Pharmacy - Chăm sóc sức khỏe tận tâm
           </Text>
 
           <Button
             type="primary"
             size="large"
-            className="bg-green-600 hover:bg-green-700 border-green-600 min-w-[200px]"
+            className="bg-green-600 hover:bg-green-800 border-green-600 min-w-[200px] transition-all duration-300 shadow-md flex items-center justify-center gap-2"
             onClick={() => navigate(-1)}
           >
-            Trở lại
+            <span>Trở lại</span>
           </Button>
         </div>
       </Card>
