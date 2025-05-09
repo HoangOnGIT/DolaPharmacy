@@ -38,6 +38,9 @@ function Payment() {
   const [paymentMethod, setPaymentMethod] = useState("transfer");
   const [provinces, setProvices] = useState([]);
   const [districts, setDistricts] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [selectedProvince, setSelectedProvince] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [showInvoiceForm, setShowInvoiceForm] = useState(false);
   const { cart, emptyCart } = useCart();
   const { user } = useAuth();
@@ -64,20 +67,106 @@ function Payment() {
   }, [user]);
 
   useEffect(() => {
-    fetch("https://provinces.open-api.vn/api/p")
+    // Fetch provinces from the new API
+    fetch("https://esgoo.net/api-tinhthanh/1/0.htm")
       .then((response) => response.json())
-      .then((data) => {
-        setProvices(data);
+      .then((responseData) => {
+        // Handle the specific response format with data property
+        if (responseData.error === 0 && responseData.data) {
+          const formattedProvinces = responseData.data.map((province) => ({
+            id: province.id,
+            value: province.name,
+            label: province.name,
+          }));
+          setProvices(formattedProvinces);
+        } else {
+          console.error("Province data format is incorrect:", responseData);
+          api.error({
+            message: "Lỗi dữ liệu",
+            description:
+              "Không thể tải danh sách tỉnh thành. Dữ liệu không hợp lệ.",
+            duration: 3,
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching provinces:", error);
+        api.error({
+          message: "Lỗi dữ liệu",
+          description:
+            "Không thể tải danh sách tỉnh thành. Vui lòng thử lại sau.",
+          duration: 3,
+        });
       });
   }, []);
 
+  // Load districts when province changes
   useEffect(() => {
-    fetch("https://provinces.open-api.vn/api/d")
-      .then((response) => response.json())
-      .then((data) => {
-        setDistricts(data);
-      });
-  }, []);
+    if (selectedProvince) {
+      fetch(`https://esgoo.net/api-tinhthanh/2/${selectedProvince}.htm`)
+        .then((response) => response.json())
+        .then((responseData) => {
+          // Similar handling for districts data
+          if (responseData.error === 0 && responseData.data) {
+            const formattedDistricts = responseData.data.map((district) => ({
+              value: district.name,
+              label: district.name,
+              id: district.id,
+            }));
+            setDistricts(formattedDistricts);
+          } else {
+            console.error("District data format is incorrect:", responseData);
+            api.error({
+              message: "Lỗi dữ liệu",
+              description:
+                "Không thể tải danh sách quận huyện. Dữ liệu không hợp lệ.",
+              duration: 3,
+            });
+          }
+          // Reset ward selection when district changes
+          setSelectedDistrict(null);
+          form.setFieldsValue({ district: undefined, ward: undefined });
+        })
+        .catch((error) => {
+          console.error("Error fetching districts:", error);
+          api.error({
+            message: "Lỗi dữ liệu",
+            description:
+              "Không thể tải danh sách quận huyện. Vui lòng thử lại sau.",
+            duration: 3,
+          });
+        });
+    } else {
+      setDistricts([]);
+    }
+  }, [selectedProvince]);
+
+  // Load wards when district changes
+  useEffect(() => {
+    if (selectedDistrict) {
+      fetch(`https://esgoo.net/api-tinhthanh/3/${selectedDistrict}.htm`)
+        .then((response) => response.json())
+        .then((responseData) => {
+          const formattedWards = responseData.data.map((ward) => ({
+            value: ward.name,
+            label: ward.name,
+          }));
+          setWards(formattedWards);
+          form.setFieldsValue({ ward: undefined });
+        })
+        .catch((error) => {
+          console.error("Error fetching wards:", error);
+          api.error({
+            message: "Lỗi dữ liệu",
+            description:
+              "Không thể tải danh sách phường xã. Vui lòng thử lại sau.",
+            duration: 3,
+          });
+        });
+    } else {
+      setWards([]);
+    }
+  }, [selectedDistrict]);
 
   function handleSubmit() {
     form.submit();
@@ -105,14 +194,70 @@ function Payment() {
         currUser.lastName || ""
       }`.trim();
 
+      // First, update the basic information
       form.setFieldsValue({
         fullName: fullName,
         phone: primaryShippingAddress?.phone,
         email: currUser.email || "",
-        province: primaryShippingAddress?.city || "",
-        district: primaryShippingAddress?.state || "",
         address: primaryShippingAddress?.street || "",
       });
+
+      // Set province and handle cascading fields
+      const province = primaryShippingAddress?.city;
+      if (province) {
+        form.setFieldsValue({ province });
+
+        // Find the province ID to trigger the district loading
+        const provinceItem = provinces.find((p) => p.value === province);
+        if (provinceItem) {
+          // Set the selected province to trigger district loading
+          setSelectedProvince(provinceItem.id);
+
+          // Handle district selection after provinces are loaded
+          setTimeout(() => {
+            const district = primaryShippingAddress?.state;
+            if (district) {
+              // First wait for districts to load
+              const checkDistricts = setInterval(() => {
+                if (districts.length > 0) {
+                  clearInterval(checkDistricts);
+
+                  // Now set the district value
+                  form.setFieldsValue({ district });
+
+                  // Find district ID to trigger ward loading
+                  const districtItem = districts.find(
+                    (d) => d.value === district
+                  );
+                  if (districtItem) {
+                    setSelectedDistrict(districtItem.id);
+
+                    // Handle ward selection after districts are loaded
+                    setTimeout(() => {
+                      const ward = primaryShippingAddress?.ward;
+                      if (ward) {
+                        // Wait for wards to load
+                        const checkWards = setInterval(() => {
+                          if (wards.length > 0) {
+                            clearInterval(checkWards);
+                            form.setFieldsValue({ ward });
+                          }
+                        }, 200);
+
+                        // Set a timeout to clear the interval if it takes too long
+                        setTimeout(() => clearInterval(checkWards), 5000);
+                      }
+                    }, 500);
+                  }
+                }
+              }, 200);
+
+              // Set a timeout to clear the interval if it takes too long
+              setTimeout(() => clearInterval(checkDistricts), 5000);
+            }
+          }, 500);
+        }
+      }
 
       api.success({
         message: "Thông tin đã được điền",
@@ -338,9 +483,18 @@ function Payment() {
                             .toLowerCase()
                             .includes(input.toLowerCase())
                         }
-                        options={provinces.map((province) => {
-                          return { value: province.name, label: province.name };
-                        })}
+                        options={provinces}
+                        onChange={(value, option) => {
+                          setSelectedProvince(
+                            provinces.find(
+                              (province) => (province.name = value)
+                            ).id
+                          );
+                          // form.setFieldsValue({
+                          //   district: undefined,
+                          //   ward: undefined,
+                          // });
+                        }}
                       />
                     </Form.Item>
                   </Col>
@@ -363,10 +517,44 @@ function Payment() {
                             .toLowerCase()
                             .includes(input.toLowerCase())
                         }
-                        options={districts.map((district) => {
-                          return { value: district.name, label: district.name };
-                        })}
-                      ></Select>
+                        options={districts}
+                        disabled={!selectedProvince}
+                        onChange={(value) => {
+                          setSelectedDistrict(
+                            districts.find(
+                              (district) => district.value === value
+                            ).id
+                          );
+                          form.setFieldsValue({ ward: undefined });
+                        }}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+
+                <Row gutter={16}>
+                  <Col span={24}>
+                    <Form.Item
+                      name="ward"
+                      label="Phường xã"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng chọn phường xã!",
+                        },
+                      ]}
+                    >
+                      <Select
+                        showSearch
+                        placeholder="Chọn phường xã"
+                        filterOption={(input, option) =>
+                          (option?.label ?? "")
+                            .toLowerCase()
+                            .includes(input.toLowerCase())
+                        }
+                        options={wards}
+                        disabled={!selectedDistrict}
+                      />
                     </Form.Item>
                   </Col>
                 </Row>

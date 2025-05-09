@@ -32,10 +32,11 @@ function AddressCard({ address, onDelete, loading }) {
         </Text>
       </Paragraph>
       <Paragraph className="mb-1 text-gray-600">
-        {address.street}, {address.city}, {address.state}
+        {address.street}, {address.ward}, {address.state}
       </Paragraph>
       <Paragraph className="mb-1 text-gray-600">
-        {address.postalCode}, {address.country}
+        {address.city}, {address.postalCode || ""}
+        {address.country ? `, ${address.country}` : ""}
       </Paragraph>
       <Paragraph className="mb-3 text-gray-600">
         <strong>SĐT:</strong> {address.phone}

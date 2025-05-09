@@ -69,6 +69,8 @@ function PersonalInfomation() {
 
   // Function to handle adding a new address
   const handleAddAddress = async (values) => {
+    console.log(values);
+
     setSubmitting(true);
     try {
       const newAddress = {
@@ -78,7 +80,7 @@ function PersonalInfomation() {
         street: values.address,
         city: values.province,
         state: values.district,
-        country: "Việt Nam",
+        ward: values.ward,
         phone: values.phoneNumber,
       };
 
