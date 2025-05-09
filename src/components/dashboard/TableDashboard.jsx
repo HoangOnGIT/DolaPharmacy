@@ -61,7 +61,7 @@ const TableDashboard = ({ category, filter, choose }) => {
       alert("Không tìm thấy token. Vui lòng đăng nhập lại!");
     }
     try {
-      const response = await fetch(`${BASE_URL}/api/products/${id}`, {
+      const response = await fetch(`${baseUrl}/api/products/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
