@@ -163,7 +163,7 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            <div className="bg-white rounded-md shadow-sm p-6 border border-gray-200">
+            {/* <div className="bg-white rounded-md shadow-sm p-6 border border-gray-200">
               <h2 className="text-xl font-semibold text-gray-700 mb-4 border-b border-gray-200 pb-3">
                 Thống kê
               </h2>
@@ -171,7 +171,7 @@ const ProductDetail = () => {
                 <p className="text-lg text-gray-600"><strong className="text-blue-800">Đánh giá trung bình:</strong> <span className="font-semibold text-yellow-500">{product.averageRating?.toFixed(1) ?? 0}</span></p>
                 <p className="text-lg text-gray-600"><strong className="text-blue-800">Số đánh giá:</strong> <span className="font-semibold">{product.reviewCount ?? 0}</span></p>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
