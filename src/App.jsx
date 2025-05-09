@@ -28,6 +28,7 @@ import About from "./pages/About";
 import OrderDetail from "./pages/OrdersDetail";
 import QnA from "./pages/QnA";
 import Contact from "./pages/Contact";
+import ScrollToTop from "../src/components/common/ScrollToTop";
 
 const router = createBrowserRouter([
   {
@@ -71,7 +72,6 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       { index: true, element: <Home /> },
-      { path: "homepage", element: <Home /> },
       { path: "news", element: <News /> },
       {
         path: "news/:slug",

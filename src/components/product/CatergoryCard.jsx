@@ -8,7 +8,7 @@ function CatergoryCard({ catergory, onFilter }) {
         className="ring-1 shadow-md rounded-lg ring-gray-200 hover:ring-blue-500 flex flex-col items-center justify-center h-32 p-3 space-y-2 hover:text-blue-600 hover:shadow-lg hover:scale-105 transition-transform duration-300 cursor-pointer bg-white"
         onClick={() =>
           onFilter((prev) => {
-            return { ...prev, category: catergory.id };
+            return { ...prev, categoryName: catergory.name };
           })
         }
         title={catergory.name}
