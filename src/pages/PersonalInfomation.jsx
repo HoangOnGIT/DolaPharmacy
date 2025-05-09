@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Card, Typography, Spin, Tabs, Row, Col, message } from "antd";
 import { UserOutlined, ShoppingOutlined } from "@ant-design/icons";
-import AddressModal from "../components/PersonalInfo/AddressModal";
+import AddressModal from "../components/personalInfo/AddressModal";
 
-// Import our new components
-import ProfileCard from "../components/PersonalInfo/ProfileCard";
-import BasicInfoCard from "../components/PersonalInfo/BasicInfoCard";
-import AddressList from "../components/PersonalInfo/AddressList";
-import OtherInfoCard from "../components/PersonalInfo/OtherInfoCard";
-import OrderHistory from "../components/PersonalInfo/OrderHistory";
+import ProfileCard from "../components/personalInfo/ProfileCard";
+import BasicInfoCard from "../components/personalInfo/BasicInfoCard";
+import AddressList from "../components/personalInfo/AddressList";
+import OtherInfoCard from "../components/personalInfo/OtherInfoCard";
+import OrderHistory from "../components/personalInfo/OrderHistory";
 
 const { Title } = Typography;
 const { TabPane } = Tabs;
