@@ -14,7 +14,6 @@ import ProductGrid from "../components/product/ProductGrid";
 
 const Product = ({ promotion = false }) => {
   const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
   const { favList, toggleFavourite } = useFav();
   const { addToCart } = useCart();
   const [catergories, setCatergories] = useState([]);
@@ -25,6 +24,7 @@ const Product = ({ promotion = false }) => {
     _limit: 16,
     _totalRows: 1,
   });
+  const [searchParams, setSearchParams] = useSearchParams();
 
   let initalFilter = {
     _page: 1,
@@ -34,6 +34,7 @@ const Product = ({ promotion = false }) => {
     brand: [],
     targeted: [],
     weight: [],
+    categoryName: searchParams.get("categoryName") || "",
   };
 
   if (promotion) {
@@ -41,6 +42,10 @@ const Product = ({ promotion = false }) => {
       ...initalFilter,
       discount_ne: null,
     };
+  }
+
+  if (!initalFilter.categoryName) {
+    delete initalFilter.categoryName;
   }
 
   const [filter, setFilter] = useState(initalFilter);
@@ -139,6 +144,20 @@ const Product = ({ promotion = false }) => {
       .finally(() => setLoading(false));
   }, [filter]);
 
+  // Update filter from URL params on initial load
+  useEffect(() => {
+    const urlSearchQuery = searchParams.get("q");
+    if (urlSearchQuery && urlSearchQuery !== filter.q) {
+      setFilter((prev) => ({ ...prev, q: urlSearchQuery }));
+    }
+  }, []);
+
+  // Update search params when filter changes
+  useEffect(() => {
+    const params = queryString.stringify(filter);
+    setSearchParams(params);
+  }, [filter, setSearchParams]);
+
   const filterArr = [
     {
       title: "Chọn mức giá",
@@ -181,13 +200,6 @@ const Product = ({ promotion = false }) => {
     { name: "Giá thấp đến cao", order: "asc", sort_name: "salePrice" },
     { name: "Giá cao xuống thấp", order: "desc", sort_name: "salePrice" },
   ];
-
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  useEffect(() => {
-    const params = queryString.stringify(filter);
-    setSearchParams(params);
-  }, [filter]);
 
   return (
     <div className="bg-gradient-to-br from-blue-50 via-white to-gray-100 min-h-screen py-12">

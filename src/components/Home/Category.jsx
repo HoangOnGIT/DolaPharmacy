@@ -18,16 +18,52 @@ import { Link } from "react-router-dom";
 
 const Category = () => {
   const categories = [
-    { name: "Quà Tặng Sức Khỏe", img: img1 },
-    { name: "Thiết Bị Y Tế", img: img2 },
-    { name: "Khuyến Mãi Hot", img: img3 },
-    { name: "Vitamin & Khoáng Chất", img: img4 },
-    { name: "Vitamin Cho U50+", img: img5 },
-    { name: "Vitamin Cho Mẹ", img: img6 },
-    { name: "Dưỡng Trắng Da", img: img7 },
-    { name: "Ung Thư - Bướu", img: img8 },
-    { name: "Tăng Cân", img: img9 },
-    { name: "Giảm Cân", img: img10 },
+    {
+      name: "Quà Tặng Sức Khỏe",
+      img: img1,
+      link: "/product?categoryName=Thuốc+kê+đơn",
+    },
+    {
+      name: "Thiết Bị Y Tế",
+      img: img2,
+      link: "/product?categoryName=Thuốc+không+kê+đơn",
+    },
+    {
+      name: "Khuyến Mãi Hot",
+      img: img3,
+      link: "/product?categoryName=Vitamin+%26+Thực+phẩm+chức+năng",
+    },
+    {
+      name: "Vitamin & Khoáng Chất",
+      img: img4,
+      link: "/product?categoryName=Chăm+sóc+cá+nhân",
+    },
+    {
+      name: "Vitamin Cho U50+",
+      img: img5,
+      link: "/product?categoryName=Sơ+cứu",
+    },
+    {
+      name: "Vitamin Cho Mẹ",
+      img: img6,
+      link: "/product?categoryName=Sức+khỏe+trẻ+em+%26+Trẻ+sơ+sinh",
+    },
+    {
+      name: "Dưỡng Trắng Da",
+      img: img7,
+      link: "/product?categoryName=Vitamin+%26+Thực+phẩm+chức+năng",
+    },
+    {
+      name: "Ung Thư - Bướu",
+      img: img8,
+      link: "/product?categoryName=Chăm+sóc+cá+nhân",
+    },
+    { name: "Tăng Cân", img: img9, link: "/product?categoryName=Thuốc+kê+đơn" },
+    {
+      name: "Giảm Cân",
+      img: img10,
+      link: "/product?categoryName=Thuốc+kê+đơn",
+    },
   ];
 
   const discount = [
@@ -111,7 +147,9 @@ const Category = () => {
             <div
               className="flex flex-row items-center transition-transform duration-500 ease-in-out"
               style={{
-                transform: `translateX(-${categoryIndex * (100 / itemsPerPage)}%)`,
+                transform: `translateX(-${
+                  categoryIndex * (100 / itemsPerPage)
+                }%)`,
               }}
             >
               {categories.map((category, index) => (
@@ -120,7 +158,10 @@ const Category = () => {
                   className="flex-shrink-0 flex flex-col items-center"
                   style={{ width: `${100 / itemsPerPage}%` }}
                 >
-                  <a href="#" className="flex flex-col items-center">
+                  <a
+                    href={category.link}
+                    className="flex flex-col items-center"
+                  >
                     <img
                       src={category.img}
                       alt={category.name}
@@ -192,7 +233,9 @@ const Category = () => {
             <div
               className="flex flex-row transition-transform duration-500 ease-in-out"
               style={{
-                transform: `translateX(-${discountIndex * (100 / discountItemsPerPage)}%)`,
+                transform: `translateX(-${
+                  discountIndex * (100 / discountItemsPerPage)
+                }%)`,
               }}
             >
               {discount.map((item, index) => (

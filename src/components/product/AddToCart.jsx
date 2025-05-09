@@ -13,7 +13,7 @@ function AddToCart({ item, handleAddToCart }) {
       <button
         type="button"
         className="bg-gradient-to-r from-blue-500 to-blue-700 !text-white py-2 px-4 rounded-lg flex items-center justify-center shadow-md hover:from-blue-600 hover:to-blue-800 hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300 ease-in-out cursor-pointer font-medium"
-        onClick={onClickCart}
+        onClick={(e) => onClickCart(e)}
       >
         <ShoppingCartOutlined className="mr-2 text-lg" />
         <span className="text-sm font-medium">Thêm</span>

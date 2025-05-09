@@ -60,8 +60,8 @@ export default function CartButton() {
                     {new Intl.NumberFormat("vi-VN").format(total)}đ
                   </span>
                 </div>
-                <Button type="primary" block onClick={() => nav("/cart")}>
-                  Xem giỏ hàng và thanh toán
+                <Button type="primary" block onClick={() => nav("/payment")}>
+                  Thanh toán ngay
                 </Button>
               </>
             ) : (
