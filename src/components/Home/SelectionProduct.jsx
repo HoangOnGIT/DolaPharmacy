@@ -6,6 +6,7 @@ import img4 from "../../img/Header/imgSelection/MomAndBaby.png";
 import img5 from "../../img/Header/imgSelection/Old.png";
 import SingleProduct from "../common/SingleProduct";
 import { Link } from "react-router-dom";
+import queryString from "query-string";
 
 const SelectionProduct = ({ name }) => {
   const [category, setCategory] = useState([]);
@@ -39,6 +40,12 @@ const SelectionProduct = ({ name }) => {
 
   useEffect(() => {
     if (active) {
+      console.log(
+        `${BASE_URL}/api/products?${queryString.stringify({
+          categoryName: active,
+        })}`
+      );
+
       fetch(`${BASE_URL}/api/products?categoryName=${active}`)
         .then((response) => response.json())
         .then((data) => {
@@ -55,6 +62,8 @@ const SelectionProduct = ({ name }) => {
   const handleActive = (key) => {
     setActive(key);
   };
+
+  console.log(products);
 
   return (
     <div className="my-14 px-4">
@@ -87,7 +96,7 @@ const SelectionProduct = ({ name }) => {
         <div className="col-span-4">
           {/* Nút danh mục */}
           <div className="flex gap-3 mb-6">
-            {category.slice(0, 3).map((item) => (
+            {category.slice(4, 6).map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleActive(item.name)}
