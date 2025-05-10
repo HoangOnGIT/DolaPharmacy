@@ -80,10 +80,10 @@ function ProductInformation({
         )}
       </div>
 
-      {product.variants && (
+      {product.variants && product.variants.length > 0 ? (
         <div className="space-y-3">
           <div className="font-medium text-gray-800">Loại sản phẩm:</div>
-          <div className="grid gap-3 grid-cols-2 sm:grid-cols-3">
+          <div className="flex space-x-3">
             {product.variants.map((vari) => {
               let active = activeVariant === vari.name;
               return (
@@ -97,6 +97,10 @@ function ProductInformation({
             })}
           </div>
         </div>
+      ) : (
+        <span className="text-lg font-semibold">
+          Sản phẩm không có phân loại
+        </span>
       )}
 
       <div className="pt-2">

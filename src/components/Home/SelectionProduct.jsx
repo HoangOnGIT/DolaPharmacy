@@ -48,7 +48,7 @@ const SelectionProduct = ({ name }) => {
           categoryName: active,
         })}`
       );
-
+      
       fetch(`${BASE_URL}/api/products?${queryString.stringify({
           categoryName: active,
         })}`)
@@ -67,6 +67,8 @@ const SelectionProduct = ({ name }) => {
   const handleActive = (key) => {
     setActive(key);
   };
+
+  console.log(products);
 
   return (
     <div className="my-14 px-4">
@@ -99,7 +101,7 @@ const SelectionProduct = ({ name }) => {
         <div className="col-span-4">
           {/* Nút danh mục */}
           <div className="flex gap-3 mb-6">
-            {category.slice(0, 3).map((item) => (
+            {category.slice(4, 6).map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleActive(item.name)}
