@@ -94,7 +94,7 @@ const TableDashboard = ({ category, filter, choose }) => {
   return (
     <div className="bg-white px-4 py-3 flex-1">
       <div className="flex justify-between">
-        <strong>Table Product</strong>
+        <strong>Bảng sản phẩm</strong>
         <div className="flex items-center gap-2">
           <label className="text-sm text-gray-700">Hiển thị: </label>
           <select

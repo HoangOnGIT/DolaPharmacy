@@ -40,17 +40,17 @@ const DashboardProduct = () => {
   return (
     <>
       <div className='flex justify-between items-center'>
-        <h1 className='text-3xl font-bold'>Products</h1>
+        <h1 className='text-3xl !font-bold'>Sản phẩm</h1>
         <button className='bg-[#3782f7] hover:opacity-80 !text-white transition-colors duration-300 px-4 py-2 rounded-sm font-medium flex items-center'>
           {/* Thêm sản phẩm */}
-          <FaPlus className='mr-2' /> <Link to="add" >Add Product</Link>
+          <FaPlus className='mr-2' /> <Link to="add" >Thêm sản phẩm</Link>
         </button>
       </div>
 
       <div className='bg-white py-6 px-4 w-full flex flex-wrap gap-8 mt-5 items-center rounded-md shadow'>
         {/* Danh mục sản phẩm */}
         <div className='flex items-center'>
-          <label className="text-lg font-medium text-gray-700 mb-1">Category: </label>
+          <label className="text-lg font-medium text-gray-700 mr-3">Danh mục: </label>
           <select
             value={currentCategory}
             onChange={handleCategoryChange}
@@ -65,7 +65,7 @@ const DashboardProduct = () => {
 
         {/* Bộ lọc */}
         <div className='flex items-center'>
-          <label className="text-lg font-medium text-gray-700 mb-1">Filter:</label>
+          <label className="text-lg font-medium text-gray-700 mr-3">Lọc:</label>
           <select
             value={currentFilter}
             onChange={handleFilterChange}
