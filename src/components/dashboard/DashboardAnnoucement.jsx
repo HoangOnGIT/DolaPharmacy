@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, Calendar, PlusCircle, Search, Edit, Trash2, ChevronDown, Filter, Clock, X } from 'lucide-react';
 
-const DashboardAnnoucement = () => {
+const DashboardAnnouncement = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('date-desc');
@@ -115,7 +115,7 @@ const DashboardAnnoucement = () => {
       const newAnnouncement = await response.json();
       setAnnouncements([...announcements, newAnnouncement]);
       setIsAddModalOpen(false);
-      setFormData({ title: '', content: '', date: '', priority: 'medium', status: 'active' });
+      setFormData({ title: '', content: '', date: '', priority: 'medium', status: 'active' }); // Reset form data
       alert('Thông báo đã được thêm thành công');
     } catch (err) {
       console.error("Lỗi khi thêm thông báo:", err);
@@ -147,7 +147,7 @@ const DashboardAnnoucement = () => {
       setAnnouncements(announcements.map(a => a.id === selectedAnnouncement.id ? updatedAnnouncement : a));
       setIsEditModalOpen(false);
       setSelectedAnnouncement(null);
-      setFormData({ title: '', content: '', date: '', priority: 'medium', status: 'active' });
+      setFormData({ title: '', content: '', date: '', priority: 'medium', status: 'active' }); // Reset form data after update
       alert('Thông báo đã được cập nhật thành công');
     } catch (err) {
       console.error("Lỗi khi cập nhật thông báo:", err);
@@ -180,7 +180,7 @@ const DashboardAnnoucement = () => {
       <main className="max-w-full mx-auto p-8">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold text-gray-800">Bảng Điều Khiển Thông Báo</h2>
-          <button onClick={() => setIsAddModalOpen(true)} className="bg-green-600 hover:bg-green-700 !text-white px-6 py-3 rounded-lg flex items-center text-lg">
+          <button onClick={() => setIsAddModalOpen(true)} className="bg-green-600 hover:bg-green-700 !text-white px-6 py-3 rounded-lg flex items-center text-lg cursor-pointer">
             <PlusCircle size={20} className="mr-3" />
             Thông Báo Mới
           </button>
@@ -248,19 +248,19 @@ const DashboardAnnoucement = () => {
             <div className="flex space-x-2 bg-gray-100 rounded-lg p-2 w-full md:w-auto">
               <button 
                 onClick={() => setActiveTab('all')}
-                className={`px-6 py-3 rounded-md text-lg ${activeTab === 'all' ? 'bg-white shadow-md font-medium' : 'text-gray-600'}`}
+                className={`px-6 py-3 rounded-md text-lg ${activeTab === 'all' ? 'bg-white shadow-md font-medium' : 'text-gray-600'} cursor-pointer`}
               >
                 Tất Cả
               </button>
               <button 
                 onClick={() => setActiveTab('active')}
-                className={`px-6 py-3 rounded-md text-lg ${activeTab === 'active' ? 'bg-white shadow-md font-medium' : 'text-gray-600'}`}
+                className={`px-6 py-3 rounded-md text-lg ${activeTab === 'active' ? 'bg-white shadow-md font-medium' : 'text-gray-600'} cursor-pointer`}
               >
                 Hoạt Động
               </button>
               <button 
                 onClick={() => setActiveTab('upcoming')}
-                className={`px-6 py-3 rounded-md text-lg ${activeTab === 'upcoming' ? 'bg-white shadow-md font-medium' : 'text-gray-600'}`}
+                className={`px-6 py-3 rounded-md text-lg ${activeTab === 'upcoming' ? 'bg-white shadow-md font-medium' : 'text-gray-600'} cursor-pointer`}
               >
                 Sắp Tới
               </button>
@@ -277,14 +277,14 @@ const DashboardAnnoucement = () => {
                 />
                 <Search size={20} className="absolute left-4 top-3 text-gray-400" />
               </div>
-              <button className="flex items-center !mr-2 space-x-2 border rounded-lg px-6 py-3 bg-white hover:bg-gray-50 text-lg">
+              <button className="flex items-center !mr-2 space-x-2 border rounded-lg px-6 py-3 bg-white hover:bg-gray-50 text-lg cursor-pointer">
                 <Filter size={20} />
                 <span>Lọc</span>
               </button>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="border rounded-lg px-6 py-3 bg-white hover:bg-gray-50 text-lg"
+                className="border rounded-lg px-6 py-3 bg-white hover:bg-gray-50 text-lg cursor-pointer"
               >
                 <option value="date-desc">Ngày (Mới Nhất)</option>
                 <option value="date-asc">Ngày (Cũ Nhất)</option>
@@ -332,10 +332,10 @@ const DashboardAnnoucement = () => {
                     </span>
                   </div>
                   <div className="col-span-1 md:col-span-2 flex justify-end md:justify-start items-center space-x-4">
-                    <button onClick={() => handleEdit(announcement)} className="p-2 rounded-full hover:bg-gray-100">
+                    <button onClick={() => handleEdit(announcement)} className="p-2 rounded-full hover:bg-gray-100 cursor-pointer">
                       <Edit size={20} className="text-gray-600" />
                     </button>
-                    <button onClick={() => handleDelete(announcement.id)} className="p-2 rounded-full hover:bg-gray-100">
+                    <button onClick={() => handleDelete(announcement.id)} className="p-2 rounded-full hover:bg-gray-100 cursor-pointer">
                       <Trash2 size={20} className="text-gray-600" />
                     </button>
                   </div>
@@ -355,7 +355,7 @@ const DashboardAnnoucement = () => {
               <button
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="px-4 py-2 border rounded-md bg-white hover:bg-gray-50 text-lg disabled:opacity-50"
+                className="px-4 py-2 border rounded-md bg-white hover:bg-gray-50 text-lg cursor-pointer disabled:opacity-50"
               >
                 Trước
               </button>
@@ -363,7 +363,7 @@ const DashboardAnnoucement = () => {
               <button
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="px-4 py-2 border rounded-md bg-white hover:bg-gray-50 text-lg disabled:opacity-50"
+                className="px-4 py-2 border rounded-md bg-white hover:bg-gray-50 text-lg cursor-pointer disabled:opacity-50"
               >
                 Tiếp
               </button>
@@ -374,18 +374,18 @@ const DashboardAnnoucement = () => {
 
       {/* Nút hành động nhanh */}
       <div className="fixed bottom-8 right-8">
-        <button onClick={() => setIsAddModalOpen(true)} className="bg-green-600 hover:bg-green-700 !text-white p-5 rounded-full shadow-lg">
+        <button onClick={() => setIsAddModalOpen(true)} className="bg-green-600 hover:bg-green-700 !text-white p-5 rounded-full shadow-lg cursor-pointer">
           <PlusCircle size={28} />
         </button>
       </div>
 
       {/* Modal Thêm Thông Báo */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-lg">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-2xl font-bold text-gray-800">Thêm Thông Báo Mới</h3>
-              <button onClick={() => setIsAddModalOpen(false)} className="text-gray-500 hover:text-gray-700">
+              <button onClick={() => { setIsAddModalOpen(false); setFormData({ title: '', content: '', date: '', priority: 'medium', status: 'active' }); }} className="text-gray-500 hover:text-gray-700 cursor-pointer">
                 <X size={24} />
               </button>
             </div>
@@ -446,14 +446,14 @@ const DashboardAnnoucement = () => {
               <div className="flex justify-end space-x-3">
                 <button
                   type="button"
-                  onClick={() => setIsAddModalOpen(false)}
-                  className="px-5 py-2 border border-gray-300 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium"
+                  onClick={() => { setIsAddModalOpen(false); setFormData({ title: '', content: '', date: '', priority: 'medium', status: 'active' }); }}
+                  className="px-5 py-2 border border-gray-300 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium cursor-pointer"
                 >
                   Hủy
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-green-600 !text-white rounded-lg hover:bg-green-700 font-medium"
+                  className="px-5 py-2 bg-green-600 !text-white rounded-lg hover:bg-green-700 font-medium cursor-pointer"
                 >
                   Thêm
                 </button>
@@ -465,11 +465,11 @@ const DashboardAnnoucement = () => {
 
       {/* Modal Chỉnh Sửa Thông Báo */}
       {isEditModalOpen && selectedAnnouncement && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-lg">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-2xl font-bold text-gray-800">Chỉnh Sửa Thông Báo</h3>
-              <button onClick={() => setIsEditModalOpen(false)} className="text-gray-500 hover:text-gray-700">
+              <button onClick={() => { setIsEditModalOpen(false); setFormData({ title: '', content: '', date: '', priority: 'medium', status: 'active' }); }} className="text-gray-500 hover:text-gray-700 cursor-pointer">
                 <X size={24} />
               </button>
             </div>
@@ -530,14 +530,14 @@ const DashboardAnnoucement = () => {
               <div className="flex justify-end space-x-3">
                 <button
                   type="button"
-                  onClick={() => setIsEditModalOpen(false)}
-                  className="px-5 py-2 border border-gray-300 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium"
+                  onClick={() => { setIsEditModalOpen(false); setFormData({ title: '', content: '', date: '', priority: 'medium', status: 'active' }); }}
+                  className="px-5 py-2 border border-gray-300 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium cursor-pointer"
                 >
                   Hủy
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-blue-600 !text-white rounded-lg hover:bg-blue-700 font-medium"
+                  className="px-5 py-2 bg-blue-600 !text-white rounded-lg hover:bg-blue-700 font-medium cursor-pointer"
                 >
                   Cập nhật
                 </button>
@@ -550,4 +550,4 @@ const DashboardAnnoucement = () => {
   );
 };
 
-export default DashboardAnnoucement;
+export default DashboardAnnouncement;
