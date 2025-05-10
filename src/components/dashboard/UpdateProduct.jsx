@@ -302,7 +302,7 @@ export default function UpdateProduct() {
           <button onClick={handleCancel} className="p-2 rounded-full hover:bg-gray-100">
             <FiArrowLeft className="h-5 w-5" />
           </button>
-          <h1 className="text-2xl font-bold">Cập nhật sản phẩm</h1>
+          <h1 className="text-2xl !font-bold">Cập nhật sản phẩm</h1>
         </div>
       </div>
 
@@ -1048,11 +1048,11 @@ export default function UpdateProduct() {
           <button
             type="button"
             onClick={handleCancel}
-            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+            className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 cursor-pointer"
           >
             Hủy
           </button>
-          <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+          <button type="submit" className="px-4 py-2 bg-blue-600 !text-white rounded-md hover:bg-blue-700 !ml-2 cursor-pointer">
             Cập nhật sản phẩm
           </button>
         </div>

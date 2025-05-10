@@ -12,37 +12,37 @@ import {
 export const DASHBOARD_SIDEBAR_LINKS = [
     {
         key: 'dashboard',
-        label: 'Dashboard',
+        label: 'Tổng Quan',
         path: '/dashboard',
         icon: <HiOutlineViewGrid />,
     },
     {
         key: 'products',
-        label: 'Products',
+        label: 'Sản Phẩm',
         path: 'product',
         icon: <HiOutlineCube />,
     },
     {
         key: 'orders',
-        label: 'Orders',
+        label: 'Đơn Hàng',
         path: 'order',
         icon: <HiOutlineShoppingCart />,
     },
     {
         key: 'customers',
-        label: 'Customers',
+        label: 'Khách Hàng',
         path: 'customer',
         icon: <HiOutlineUsers />,
     },
     {
         key: 'documents',
-        label: 'Documents',
+        label: 'Tài Liệu',
         path: 'document',
         icon: <HiOutlineDocumentText />,
     },
     {
         key: 'announcement',
-        label: 'Announcement',
+        label: 'Tin Nhắn',
         path: 'announcement',
         icon: <HiOutlineAnnotation />,
     },
@@ -51,13 +51,13 @@ export const DASHBOARD_SIDEBAR_LINKS = [
 export const DASHBOARD_SIDEBAR_BOTTOM_LINKS = [
     {
         key: 'settings',
-        label: 'Settings',
+        label: 'Cài Đặt',
         path: 'setting',
         icon: <HiOutlineCog />,
     },
     {
         key: 'support',
-        label: 'Help & Support',
+        label: 'Hỗ Trợ',
         path: 'support',
         icon: <HiOutlineQuestionMarkCircle />,
     },

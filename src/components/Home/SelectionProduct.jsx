@@ -24,11 +24,14 @@ const SelectionProduct = ({ name }) => {
     "Mất ngủ",
   ];
 
+
   useEffect(() => {
     fetch(`${BASE_URL}/api/categories`)
       .then((response) => response.json())
       .then((data) => {
         setCategory(data);
+        console.log(category);
+        
         if (data && data.length > 0) {
           setActive(data[0].name);
         }
@@ -37,7 +40,7 @@ const SelectionProduct = ({ name }) => {
         console.error("Error fetching categories:", error);
       });
   }, []);
-
+  
   useEffect(() => {
     if (active) {
       console.log(
@@ -45,8 +48,10 @@ const SelectionProduct = ({ name }) => {
           categoryName: active,
         })}`
       );
-
-      fetch(`${BASE_URL}/api/products?categoryName=${active}`)
+      
+      fetch(`${BASE_URL}/api/products?${queryString.stringify({
+          categoryName: active,
+        })}`)
         .then((response) => response.json())
         .then((data) => {
           setProducts(data);
@@ -118,7 +123,7 @@ const SelectionProduct = ({ name }) => {
 
           {/* Lưới sản phẩm */}
           <div className="grid grid-cols-4 gap-20">
-            {products.map((product) => (
+            {products.slice(0,8).map((product) => (
               <SingleProduct key={product.id} product={product} />
             ))}
           </div>

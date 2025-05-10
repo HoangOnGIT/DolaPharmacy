@@ -614,6 +614,25 @@ const generateOrders = (count, users, products) => {
   return { orders, orderItems };
 };
 
+// Function to generate announcement data
+const generateAnnouncements = (count) => {
+  const announcements = [];
+  for (let i = 0; i < count; i++) {
+    const priority = faker.helpers.arrayElement(['high', 'medium', 'low']);
+    const status = faker.helpers.arrayElement(['active', 'upcoming', 'past']);
+    const announcement = {
+      id: generateId(),
+      title: faker.lorem.sentence(),
+      content: faker.lorem.paragraph(),
+      date: faker.date.future().toLocaleDateString(),
+      priority: priority,
+      status: status,
+    };
+    announcements.push(announcement);
+  }
+  return announcements;
+};
+
 // Main function to generate all data
 const generateData = async () => {
   const dbFilePath = "db.json";
@@ -627,6 +646,7 @@ const generateData = async () => {
   const brands = []; // Initialize brands array
   const products = generatePharmacyProducts(40, categories, suppliers, brands);
   const { orders, orderItems } = generateOrders(20, users, products);
+  const announcements = generateAnnouncements(20);
 
   // Calculate total products for each category
   categories.forEach((category) => {
@@ -648,6 +668,7 @@ const generateData = async () => {
     prescriptions: [],
     reviews: [],
     wishlist: [],
+    announcements: announcements,
   };
 
   // Write to db.json

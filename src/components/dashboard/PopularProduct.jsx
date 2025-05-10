@@ -16,7 +16,7 @@ const PopularProduct = () => {
     return (
         <div className='bg-white px-4 py-3  border border-gray-200 w-[20rem] shadow-sm'>
             <div className="flex items-center gap-2 mb-4">
-                <strong className="text-base text-gray-800">Popular Product</strong>
+                <strong className="text-base text-gray-800">Sản phẩm phổ biến</strong>
             </div>
 
             <div className='flex flex-col gap-3'>
