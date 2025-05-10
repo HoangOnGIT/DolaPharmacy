@@ -13,7 +13,7 @@ function PaymentProduct({ product }) {
     <div className="flex py-4 border-b border-gray-200 hover:bg-gray-50 transition-colors">
       <div className="relative mr-4">
         <Badge
-          count={`${product.quantity}`}
+          count={`Số lượng: ${product.quantity}`}
           color="green"
           className="absolute -top-2 -right-2 z-10"
           style={{ padding: "0 8px" }}
@@ -30,11 +30,9 @@ function PaymentProduct({ product }) {
 
       <div className="w-full flex flex-col justify-between">
         <div>
-          <h3 className="font-medium text-gray-800 line-clamp-2">
-            {product.name}
-          </h3>
+          <h3 className="font-medium text-gray-800 !m-0">{product.name}</h3>
           {product.variant && product.variant.name !== "Không phân loại" && (
-            <div className="text-sm text-gray-500 mt-1 flex items-center">
+            <div className="text-sm text-gray-500 flex items-center">
               <span className="inline-block w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
               <span>{product.variant.name}</span>
             </div>
