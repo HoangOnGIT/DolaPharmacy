@@ -1,5 +1,7 @@
 # DolaPharmacy Management System
 
+json-server : https://github.com/HoangOnGIT/json-server-DolasPharmacy
+
 ## Overview
 
 DolaPharmacy is a comprehensive pharmacy management system designed to streamline operations for pharmaceutical retailers. The system provides functionality for inventory management, customer accounts, prescription handling, and order processing through an intuitive web interface.
