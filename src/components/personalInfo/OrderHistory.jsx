@@ -131,18 +131,11 @@ function OrderHistory({ orders, loading }) {
       width: 230,
     },
     {
-      title: "Sản phẩm",
+      title: "Số lượng",
       dataIndex: "items",
       key: "items",
       render: (items) => (
-        <Badge
-          count={getTotalItems(items)}
-          showZero
-          overflowCount={99}
-          style={{ backgroundColor: "#1890ff" }}
-        >
-          <Text className="ml-2">sản phẩm</Text>
-        </Badge>
+        <Text className="ml-2 font-bold">{items.length} sản phẩm</Text>
       ),
       width: 120,
     },

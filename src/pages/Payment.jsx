@@ -173,98 +173,121 @@ function Payment() {
   }
 
   const fillUserInfo = () => {
-    if (currUser?.addresses?.length === 0) {
+    if (!currUser || !currUser.addresses || currUser.addresses.length === 0) {
       api.warning({
-        message: "Vui long nhập địa chỉ",
+        message: "Thông tin địa chỉ trống",
         description: "Bạn chưa có địa chỉ nào trong tài khoản của mình.",
         duration: 2,
       });
       return;
     }
 
-    if (currUser) {
-      const primaryShippingAddress =
-        currUser.addresses?.find(
-          (addr) => addr.type === "shipping" && addr.isPrimary
-        ) ||
-        currUser.addresses?.find((addr) => addr.type === "shipping") ||
-        currUser.addresses?.[0];
+    console.log(currUser);
 
-      const fullName = `${currUser.firstName || ""} ${
-        currUser.lastName || ""
-      }`.trim();
+    // Find the best address to use (primary shipping address, or any shipping address, or first address)
+    const primaryShippingAddress =
+      currUser.addresses?.find(
+        (addr) => addr.type === "shipping" && addr.isPrimary
+      ) ||
+      currUser.addresses?.find((addr) => addr.type === "shipping") ||
+      currUser.addresses?.[0];
 
-      // First, update the basic information
-      form.setFieldsValue({
-        fullName: fullName,
-        phone: primaryShippingAddress?.phone,
-        email: currUser.email || "",
-        address: primaryShippingAddress?.street || "",
-      });
-
-      // Set province and handle cascading fields
-      const province = primaryShippingAddress?.city;
-      if (province) {
-        form.setFieldsValue({ province });
-
-        // Find the province ID to trigger the district loading
-        const provinceItem = provinces.find((p) => p.value === province);
-        if (provinceItem) {
-          // Set the selected province to trigger district loading
-          setSelectedProvince(provinceItem.id);
-
-          // Handle district selection after provinces are loaded
-          setTimeout(() => {
-            const district = primaryShippingAddress?.state;
-            if (district) {
-              // First wait for districts to load
-              const checkDistricts = setInterval(() => {
-                if (districts.length > 0) {
-                  clearInterval(checkDistricts);
-
-                  // Now set the district value
-                  form.setFieldsValue({ district });
-
-                  // Find district ID to trigger ward loading
-                  const districtItem = districts.find(
-                    (d) => d.value === district
-                  );
-                  if (districtItem) {
-                    setSelectedDistrict(districtItem.id);
-
-                    // Handle ward selection after districts are loaded
-                    setTimeout(() => {
-                      const ward = primaryShippingAddress?.ward;
-                      if (ward) {
-                        // Wait for wards to load
-                        const checkWards = setInterval(() => {
-                          if (wards.length > 0) {
-                            clearInterval(checkWards);
-                            form.setFieldsValue({ ward });
-                          }
-                        }, 200);
-
-                        // Set a timeout to clear the interval if it takes too long
-                        setTimeout(() => clearInterval(checkWards), 5000);
-                      }
-                    }, 500);
-                  }
-                }
-              }, 200);
-
-              // Set a timeout to clear the interval if it takes too long
-              setTimeout(() => clearInterval(checkDistricts), 5000);
-            }
-          }, 500);
-        }
-      }
-
-      api.success({
-        message: "Thông tin đã được điền",
-        description: "Thông tin cá nhân của bạn đã được điền vào form.",
+    if (!primaryShippingAddress) {
+      api.warning({
+        message: "Địa chỉ không hợp lệ",
+        description: "Không tìm thấy địa chỉ hợp lệ trong tài khoản của bạn.",
         duration: 2,
       });
+      return;
     }
+
+    const fullName = `${currUser.firstName || ""} ${
+      currUser.lastName || ""
+    }`.trim();
+
+    // First, update the basic information
+    form.setFieldsValue({
+      fullName: fullName || primaryShippingAddress.fullName,
+      phone: primaryShippingAddress.phone || currUser.phone,
+      email: currUser.email || "",
+      address: primaryShippingAddress.street || "",
+      notes: form.getFieldValue("notes"), // Preserve any existing notes
+    });
+
+    // Set province and handle cascading fields
+    const province = primaryShippingAddress.city;
+    if (province) {
+      // Find the province in the list
+      const provinceItem = provinces.find((p) => p.value === province);
+      if (provinceItem) {
+        form.setFieldsValue({ province });
+        // Set the selected province to trigger district loading
+        setSelectedProvince(provinceItem.id);
+
+        // Load districts first
+        fetch(`https://esgoo.net/api-tinhthanh/2/${provinceItem.id}.htm`)
+          .then((response) => response.json())
+          .then((responseData) => {
+            if (responseData.error === 0 && responseData.data) {
+              const formattedDistricts = responseData.data.map((district) => ({
+                value: district.name,
+                label: district.name,
+                id: district.id,
+              }));
+              setDistricts(formattedDistricts);
+
+              // Now set the district value after districts are loaded
+              const district = primaryShippingAddress.state;
+              if (district) {
+                form.setFieldsValue({ district });
+
+                // Find district item to load wards
+                const districtItem = formattedDistricts.find(
+                  (d) => d.value === district
+                );
+                if (districtItem) {
+                  setSelectedDistrict(districtItem.id);
+
+                  // Load wards for this district
+                  fetch(
+                    `https://esgoo.net/api-tinhthanh/3/${districtItem.id}.htm`
+                  )
+                    .then((response) => response.json())
+                    .then((wardData) => {
+                      if (wardData.error === 0 && wardData.data) {
+                        const formattedWards = wardData.data.map((ward) => ({
+                          value: ward.name,
+                          label: ward.name,
+                        }));
+                        setWards(formattedWards);
+
+                        // Finally set the ward value
+                        const ward = primaryShippingAddress.ward;
+                        if (ward) {
+                          setTimeout(() => {
+                            form.setFieldsValue({ ward });
+                          }, 100); // Small delay to ensure form updates properly
+                        }
+                      }
+                    })
+                    .catch((error) => {
+                      console.error("Error loading wards:", error);
+                    });
+                }
+              }
+            }
+          })
+          .catch((error) => {
+            console.error("Error loading districts:", error);
+          });
+      }
+    }
+
+    api.success({
+      message: "Thông tin đã được điền",
+      description: "Địa chỉ của bạn đã được điền vào form thanh toán.",
+      duration: 2,
+    });
   };
 
   async function handleFinish() {
@@ -518,7 +541,6 @@ function Payment() {
                             .includes(input.toLowerCase())
                         }
                         options={districts}
-                        disabled={!selectedProvince}
                         onChange={(value) => {
                           setSelectedDistrict(
                             districts.find(
@@ -553,7 +575,6 @@ function Payment() {
                             .includes(input.toLowerCase())
                         }
                         options={wards}
-                        disabled={!selectedDistrict}
                       />
                     </Form.Item>
                   </Col>
