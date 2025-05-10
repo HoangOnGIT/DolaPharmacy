@@ -218,6 +218,14 @@ export default function UpdateProduct() {
     setImages(images.filter((img) => img.id !== id))
   }
 
+  const setPrimaryImage = (id) => {
+    setImages((prevImages) =>
+      prevImages.map((img) =>
+        img.id === id ? { ...img, isPrimary: true } : { ...img, isPrimary: false }
+      )
+    )
+  }
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
     if (type === "checkbox") {
@@ -1005,7 +1013,8 @@ export default function UpdateProduct() {
                         </div>
                         <button
                           type="button"
-                          className="w-full mt-auto py-1 bg-gray-200 text-gray-800 text-sm rounded-md"
+                          onClick={() => setPrimaryImage(image.id)}
+                          className={`w-full mt-auto py-1 bg-gray-200 text-gray-800 text-sm rounded-md ${image.isPrimary ? "cursor-not-allowed" : "cursor-pointer"}`}
                           disabled={image.isPrimary}
                         >
                           {image.isPrimary ? "Ảnh chính" : "Đặt làm ảnh chính"}
