@@ -1,24 +1,30 @@
-import React, { useState, useRef, useEffect } from "react";
-import { FiPlus, FiTrash2, FiArrowLeft, FiImage } from "react-icons/fi";
-import { Editor } from "@tinymce/tinymce-react";
-import { useNavigate, useParams } from "react-router-dom";
+"use client"
+
+import { useState, useRef, useEffect } from "react"
+import { FiPlus, FiTrash2, FiArrowLeft, FiImage } from "react-icons/fi"
+import { Editor } from "@tinymce/tinymce-react"
+import { useNavigate, useParams } from "react-router-dom"
 
 export default function UpdateProduct() {
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const editorRef = useRef(null);
-  const [activeTab, setActiveTab] = useState("general");
-  const [variants, setVariants] = useState([]);
-  const [images, setImages] = useState([]);
-  const [isUploading, setIsUploading] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const baseUrl = import.meta.env.VITE_API_BASE_URL;
+  const navigate = useNavigate()
+  const { id } = useParams()
+  const editorRef = useRef(null)
+  const [activeTab, setActiveTab] = useState("general")
+  const [variants, setVariants] = useState([])
+  const [images, setImages] = useState([])
+  const [isUploading, setIsUploading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [categories, setCategories] = useState([])
+  const [suppliers, setSuppliers] = useState([])
+  const [brands, setBrands] = useState([])
+  const baseUrl = import.meta.env.VITE_API_BASE_URL
 
   const [formData, setFormData] = useState({
     name: "",
     sku: "",
     brand: "",
     category: "",
+    categoryName: "",
     subCategory: "",
     basePrice: 0,
     salePrice: 0,
@@ -39,52 +45,60 @@ export default function UpdateProduct() {
     dosage: "",
     warnings: "",
     requiresPrescription: false,
-  });
-
-  const categories = [
-    { id: "bdcfd88b-8841-44f5-aab9-10a259dd9437", name: "Sức khỏe trẻ em & Trẻ sơ sinh" },
-    { id: "2", name: "Thuốc kê đơn" },
-    { id: "3", name: "Thực phẩm chức năng" },
-    { id: "4", name: "Dụng cụ y tế" },
-  ];
-  const suppliers = [
-    { id: "695afeb6-b6ea-46a1-9658-2ffd8a081aa5", name: "Công ty Dược phẩm A" },
-    { id: "2", name: "Công ty Dược phẩm B" },
-    { id: "3", name: "Công ty Dược phẩm C" },
-  ];
-  const brands = [
-    { id: "1", name: "Domesco" },
-    { id: "2", name: "Traphaco" },
-    { id: "3", name: "DHG Pharma" },
-    { id: "4", name: "Imexpharm" },
-  ];
+  })
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchInitialData = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token")
         if (!token) {
-          alert("Không tìm thấy token. Vui lòng đăng nhập lại");
-          navigate("/login");
-          return;
+          alert("Không tìm thấy token. Vui lòng đăng nhập lại")
+          navigate("/login")
+          return
         }
 
-        const response = await fetch(baseUrl+`/api/products/${id}`, {
-          headers: {
-            "Authorization": `Bearer ${token}`,
-          },
-        });
+        // Fetch categories
+        const categoriesResponse = await fetch(`${baseUrl}/api/categories`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        if (!categoriesResponse.ok) throw new Error("Không thể tải danh mục")
+        const categoriesData = await categoriesResponse.json()
+        setCategories(categoriesData)
 
-        if (!response.ok) {
-          throw new Error("Không thể tải thông tin sản phẩm");
-        }
+        // Fetch suppliers
+        const suppliersResponse = await fetch(`${baseUrl}/api/suppliers`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        if (!suppliersResponse.ok) throw new Error("Không thể tải nhà cung cấp")
+        const suppliersData = await suppliersResponse.json()
+        setSuppliers(suppliersData)
 
-        const product = await response.json();
+        // Fetch brands
+        const brandsResponse = await fetch(`${baseUrl}/api/brands`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        if (!brandsResponse.ok) throw new Error("Không thể tải thương hiệu")
+        const brandsData = await brandsResponse.json()
+        // Transform the array of strings into array of objects with id and name
+        const formattedBrands = brandsData.map((brandName, index) => ({
+          id: index.toString(),
+          name: brandName,
+        }))
+        setBrands(formattedBrands)
+
+        // Fetch product
+        const productResponse = await fetch(`${baseUrl}/api/products/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        if (!productResponse.ok) throw new Error("Không thể tải thông tin sản phẩm")
+        const product = await productResponse.json()
+
         setFormData({
           name: product.name || "",
           sku: product.sku || "",
           brand: product.brand || "",
           category: product.category || "",
+          categoryName: product.categoryName || "",
           subCategory: product.subCategory || "",
           basePrice: product.basePrice || 0,
           salePrice: product.salePrice || 0,
@@ -105,86 +119,83 @@ export default function UpdateProduct() {
           dosage: product.dosage || "",
           warnings: product.warnings || "",
           requiresPrescription: product.requiresPrescription || false,
-        });
-        setVariants(product.variants || []);
-        setImages(product.images || []);
+        })
+        setVariants(product.variants || [])
+        setImages(product.images || [])
       } catch (error) {
-        console.error("Lỗi khi tải sản phẩm:", error);
-        alert("Không thể tải thông tin sản phẩm. Vui lòng thử lại.");
-        navigate("/dashboard");
+        console.error("Lỗi khi tải dữ liệu:", error)
+        alert("Không thể tải thông tin. Vui lòng thử lại.")
+        navigate("/dashboard")
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
-    };
+    }
 
-    fetchProduct();
-  }, [id, navigate]);
+    fetchInitialData()
+  }, [id, navigate, baseUrl])
 
   const handleCancel = () => {
-    window.history.back();
-  };
+    window.history.back()
+  }
 
   const addVariant = () => {
-    setVariants([...variants, { id: crypto.randomUUID(), name: "", sku: "", price: 0, stock: 0 }]);
-  };
+    setVariants([...variants, { id: crypto.randomUUID(), name: "", sku: "", price: 0, stock: 0 }])
+  }
 
   const removeVariant = (id) => {
-    setVariants(variants.filter((v) => v.id !== id));
-  };
+    setVariants(variants.filter((v) => v.id !== id))
+  }
 
   const updateVariant = (id, field, value) => {
-    setVariants(variants.map((v) => (v.id === id ? { ...v, [field]: value } : v)));
-  };
+    setVariants(variants.map((v) => (v.id === id ? { ...v, [field]: value } : v)))
+  }
 
   const handleImageUpload = async (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length === 0) return;
+    const files = Array.from(e.target.files)
+    if (files.length === 0) return
 
-    setIsUploading(true);
-    const cloudName = "dysjwopcc";
-    const uploadPreset = "Dola-Pharmacy";
+    setIsUploading(true)
+    const cloudName = "dysjwopcc"
+    const uploadPreset = "Dola-Pharmacy"
 
     const uploadPromises = files.map(async (file) => {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", uploadPreset);
+      const formData = new FormData()
+      formData.append("file", file)
+      formData.append("upload_preset", uploadPreset)
 
       try {
-        const response = await fetch(
-          `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+          method: "POST",
+          body: formData,
+        })
 
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(`Lỗi khi tải ảnh lên Cloudinary: ${errorData.message || "Không xác định"}`);
+          const errorData = await response.json()
+          throw new Error(`Lỗi khi tải ảnh lên Cloudinary: ${errorData.message || "Không xác định"}`)
         }
 
-        const data = await response.json();
+        const data = await response.json()
         return {
           id: crypto.randomUUID(),
           url: data.secure_url,
           alt: `Product image ${images.length + 1}`,
           isPrimary: images.length === 0,
           sortOrder: images.length,
-        };
+        }
       } catch (error) {
-        console.error("Lỗi khi tải ảnh:", error);
-        return null;
+        console.error("Lỗi khi tải ảnh:", error)
+        return null
       }
-    });
+    })
 
     try {
-      const results = await Promise.all(uploadPromises);
-      const uploadedImages = results.filter((img) => img !== null);
+      const results = await Promise.all(uploadPromises)
+      const uploadedImages = results.filter((img) => img !== null)
 
       if (uploadedImages.length === 0) {
-        alert("Không thể tải bất kỳ ảnh nào lên Cloudinary. Vui lòng thử lại.");
+        alert("Không thể tải bất kỳ ảnh nào lên Cloudinary. Vui lòng thử lại.")
       } else if (uploadedImages.length < files.length) {
-        alert("Một số ảnh không thể tải lên. Vui lòng kiểm tra lại.");
+        alert("Một số ảnh không thể tải lên. Vui lòng kiểm tra lại.")
       }
 
       setImages((prevImages) => [
@@ -194,42 +205,49 @@ export default function UpdateProduct() {
           sortOrder: prevImages.length + index,
           isPrimary: prevImages.length === 0 && index === 0,
         })),
-      ]);
+      ])
     } catch (error) {
-      console.error("Lỗi tổng thể khi tải ảnh:", error);
-      alert("Đã xảy ra lỗi khi tải ảnh. Vui lòng thử lại.");
+      console.error("Lỗi tổng thể khi tải ảnh:", error)
+      alert("Đã xảy ra lỗi khi tải ảnh. Vui lòng thử lại.")
     } finally {
-      setIsUploading(false);
+      setIsUploading(false)
     }
-  };
+  }
 
   const removeImage = (id) => {
-    setImages(images.filter((img) => img.id !== id));
-  };
+    setImages(images.filter((img) => img.id !== id))
+  }
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked } = e.target
     if (type === "checkbox") {
-      setFormData((prev) => ({ ...prev, [name]: checked }));
+      setFormData((prev) => ({ ...prev, [name]: checked }))
+    } else if (name === "category") {
+      const selectedCategory = categories.find((cat) => cat.id === value)
+      setFormData((prev) => ({
+        ...prev,
+        category: value,
+        categoryName: selectedCategory ? selectedCategory.name : "",
+      }))
     } else if (name.includes(".")) {
-      const [parent, child] = name.split(".");
+      const [parent, child] = name.split(".")
       setFormData((prev) => ({
         ...prev,
         [parent]: { ...prev[parent], [child]: value },
-      }));
+      }))
     } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }))
     }
-  };
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token")
     if (!token) {
-      alert("Không tìm thấy token. Vui lòng đăng nhập lại");
-      navigate("/login");
-      return;
+      alert("Không tìm thấy token. Vui lòng đăng nhập lại")
+      navigate("/login")
+      return
     }
 
     const product = {
@@ -247,38 +265,34 @@ export default function UpdateProduct() {
         isPrimary: img.isPrimary,
         sortOrder: img.sortOrder,
       })),
-    };
+    }
 
     try {
-      const response = await fetch(baseUrl+`/api/products/${id}`, {
+      const response = await fetch(`${baseUrl}/api/products/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(product),
-      });
+      })
 
       if (!response.ok) {
-        const errorData = await response.json();
-        alert(
-          `Lỗi khi cập nhật sản phẩm: ${response.status} - ${
-            errorData.message || "Lỗi không xác định"
-          }`
-        );
-        return;
+        const errorData = await response.json()
+        alert(`Lỗi khi cập nhật sản phẩm: ${response.status} - ${errorData.message || "Lỗi không xác định"}`)
+        return
       }
 
-      alert("Sản phẩm đã được cập nhật thành công!");
-      navigate("/dashboard");
+      alert("Sản phẩm đã được cập nhật thành công!")
+      navigate("/dashboard")
     } catch (error) {
-      console.error("Lỗi khi gửi yêu cầu:", error);
-      alert("Đã xảy ra lỗi khi cập nhật sản phẩm. Vui lòng thử lại sau.");
+      console.error("Lỗi khi gửi yêu cầu:", error)
+      alert("Đã xảy ra lỗi khi cập, Vui lòng thử lại sau.")
     }
-  };
+  }
 
   if (isLoading) {
-    return <div className="p-6">Đang tải thông tin sản phẩm...</div>;
+    return <div className="p-6">Đang tải thông tin sản phẩm...</div>
   }
 
   return (
@@ -336,11 +350,11 @@ export default function UpdateProduct() {
                       name="brand"
                       value={formData.brand}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-800"
                     >
                       <option value="">Chọn thương hiệu</option>
                       {brands.map((brand) => (
-                        <option key={brand.id} value={brand.name}>
+                        <option key={brand.id} value={brand.name} className="text-gray-800">
                           {brand.name}
                         </option>
                       ))}
@@ -358,12 +372,12 @@ export default function UpdateProduct() {
                       name="category"
                       value={formData.category}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-800"
                       required
                     >
                       <option value="">Chọn danh mục</option>
                       {categories.map((category) => (
-                        <option key={category.id} value={category.id}>
+                        <option key={category.id} value={category.id} className="text-gray-800">
                           {category.name}
                         </option>
                       ))}
@@ -480,10 +494,14 @@ export default function UpdateProduct() {
                         name="discount.type"
                         value={formData.discount.type}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-800"
                       >
-                        <option value="percentage">Phần trăm (%)</option>
-                        <option value="fixed">Số tiền cố định</option>
+                        <option value="percentage" className="text-gray-800">
+                          Phần trăm (%)
+                        </option>
+                        <option value="fixed" className="text-gray-800">
+                          Số tiền cố định
+                        </option>
                       </select>
                     </div>
                     <div>
@@ -555,14 +573,26 @@ export default function UpdateProduct() {
                         name="priceRange"
                         value={formData.priceRange}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-800"
                       >
-                        <option value="Dưới 1 triệu">Dưới 1 triệu</option>
-                        <option value="1-5 triệu">1-5 triệu</option>
-                        <option value="5-10 triệu">5-10 triệu</option>
-                        <option value="10-20 triệu">10-20 triệu</option>
-                        <option value="20-50 triệu">20-50 triệu</option>
-                        <option value="Trên 50 triệu">Trên 50 triệu</option>
+                        <option value="Dưới 1 triệu" className="text-gray-800">
+                          Dưới 1 triệu
+                        </option>
+                        <option value="1-5 triệu" className="text-gray-800">
+                          1-5 triệu
+                        </option>
+                        <option value="5-10 triệu" className="text-gray-800">
+                          5-10 triệu
+                        </option>
+                        <option value="10-20 triệu" className="text-gray-800">
+                          10-20 triệu
+                        </option>
+                        <option value="20-50 triệu" className="text-gray-800">
+                          20-50 triệu
+                        </option>
+                        <option value="Trên 50 triệu" className="text-gray-800">
+                          Trên 50 triệu
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -603,13 +633,23 @@ export default function UpdateProduct() {
                         name="weight"
                         value={formData.weight}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-800"
                       >
-                        <option value="Dưới 100g">Dưới 100g</option>
-                        <option value="100g-500g">100g-500g</option>
-                        <option value="500g-1kg">500g-1kg</option>
-                        <option value="1kg-2kg">1kg-2kg</option>
-                        <option value="Trên 2kg">Trên 2kg</option>
+                        <option value="Dưới 100g" className="text-gray-800">
+                          Dưới 100g
+                        </option>
+                        <option value="100g-500g" className="text-gray-800">
+                          100g-500g
+                        </option>
+                        <option value="500g-1kg" className="text-gray-800">
+                          500g-1kg
+                        </option>
+                        <option value="1kg-2kg" className="text-gray-800">
+                          1kg-2kg
+                        </option>
+                        <option value="Trên 2kg" className="text-gray-800">
+                          Trên 2kg
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -624,13 +664,23 @@ export default function UpdateProduct() {
                         name="targeted"
                         value={formData.targeted}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-800"
                       >
-                        <option value="Nam">Nam</option>
-                        <option value="Nữ">Nữ</option>
-                        <option value="Trẻ em">Trẻ em</option>
-                        <option value="Người cao tuổi">Người cao tuổi</option>
-                        <option value="Mọi đối tượng">Mọi đối tượng</option>
+                        <option value="Nam" className="text-gray-800">
+                          Nam
+                        </option>
+                        <option value="Nữ" className="text-gray-800">
+                          Nữ
+                        </option>
+                        <option value="Trẻ em" className="text-gray-800">
+                          Trẻ em
+                        </option>
+                        <option value="Người cao tuổi" className="text-gray-800">
+                          Người cao tuổi
+                        </option>
+                        <option value="Mọi đối tượng" className="text-gray-800">
+                          Mọi đối tượng
+                        </option>
                       </select>
                     </div>
                     <div>
@@ -642,11 +692,11 @@ export default function UpdateProduct() {
                         name="supplierId"
                         value={formData.supplierId}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-800"
                       >
                         <option value="">Chọn nhà cung cấp</option>
                         {suppliers.map((supplier) => (
-                          <option key={supplier.id} value={supplier.id}>
+                          <option key={supplier.id} value={supplier.id} className="text-gray-800">
                             {supplier.name}
                           </option>
                         ))}
@@ -661,11 +711,17 @@ export default function UpdateProduct() {
                         name="status"
                         value={formData.status}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-800"
                       >
-                        <option value="active">Đang bán</option>
-                        <option value="draft">Nháp</option>
-                        <option value="inactive">Ngừng bán</option>
+                        <option value="active" className="text-gray-800">
+                          Đang bán
+                        </option>
+                        <option value="draft" className="text-gray-800">
+                          Nháp
+                        </option>
+                        <option value="inactive" className="text-gray-800">
+                          Ngừng bán
+                        </option>
                       </select>
                     </div>
                   </div>
@@ -770,9 +826,7 @@ export default function UpdateProduct() {
                         apiKey="95zzat4zdhk63cbyepm9apkvb89bqply9apvsjwh88a454sw"
                         onInit={(evt, editor) => (editorRef.current = editor)}
                         value={formData.description}
-                        onEditorChange={(content) =>
-                          setFormData((prev) => ({ ...prev, description: content }))
-                        }
+                        onEditorChange={(content) => setFormData((prev) => ({ ...prev, description: content }))}
                         init={{
                           height: 400,
                           menubar: true,
@@ -801,7 +855,8 @@ export default function UpdateProduct() {
                             "bold italic forecolor | alignleft aligncenter " +
                             "alignright alignjustify | bullist numlist outdent indent | " +
                             "removeformat | help",
-                          content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+                          content_style:
+                            "body { font-family:Helvetica,Arial,sans-serif; font-size:14px; color: #333333; }",
                         }}
                       />
                     </div>
@@ -887,11 +942,17 @@ export default function UpdateProduct() {
                     name="status"
                     value={formData.status}
                     onChange={handleInputChange}
-                    className="w-[180px] px-3 py-2 border border-gray-300 rounded-md"
+                    className="w-[180px] px-3 py-2 border border-gray-300 rounded-md text-gray-800"
                   >
-                    <option value="active">Đang bán</option>
-                    <option value="draft">Nháp</option>
-                    <option value="inactive">Ngừng bán</option>
+                    <option value="active" className="text-gray-800">
+                      Đang bán
+                    </option>
+                    <option value="draft" className="text-gray-800">
+                      Nháp
+                    </option>
+                    <option value="inactive" className="text-gray-800">
+                      Ngừng bán
+                    </option>
                   </select>
                 </div>
 
@@ -931,7 +992,7 @@ export default function UpdateProduct() {
                 <div className="grid grid-cols-2 gap-4">
                   {images.map((image) => (
                     <div key={image.id} className="relative border rounded-md overflow-hidden">
-                      <img src={image.url} alt={image.alt} className="w-full h-32 object-cover" />
+                      <img src={image.url || "/placeholder.svg"} alt={image.alt} className="w-full h-32 object-cover" />
                       <div className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity flex flex-col justify-between p-2">
                         <div className="flex justify-end">
                           <button
@@ -997,5 +1058,5 @@ export default function UpdateProduct() {
         </div>
       </form>
     </div>
-  );
+  )
 }
