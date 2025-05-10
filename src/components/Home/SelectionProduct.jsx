@@ -6,6 +6,7 @@ import img4 from "../../img/Header/imgSelection/MomAndBaby.png";
 import img5 from "../../img/Header/imgSelection/Old.png";
 import SingleProduct from "../common/SingleProduct";
 import { Link } from "react-router-dom";
+import queryString from "query-string";
 
 const SelectionProduct = ({ name }) => {
   const [category, setCategory] = useState([]);
@@ -23,11 +24,14 @@ const SelectionProduct = ({ name }) => {
     "Mất ngủ",
   ];
 
+
   useEffect(() => {
     fetch(`${BASE_URL}/api/categories`)
       .then((response) => response.json())
       .then((data) => {
         setCategory(data);
+        console.log(category);
+        
         if (data && data.length > 0) {
           setActive(data[0].name);
         }
@@ -36,10 +40,18 @@ const SelectionProduct = ({ name }) => {
         console.error("Error fetching categories:", error);
       });
   }, []);
-
+  
   useEffect(() => {
     if (active) {
-      fetch(`${BASE_URL}/api/products?categoryName=${active}`)
+      console.log(
+        `${BASE_URL}/api/products?${queryString.stringify({
+          categoryName: active,
+        })}`
+      );
+
+      fetch(`${BASE_URL}/api/products?${queryString.stringify({
+          categoryName: active,
+        })}`)
         .then((response) => response.json())
         .then((data) => {
           setProducts(data);
@@ -109,7 +121,7 @@ const SelectionProduct = ({ name }) => {
 
           {/* Lưới sản phẩm */}
           <div className="grid grid-cols-4 gap-20">
-            {products.map((product) => (
+            {products.slice(0,8).map((product) => (
               <SingleProduct key={product.id} product={product} />
             ))}
           </div>

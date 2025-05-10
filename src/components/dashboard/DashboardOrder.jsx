@@ -30,6 +30,7 @@ const DashboardOrder = () => {
     processing: 'Đang xử lý',
     shipped: 'Đang giao hàng',
     delivered: 'Đã giao hàng',
+    completed: 'Đã giao hàng', // Map "completed" to "Đã giao hàng"
     cancelled: 'Đã hủy'
   };
 
@@ -39,6 +40,7 @@ const DashboardOrder = () => {
     processing: { bg: "bg-blue-400", text: "text-blue-800" },
     shipped: { bg: "bg-purple-400", text: "text-purple-800" },
     delivered: { bg: "bg-green-400", text: "text-green-800" },
+    completed: { bg: "bg-green-400", text: "text-green-800" }, // Match "completed" with "delivered" style
     cancelled: { bg: "bg-red-400", text: "text-red-800" }
   };
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -194,11 +196,14 @@ const DashboardOrder = () => {
 
   // Status badge component with dot
   const StatusBadge = ({ status }) => {
-    const statusStyle = statusColors[status] || { bg: "bg-gray-400", text: "text-gray-800" };
+    // Map "completed" to "delivered" for consistent display
+    const normalizedStatus = status === 'completed' ? 'delivered' : status;
+    const statusStyle = statusColors[normalizedStatus] || { bg: "bg-gray-400", text: "text-gray-800" };
+    const displayStatus = statusMapping[normalizedStatus] || statusMapping[status] || status;
     return (
       <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-lg font-medium ${statusStyle.bg} ${statusStyle.text}`}>
         <span className="w-1.5 h-1.5 rounded-full mr-1.5"></span>
-        {statusMapping[status] || status}
+        {displayStatus}
       </span>
     );
   };
@@ -690,7 +695,7 @@ const DashboardOrder = () => {
             return (
               <div
                 key={key}
-                className={`bg-white rounded-lg shadow-sm p-5 border-l-4 ${activeTab === key ? 'border-blue-500' : `border-${key === 'pending' ? 'yellow' : key === 'processing' ? 'blue' : key === 'shipped' ? 'purple' : key === 'delivered' ? 'green' : 'red'}-400`
+                className={`bg-white rounded-lg shadow-sm p-5 border-l-4 ${activeTab === key ? 'border-blue-500' : `border-${key === 'pending' ? 'yellow' : key === 'processing' ? 'blue' : key === 'shipped' ? 'purple' : key === 'delivered' || key === 'completed' ? 'green' : 'red'}-400`
                   } cursor-pointer hover:shadow-md transition-shadow`}
                 onClick={() => setActiveTab(key)}
               >
