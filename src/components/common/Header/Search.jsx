@@ -130,7 +130,7 @@ const Search = ({ products }) => {
                             <div>
                                 <div className="text-black">{product.name}</div>
                                 <div className="text-red-500">
-                                    {product.discountedPrice ? product.discountedPrice.toLocaleString('vi-VN') : 'N/A'} VNĐ
+                                    {product.salePrice ? product.salePrice.toLocaleString('vi-VN') : 'N/A'} VNĐ
                                 </div>
                             </div>
                         </div>
